@@ -1,6 +1,6 @@
 {
   "benchmark_id": "riskchainbench-task1-obfuscated-reconstruction-v0.4",
-  "contract_sha256": "fba49afafbf14bc375716754152163afc57759c90a4d904dd53c8eb4e6986dda",
+  "contract_sha256": "28a2fe6bac429d902153f3d9f2b575b89439115a91e9cd882843d5e54e056240",
   "files": {
     "generated_gold": {
       "bytes": 121835617,
@@ -33,9 +33,9 @@
       "visibility": "MODEL_VISIBLE_SPEC"
     },
     "spec_model_prompt.md": {
-      "bytes": 2629,
+      "bytes": 2581,
       "path": "spec/model_prompt.md",
-      "sha256": "d7dbe332622683bc356a7f2b9eb7b0237b88a4c8b0944a53884fe9d97e92e12d",
+      "sha256": "0ff36d7884742635ea4eec3db72e54ad9bb1c8b895db24c32130ed7839357d6c",
       "visibility": "MODEL_VISIBLE_SPEC"
     },
     "spec_task_input.schema.json": {

@@ -24,7 +24,7 @@ DEFAULT_RELEASE = ROOT / "outputs/riskchainbench_split_tasks_v0.1/task1"
 DEFAULT_ROUTE_PROBE = (
     ROOT / "outputs/libinfer_neo_600_eval_20260725/preflight/all_routes.json"
 )
-DEFAULT_OUT = ROOT / "outputs/libinfer_neo_task1_v04_four_models_20260725"
+DEFAULT_OUT = ROOT / "outputs/libinfer_neo_task1_text_v04_eval_20260725"
 DEFAULT_MODELS = (
     "gpt-5.4",
     "claude-opus-4-8-kiro",
@@ -35,8 +35,8 @@ TRACK_VARIANTS = {
     "primary": {0},
     "robustness": {1, 2, 3, 4, 5},
 }
-RUNNER = ROOT / "scripts/run_task1_multimodal_batch.py"
-VALIDATOR = ROOT / "scripts/validate_task1_multimodal_batch.py"
+RUNNER = ROOT / "scripts/run_task1_text_batch.py"
+VALIDATOR = ROOT / "scripts/validate_task1_text_batch.py"
 SCORER = ROOT / "scripts/score_obfuscated_reconstruction.py"
 
 
@@ -117,8 +117,6 @@ def parse_models(value: str) -> list[str]:
     models = [row.strip() for row in value.split(",") if row.strip()]
     if not models or len(models) != len(set(models)):
         raise ValueError("models must be a unique non-empty list")
-    if any(model not in DEFAULT_MODELS for model in models):
-        raise ValueError("model is outside the frozen four-model set")
     return models
 
 
@@ -322,8 +320,9 @@ def run_track(
     summary = read_json(run_root / "summary.json")
     audit_dir = track_root / "audits"
     audit_dir.mkdir(parents=True, exist_ok=True)
+    validation_code = None
     if summary.get("status") == "PASS":
-        run_logged(
+        validation_code = run_logged(
             [
                 "/usr/bin/python3.10",
                 str(VALIDATOR),
@@ -346,12 +345,19 @@ def run_track(
         "--allow-missing",
     ]
     score_code = run_logged(score_command, track_root / "scorer.log")
-    state = "COMPLETE" if summary.get("status") == "PASS" and score_code == 0 else "PARTIAL"
+    state = (
+        "COMPLETE"
+        if summary.get("status") == "PASS"
+        and validation_code == 0
+        and score_code == 0
+        else "PARTIAL"
+    )
     ledger.update(
         model,
         track,
         state,
         runner_returncode=final_code,
+        validation_returncode=validation_code,
         score_returncode=score_code,
         selected_task_count=summary.get("selected_task_count"),
         valid_prediction_count=summary.get("valid_prediction_count"),
@@ -375,8 +381,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         models = parse_models(args.models)
         tracks = parse_tracks(args.tracks)
-        if not 1 <= args.model_workers <= 4:
-            raise ValueError("model-workers must be between 1 and 4")
+        if not 1 <= args.model_workers <= 8:
+            raise ValueError("model-workers must be between 1 and 8")
         if not 1 <= args.task_concurrency <= 8:
             raise ValueError("task-concurrency must be between 1 and 8")
         contract = verify_release(args.release, args.route_probe, models)

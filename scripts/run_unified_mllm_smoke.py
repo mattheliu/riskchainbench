@@ -355,13 +355,10 @@ def call_model_json(
     max_attempts: int = 3,
     timeout_seconds: float = 240,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    if not images:
-        raise ValueError("unified MLLM call requires at least one image")
     if not 1 <= max_attempts <= 5:
         raise ValueError("max_attempts must be between 1 and 5")
-    content: list[dict[str, Any]] = [
-        {"type": "text", "text": canonical_json(user_payload)}
-    ]
+    user_text = canonical_json(user_payload)
+    content: list[dict[str, Any]] = [{"type": "text", "text": user_text}]
     image_records = []
     for evidence_id, path in images:
         digest = sha256_file(path)
@@ -424,7 +421,7 @@ def call_model_json(
             "user_payload_sha256": sha256_text(canonical_json(user_payload)),
             "images": image_records,
             "image_count": len(image_records),
-            "multimodal_input": True,
+            "multimodal_input": bool(image_records),
             "request_protocol": request_protocol,
             "max_attempts": max_attempts,
             "timeout_seconds": timeout_seconds,
@@ -440,22 +437,25 @@ def call_model_json(
     for attempt in range(1, max_attempts + 1):
         run_id = str(uuid.uuid4())
         budget = min(max_tokens * (2 ** (attempt - 1)), 4096)
-        attempt_content = list(content)
+        feedback_text = None
         if validation_feedback:
-            attempt_content.append(
+            feedback_text = canonical_json(
                 {
-                    "type": "text",
-                    "text": canonical_json(
-                        {
-                            "protocol_validation_feedback": validation_feedback,
-                            "instruction": (
-                                "Correct only the response protocol. This feedback does not "
-                                "contain the expected answer or hidden Gold."
-                            ),
-                        }
+                    "protocol_validation_feedback": validation_feedback,
+                    "instruction": (
+                        "Correct only the response protocol. This feedback does not "
+                        "contain the expected answer or hidden Gold."
                     ),
                 }
             )
+        if image_records:
+            attempt_content: str | list[dict[str, Any]] = list(content)
+            if feedback_text is not None:
+                attempt_content.append({"type": "text", "text": feedback_text})
+        else:
+            attempt_content = user_text
+            if feedback_text is not None:
+                attempt_content += "\n\n" + feedback_text
         body = {
             "model": model,
             "messages": [

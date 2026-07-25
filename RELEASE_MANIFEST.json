@@ -4,12 +4,12 @@
     "secret_hits": [],
     "status": "PASS"
   },
-  "file_count": 25,
-  "file_manifest_sha256": "58820db66b4b08ca5589ac21137086f122cfb489f94dc687ad1c82ec5bcb8139",
-  "generated_at": "2026-07-25T08:52:53+00:00",
-  "release_sha256": "6d3ecb41a66e1bb15a58d92ea8d9c34aeef35808748fb18b7bd051d7e116e8fc",
+  "file_count": 27,
+  "file_manifest_sha256": "02e7408953a685f3cf4bdee244e1b30e1d93ecb8f82f641ed9234a69a5512cba",
+  "generated_at": "2026-07-25T11:50:42+00:00",
+  "release_sha256": "03ba1c957cd323f90cfb8c63c05176e7afed676834aa07b98c44e2ae58433058",
   "schema_version": "riskchainbench-platform-release/v0.1",
   "status": "PASS_STAGED_NOT_UPLOADED",
-  "total_bytes": 845675,
+  "total_bytes": 872976,
   "visibility": "SOURCE_CODE"
 }

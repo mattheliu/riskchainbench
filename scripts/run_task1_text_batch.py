@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run resumable, artifact-complete Task 1 inference through libinfer-neo."""
+"""Run resumable, artifact-complete Task 1 text-token inference through libinfer-neo."""
 
 from __future__ import annotations
 
@@ -26,7 +26,6 @@ import score_obfuscated_reconstruction as scorer  # noqa: E402
 from run_unified_mllm_smoke import (  # noqa: E402
     DEFAULT_CONFUSABLES,
     DEFAULT_ENV,
-    DEFAULT_FONT,
     ModelCallError,
     atomic_json,
     build_confusable_legend,
@@ -34,7 +33,6 @@ from run_unified_mllm_smoke import (  # noqa: E402
     canonical_json,
     load_export_env,
     pinned_response_models,
-    render_task_image,
     sha256_file,
     sha256_text,
     task_message_text,
@@ -56,7 +54,7 @@ DEFAULT_TASK_SCHEMA = PROJECT_ROOT / "schemas/obfuscated_reconstruction_task_v0.
 DEFAULT_PREDICTION_SCHEMA = (
     PROJECT_ROOT / "schemas/obfuscated_reconstruction_prediction_v0.1.schema.json"
 )
-DEFAULT_PROMPT = PROJECT_ROOT / "configs/task1_multimodal_batch_prompt_v0.2.md"
+DEFAULT_PROMPT = PROJECT_ROOT / "configs/task1_text_batch_prompt_v0.1.md"
 DEFAULT_PLATFORM_EVIDENCE = PROJECT_ROOT / "configs/platform_token_evidence_v0.1.json"
 FORBIDDEN_KEYS = {
     "entry",
@@ -131,7 +129,7 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
-def passing_multimodal_models(route_probe: dict[str, Any]) -> set[str]:
+def passing_models(route_probe: dict[str, Any]) -> set[str]:
     return {
         str(row["model"])
         for row in route_probe.get("results") or []
@@ -338,7 +336,7 @@ def build_prediction(
         "sample_id": task["sample_id"],
         "model_id": model,
         "run_id": run_id,
-        "input_view": "MULTIMODAL",
+        "input_view": "TEXT",
         "reconstructed_messages": [
             {
                 "message_id": row["message_id"],
@@ -388,7 +386,6 @@ def frozen_config(
     prediction_schema_path: Path,
     prompt_path: Path,
     route_probe_path: Path,
-    font_path: Path,
     confusables_path: Path,
     platform_evidence_path: Path,
     model: str,
@@ -404,14 +401,14 @@ def frozen_config(
     resolved_model_allowlist: set[str],
 ) -> dict[str, Any]:
     immutable = {
-        "schema_version": "task1-multimodal-batch-config/v0.1",
+        "schema_version": "task1-text-batch-config/v0.1",
         "transport": "libinfer-neo",
         "oneapi_used": False,
         "requested_model": model,
         "resolved_model_allowlist": sorted(resolved_model_allowlist),
         "run_id": run_id,
         "evaluation_setting": setting,
-        "input_view": "MULTIMODAL",
+        "input_view": "TEXT",
         "temperature_policy": (
             "provider_default_omitted" if model.startswith("gpt-5.") else "explicit_zero"
         ),
@@ -469,7 +466,6 @@ def frozen_config(
                 "path": str(route_probe_path),
                 "sha256": sha256_file(route_probe_path),
             },
-            "font": {"path": str(font_path), "sha256": sha256_file(font_path)},
             "confusables": {
                 "path": str(confusables_path),
                 "sha256": sha256_file(confusables_path),
@@ -542,7 +538,7 @@ def build_user_payload(
     payload: dict[str, Any] = {
         "phase": "TASK1_RECONSTRUCTION",
         "evaluation_setting": setting,
-        "input_view": "MULTIMODAL",
+        "input_view": "TEXT",
         "task": task,
         "output_contract": {
             "keys": sorted(SEMANTIC_KEYS),
@@ -578,7 +574,6 @@ def run_one(
     model: str,
     run_id: str,
     setting: str,
-    font_path: Path,
     confusables_path: Path,
     platform_evidence_sha256: str,
     max_tokens: int,
@@ -606,8 +601,6 @@ def run_one(
         }
 
     attempt_root = next_attempt_dir(task_root)
-    image_path = attempt_root / "task1_message.png"
-    image_record = render_task_image(task, image_path, font_path)
     user_payload = build_user_payload(
         task,
         setting=setting,
@@ -622,7 +615,6 @@ def run_one(
             "task_sha256": task["task_sha256"],
             "user_payload_sha256": sha256_text(canonical_json(user_payload)),
             "prompt_sha256": sha256_text(prompt),
-            "image": image_record,
             "forbidden_key_findings": find_forbidden_keys(user_payload),
             "gold_present": False,
             "resolver_present": False,
@@ -637,16 +629,16 @@ def run_one(
             model=model,
             system_prompt=prompt,
             user_payload=user_payload,
-            images=[("TASK1_MESSAGE", image_path)],
+            images=[],
             phase="task1",
             case_ref=sample_id,
             max_tokens=max_tokens,
             call_index=1,
             validator=lambda value: validate_semantic_response(value, task),
             audit_path=attempt_root / "model_call.json",
-            request_protocol="riskchainbench_task1_multimodal_batch_v0.1",
-            notes_task_prefix="task1-multimodal-batch",
-            notes_extra="frozen-task1-multimodal-evaluation-v0.1",
+            request_protocol="riskchainbench_task1_text_batch_v0.1",
+            notes_task_prefix="task1-text-batch",
+            notes_extra="frozen-task1-text-evaluation-v0.1",
             max_attempts=max_attempts,
             timeout_seconds=timeout_seconds,
         )
@@ -706,35 +698,38 @@ def run_one(
 
 def summarize_usage(run_root: Path, selected: list[dict[str, Any]]) -> dict[str, Any]:
     totals: dict[str, int] = {}
-    call_count = 0
+    successful_call_count = 0
+    failed_call_count = 0
     attempt_count = 0
     resolved_models: set[str] = set()
     for task in selected:
         task_root = run_root / "tasks" / task["sample_id"]
-        state_path = task_root / "state.json"
-        if not state_path.is_file():
-            continue
-        state = read_json(state_path)
-        if state.get("status") != "PASS":
-            continue
-        resolved = state.get("resolved_model")
-        if resolved:
-            resolved_models.add(str(resolved))
-        call_path = Path(str(state["attempt_path"])) / "model_call.json"
-        if not call_path.is_file():
-            continue
-        call = read_json(call_path)
-        call_count += 1
-        for attempt in call.get("attempts") or []:
-            attempt_count += 1
-            usage = attempt.get("usage")
-            if not isinstance(usage, dict):
-                continue
-            for key, value in usage.items():
-                if isinstance(value, int):
-                    totals[key] = totals.get(key, 0) + value
+        for call_path in sorted(task_root.glob("attempts/*/model_call.json")):
+            call = read_json(call_path)
+            if call.get("status") == "PASS":
+                successful_call_count += 1
+            else:
+                failed_call_count += 1
+            resolved = call.get("response_model")
+            if resolved:
+                resolved_models.add(str(resolved))
+            for attempt in call.get("attempts") or []:
+                if not isinstance(attempt, dict):
+                    continue
+                attempt_count += 1
+                attempt_model = attempt.get("response_model")
+                if attempt_model:
+                    resolved_models.add(str(attempt_model))
+                usage = attempt.get("usage")
+                if not isinstance(usage, dict):
+                    continue
+                for key, value in usage.items():
+                    if isinstance(value, int) and not isinstance(value, bool):
+                        totals[key] = totals.get(key, 0) + value
     return {
-        "successful_model_call_count": call_count,
+        "successful_model_call_count": successful_call_count,
+        "failed_model_call_count": failed_call_count,
+        "model_call_audit_count": successful_call_count + failed_call_count,
         "provider_attempt_count": attempt_count,
         "resolved_models": sorted(resolved_models),
         "token_usage": dict(sorted(totals.items())),
@@ -750,7 +745,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--prompt", type=Path, default=DEFAULT_PROMPT)
     parser.add_argument("--route-probe", type=Path, required=True)
     parser.add_argument("--env-file", type=Path, default=DEFAULT_ENV)
-    parser.add_argument("--font", type=Path, default=DEFAULT_FONT)
     parser.add_argument("--confusables", type=Path, default=DEFAULT_CONFUSABLES)
     parser.add_argument("--platform-evidence", type=Path, default=DEFAULT_PLATFORM_EVIDENCE)
     parser.add_argument("--model", required=True)
@@ -819,8 +813,8 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError("route probe did not pass")
         if route_probe.get("transport") != "libinfer-neo" or route_probe.get("oneapi_used"):
             raise ValueError("route probe transport policy mismatch")
-        if args.model not in passing_multimodal_models(route_probe):
-            raise ValueError("requested model lacks a passing multimodal probe")
+        if args.model not in passing_models(route_probe):
+            raise ValueError("requested model lacks a passing model probe")
         resolved_model_allowlist = pinned_response_models(route_probe, args.model)
 
         environment = load_export_env(args.env_file)
@@ -830,7 +824,7 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError("missing LIBINFER_NEO_URL or LIBINFER_SK")
         prompt = args.prompt.read_text(encoding="utf-8")
         run_id = args.run_id or (
-            "task1-gpt56-" + sha256_text(
+            "task1-text-" + sha256_text(
                 f"{args.model}|{sha256_file(args.prompt)}|{args.setting}"
             )[:12]
         )
@@ -843,7 +837,6 @@ def main(argv: list[str] | None = None) -> int:
             prediction_schema_path=args.prediction_schema,
             prompt_path=args.prompt,
             route_probe_path=args.route_probe,
-            font_path=args.font,
             confusables_path=args.confusables,
             platform_evidence_path=args.platform_evidence,
             model=args.model,
@@ -877,7 +870,6 @@ def main(argv: list[str] | None = None) -> int:
                     model=args.model,
                     run_id=run_id,
                     setting=args.setting,
-                    font_path=args.font,
                     confusables_path=args.confusables,
                     platform_evidence_sha256=platform_evidence_sha256,
                     max_tokens=args.max_tokens,
@@ -929,7 +921,7 @@ def main(argv: list[str] | None = None) -> int:
         usage = summarize_usage(args.out, selected)
         pass_count = len(predictions)
         summary = {
-            "schema_version": "task1-multimodal-batch-summary/v0.1",
+            "schema_version": "task1-text-batch-summary/v0.1",
             "generated_at": utc_now(),
             "status": "PASS" if pass_count == len(selected) else "PARTIAL",
             "config_fingerprint": config["config_fingerprint"],

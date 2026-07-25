@@ -1,6 +1,6 @@
 {
   "case_count": 600,
-  "contract_sha256": "6929eddaa64234ac48eccc4cb5780aee231f187bb1665741a566c0107953ea15",
+  "contract_sha256": "7c2f462ecc92ca57b69675afc4462a348e8c75614bcc5960465c6110fe4fcc4d",
   "handoff_id": "riskchainbench-task1-task2-handoff-v0.1",
   "handoff_map": {
     "bytes": 287892,
@@ -17,7 +17,7 @@
   "schema_version": "riskchainbench-handoff-contract/v0.1",
   "status": "PASS",
   "task1_benchmark_id": "riskchainbench-task1-obfuscated-reconstruction-v0.4",
-  "task1_contract_sha256": "fba49afafbf14bc375716754152163afc57759c90a4d904dd53c8eb4e6986dda",
+  "task1_contract_sha256": "28a2fe6bac429d902153f3d9f2b575b89439115a91e9cd882843d5e54e056240",
   "task1_variant_index": 0,
   "task2_benchmark_id": "riskchainbench-task2-controlled-web-investigation-v0.3",
   "task2_contract_sha256": "028109cd4966e685aa7e611472ef7bc6482a5b83f68f776f9547f7c8175fabed"

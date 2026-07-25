@@ -1,6 +1,7 @@
 -r requirements-task1.txt
 numpy==2.2.6
 Pillow==11.2.1
+playwright==1.60.0
 qrcode==8.2
 zxing-cpp==2.3.0
 onnxruntime==1.21.1

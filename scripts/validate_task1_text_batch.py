@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently validate a resumable Task 1 multimodal batch run."""
+"""Independently validate a resumable Task 1 text-token batch run."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-import run_task1_multimodal_batch as runner  # noqa: E402
+import run_task1_text_batch as runner  # noqa: E402
 from validate_unified_mllm_smoke import validate_generation_policy  # noqa: E402
 
 
@@ -93,6 +93,11 @@ def validate_run(run_dir: Path) -> dict[str, Any]:
     checks.require(summary.get("status") == "PASS", "SUMMARY_NOT_PASS")
     checks.require(summary.get("oneapi_used") is False, "SUMMARY_ONEAPI_USED")
     checks.require(config.get("oneapi_used") is False, "CONFIG_ONEAPI_USED")
+    checks.require(
+        config.get("schema_version") == "task1-text-batch-config/v0.1",
+        "CONFIG_SCHEMA_NOT_TEXT",
+    )
+    checks.require(config.get("input_view") == "TEXT", "CONFIG_INPUT_VIEW_NOT_TEXT")
     checks.require(
         summary.get("config_fingerprint") == config.get("config_fingerprint"),
         "SUMMARY_CONFIG_MISMATCH",
@@ -258,13 +263,15 @@ def validate_run(run_dir: Path) -> dict[str, Any]:
                     f"INPUT_{field.upper()}",
                     sample_id=sample_id,
                 )
+            # Text-token inputs do not include rendered images.
             image = input_audit.get("image") or {}
-            checks.file_hash(
-                Path(str(image.get("path") or "")),
-                image.get("sha256"),
-                "TASK_IMAGE",
-                sample_id=sample_id,
-            )
+            if image:
+                checks.file_hash(
+                    Path(str(image.get("path") or "")),
+                    image.get("sha256"),
+                    "TASK_IMAGE",
+                    sample_id=sample_id,
+                )
         if call_path.is_file():
             call = read_json(call_path)
             checks.require(call.get("status") == "PASS", "MODEL_CALL_NOT_PASS", sample_id=sample_id)
@@ -284,8 +291,18 @@ def validate_run(run_dir: Path) -> dict[str, Any]:
             )
             checks.require(
                 call.get("request_protocol")
-                == "riskchainbench_task1_multimodal_batch_v0.1",
+                == "riskchainbench_task1_text_batch_v0.1",
                 "REQUEST_PROTOCOL_CHANGED",
+                sample_id=sample_id,
+            )
+            checks.require(
+                call.get("multimodal_input") is False,
+                "MODEL_CALL_UNEXPECTED_MULTIMODAL_INPUT",
+                sample_id=sample_id,
+            )
+            checks.require(
+                call.get("image_count") == 0,
+                "MODEL_CALL_UNEXPECTED_IMAGE",
                 sample_id=sample_id,
             )
             policy_errors = validate_generation_policy(
@@ -319,7 +336,7 @@ def validate_run(run_dir: Path) -> dict[str, Any]:
                     )
 
     return {
-        "schema_version": "task1-multimodal-batch-validation/v0.1",
+        "schema_version": "task1-text-batch-validation/v0.1",
         "generated_at": utc_now(),
         "status": "PASS" if not checks.errors else "FAIL",
         "run_dir": str(run_dir),
