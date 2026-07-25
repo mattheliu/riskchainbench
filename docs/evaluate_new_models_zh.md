@@ -60,6 +60,18 @@ Task 1 与 Task 2 使用同一个被测模型，但结果分开统计。Task 2 �
 `riskchainbench-balanced-600-v0.3`，Task 2 和 handoff 的案例数必须都是
 600，handoff 只能使用 Task 1 `v000`。
 
+可移植发布还固定以下 evaluator/runtime 产物：
+
+| 产物 | SHA-256 |
+|---|---|
+| 600-case handoff map | `78502501b787b892049e45587d1ece84547c960b35f66f4764dfb81f2e336177` |
+| Task 2 runtime supplement | `195a60585d726a6feb4dd986ffa324d0fac6a7746f1003ef669f392976689617` |
+| Runtime metadata bundle | `60d60bdeb7dd5448e0ea6a8349811075bed3b266a8586698fcb301f13ca14c1c` |
+
+每个数据仓库根目录的 `PORTABLE_OVERLAY_MANIFEST.json` 记录该次发布的
+`overlay_sha256`。不要把旧 overlay 哈希写死到运行脚本中；应由下载后的验证器
+读取并核验其内嵌值。
+
 ## 4. 环境要求
 
 - Linux x86-64；
@@ -150,6 +162,22 @@ export HTTPS_PROXY="$https_proxy"
 
 不要同时从两个平台拼接一套运行目录。可用一个平台作为主下载源，另一个平台只
 用于 SHA-256 回读或断点恢复。
+
+### 5.3 下载后完整性检查
+
+ModelScope 与 Hugging Face 提供相同的 portable overlay。下载完成后分别执行：
+
+```bash
+python data/task1/tools/verify_split_task_platform_overlay.py \
+  --root data/task1
+
+python data/task2/tools/verify_split_task_platform_overlay.py \
+  --root data/task2
+```
+
+两次都必须返回 `status=PASS`，且 `case_count=600`。验证器会检查 overlay
+内嵌哈希、逐文件 SHA-256、handoff map，以及 Task 2 runtime supplement/bundle。
+平台仓库可能包含既有的 Docker 基础文件；这些额外文件不影响 overlay 校验。
 
 ## 6. 获取代码与安装依赖
 
@@ -411,4 +439,3 @@ accuracy/F1。
 - 系统失败、模型失败、弃答和不可调查没有混算；
 - 结果中没有凭证、原始 resolver、真实入口或未脱敏截图；
 - 未完成 Human Gold/Judge 校准时，没有发布 accuracy/F1 或正式证据链总分。
-
