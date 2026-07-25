@@ -114,6 +114,21 @@ class ModelCallError(RuntimeError):
         self.audit = audit
 
 
+def provider_output_observed(attempt: dict[str, Any]) -> bool:
+    """Return whether an attempt reached a model-produced response."""
+
+    return any(
+        key in attempt and attempt.get(key) is not None
+        for key in (
+            "response_content",
+            "response_id",
+            "response_model",
+            "finish_reason",
+            "usage",
+        )
+    )
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -423,6 +438,7 @@ def call_model_json(
             "image_count": len(image_records),
             "multimodal_input": bool(image_records),
             "request_protocol": request_protocol,
+            "retry_policy": "SYSTEM_FAILURES_ONLY",
             "max_attempts": max_attempts,
             "timeout_seconds": timeout_seconds,
             "attempts": attempts,
@@ -511,6 +527,8 @@ def call_model_json(
                 row.update(
                     {
                         "status": "FAIL_PROTOCOL_VALIDATION",
+                        "failure_owner": "MODEL",
+                        "retryable": False,
                         "duration_seconds": round(time.monotonic() - started, 3),
                         "response_sha256": sha256_text(text),
                         "response_content": text,
@@ -525,15 +543,8 @@ def call_model_json(
                     }
                 )
                 attempts.append(row)
-                validation_feedback = validation_errors
-                audit = make_audit(
-                    "RETRYING" if attempt < max_attempts else "FAIL",
-                    payload.get("model"),
-                )
+                audit = make_audit("FAIL", payload.get("model"))
                 persist(audit)
-                if attempt < max_attempts:
-                    time.sleep(attempt)
-                    continue
                 break
             row.update(
                 {
@@ -567,7 +578,7 @@ def call_model_json(
             urllib.error.HTTPError,
         ) as exc:
             http_status = exc.code if isinstance(exc, urllib.error.HTTPError) else None
-            retryable = http_status is None or http_status in {
+            retryable_status = http_status is None or http_status in {
                 408,
                 409,
                 425,
@@ -577,9 +588,12 @@ def call_model_json(
                 503,
                 504,
             }
+            observed = payload is not None or text is not None
+            retryable = retryable_status and not observed
             row.update(
                 {
                     "status": "FAIL_RETRYABLE" if retryable else "FAIL_TERMINAL",
+                    "failure_owner": "SYSTEM" if not observed else "MODEL",
                     "duration_seconds": round(time.monotonic() - started, 3),
                     "error_type": type(exc).__name__,
                     "error": str(exc)[:800],
@@ -607,9 +621,6 @@ def call_model_json(
                     }
                 )
             attempts.append(row)
-            validation_feedback = [
-                f"{type(exc).__name__}:INVALID_OR_MISSING_JSON_OBJECT"
-            ]
             should_retry = retryable and attempt < max_attempts
             persist(make_audit("RETRYING" if should_retry else "FAIL"))
             if should_retry:

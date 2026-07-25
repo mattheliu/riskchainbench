@@ -5,7 +5,7 @@
 {"bytes":2581,"path":"configs/task1_text_batch_prompt_v0.1.md","sha256":"0ff36d7884742635ea4eec3db72e54ad9bb1c8b895db24c32130ed7839357d6c","visibility":"SOURCE_CODE"}
 {"bytes":3242,"path":"configs/task1_variant_recipes_v0.1.json","sha256":"e4b527ee05aba603ae92c45a4bae449eb4d57c8840407bb8ac4449c1cdd33edb","visibility":"SOURCE_CODE"}
 {"bytes":516019,"path":"data/derived/unicode_confusables_ascii_v17.0.0.json","sha256":"b5873315b888da4f7ea229f0a3f86110158c0112dabd24a04e8dc1fb62727d89","visibility":"SOURCE_CODE"}
-{"bytes":25744,"path":"docs/evaluate_new_models_zh.md","sha256":"d0d04b7962d39808937e19356e81746562d76275c461399b6f0d91f86de10e9b","visibility":"SOURCE_CODE"}
+{"bytes":26752,"path":"docs/evaluate_new_models_zh.md","sha256":"6e5ebbb6c38078c0928e19185e2693518f9554084e9b726019783699c7f4e624","visibility":"SOURCE_CODE"}
 {"bytes":1049,"path":"handoff_contract.json","sha256":"b71f56f471a5bd49d4575d6747e1e87494fa62ff7a7f4b412e5704d73c6591eb","visibility":"SOURCE_CODE"}
 {"bytes":3009369,"path":"model_visible/task1_inputs.jsonl","sha256":"de767cb0fc3352c04e186cf6d83f742bd87e20736e31d7d720a5562d08aa9d64","visibility":"SOURCE_CODE"}
 {"bytes":679949,"path":"model_visible/task1_inputs_manifest.json","sha256":"8d242620d3f98d526b5bae1240ac23e79f2af7297b4a38f581ac39900cae64e3","visibility":"SOURCE_CODE"}
@@ -19,10 +19,11 @@
 {"bytes":2908,"path":"schemas/task1_variant_recipes_v0.1.schema.json","sha256":"ad3dfa88eba6688ce1388ba80da08ec5389c547462c08f24f6aa1253c38239ea","visibility":"SOURCE_CODE"}
 {"bytes":8329,"path":"scripts/build_obfuscated_reconstruction_tasks.py","sha256":"93f5b4c2cac2ab72c028f8541ead3e727cfde032b5da6ffb9b9ec9909d13d59b","visibility":"SOURCE_CODE"}
 {"bytes":7258,"path":"scripts/build_split_task_platform_overlay_manifest.py","sha256":"32a12587c6efde665af57af08c382dec9f2451b532c5dd765e8536e5eb87de24","visibility":"SOURCE_CODE"}
+{"bytes":18035,"path":"scripts/freeze_task1_protocol_results.py","sha256":"bb365c73c7780704577c4835280dbc15e39c4b49d61f8ee7523c1424d7befcbf","visibility":"SOURCE_CODE"}
 {"bytes":99082,"path":"scripts/generate_obfuscated_session_dataset.py","sha256":"195490a8cd65b2f6c5583b5c25f29c0c946f21c4cc5e6626e9f898829862f52e","visibility":"SOURCE_CODE"}
 {"bytes":16693,"path":"scripts/run_task1_four_model_matrix.py","sha256":"7558bccec2b6e30ca67eb7cf394ac21bcc3bb0f806cd032506228683aca42dad","visibility":"SOURCE_CODE"}
-{"bytes":39287,"path":"scripts/run_task1_text_batch.py","sha256":"194a2d1ea025013ed677e52b009ab22d5ae0430925af4c181b96f52ef4d8188a","visibility":"SOURCE_CODE"}
-{"bytes":66687,"path":"scripts/run_unified_mllm_smoke.py","sha256":"4d6efc873a5c3c260b225ef763762aa0efee7f2df4f2e3aaf140e7a811489cc1","visibility":"SOURCE_CODE"}
+{"bytes":40844,"path":"scripts/run_task1_text_batch.py","sha256":"74ffe6caeec79d5467a5d3312fc66bf11e32f88616b539a8cf5e2243ccb99b2d","visibility":"SOURCE_CODE"}
+{"bytes":67032,"path":"scripts/run_unified_mllm_smoke.py","sha256":"0f48e8a63f99944cff7b92f30a7cf3d1e95cb3e55beda372b9de7a7eb5467eef","visibility":"SOURCE_CODE"}
 {"bytes":20694,"path":"scripts/score_obfuscated_reconstruction.py","sha256":"7b8bd1707d8c9c5141009a205d0926182e16cbe02c8cc120a2e9e969ffc0adf8","visibility":"SOURCE_CODE"}
 {"bytes":6236,"path":"scripts/stateful_scope.py","sha256":"20447acf74040a2bd704514e2e3a625cbf8cbbce548025118a9bfc2bdbfb4425","visibility":"SOURCE_CODE"}
 {"bytes":13622,"path":"scripts/validate_task1_text_batch.py","sha256":"7d3b6e674f3713648504a0a1aca1edab7c6ebc7b81ab24d5c6c4a1bfe6442175","visibility":"SOURCE_CODE"}

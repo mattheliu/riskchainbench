@@ -289,6 +289,27 @@ python code/task1/scripts/run_task1_four_model_matrix.py \
 Task 1 的系统错误允许有限重试；模型拒答、无法解析或不符合输出 Schema 必须保留
 为模型失败，不能使用 gold 自动修复。
 
+严格重试边界如下：
+
+- 502、超时或连接中断等“尚未获得任何模型响应”的系统故障可以在固定预算内
+  重试；
+- 一旦取得模型响应，坏 JSON、拒答、Schema 错误或无效内容立即成为该案例的
+  模型终态，不再向同一模型追加“纠格式”请求；
+- 再次执行 matrix runner 时，已有的模型终态只参与汇总，不会再次调用模型；
+- 历史运行若曾混合重试系统错误与模型错误，必须先按首个模型可观察结果重新冻结：
+
+```bash
+python code/task1/scripts/freeze_task1_protocol_results.py \
+  --task1-release data/task1 \
+  --raw-results runs/task1-raw \
+  --out runs/task1 \
+  --models "$MODELS"
+```
+
+冻结器允许跳过前置系统失败，但把首个模型可观察结果设为不可逆终态。它会输出
+600 条逐案例 `protocol_accounting.jsonl`，并明确统计被旧重试掩盖的模型失败。
+后续 Task 2 的 `--task1-results` 必须指向这份协议冻结结果。
+
 ## 10. 运行 Task 2
 
 Task 2 会先等待每个模型的 Task 1 主任务完成，然后分别跑 reference restoration

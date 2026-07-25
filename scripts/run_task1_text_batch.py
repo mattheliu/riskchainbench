@@ -32,7 +32,7 @@ from run_unified_mllm_smoke import (  # noqa: E402
     call_model_json,
     canonical_json,
     load_export_env,
-    pinned_response_models,
+    provider_output_observed,
     sha256_file,
     sha256_text,
     task_message_text,
@@ -574,6 +574,37 @@ def completed_prediction(
     return prediction
 
 
+def terminal_model_failure(
+    task_root: Path,
+    *,
+    config_fingerprint: str,
+) -> dict[str, Any] | None:
+    """Return a prior model-owned failure that must not be retried."""
+
+    state_path = task_root / "state.json"
+    if not state_path.is_file():
+        return None
+    state = read_json(state_path)
+    if state.get("status") != "FAIL":
+        return None
+    if state.get("config_fingerprint") != config_fingerprint:
+        raise ValueError(f"failed task has a different config: {task_root.name}")
+    attempt_path = Path(str(state.get("attempt_path") or ""))
+    if not attempt_path.is_absolute():
+        attempt_path = PROJECT_ROOT / attempt_path
+    call_path = attempt_path / "model_call.json"
+    if not call_path.is_file():
+        return None
+    call = read_json(call_path)
+    if not any(
+        provider_output_observed(row)
+        for row in call.get("attempts") or []
+        if isinstance(row, dict)
+    ):
+        return None
+    return state
+
+
 def build_user_payload(
     task: dict[str, Any],
     *,
@@ -644,6 +675,23 @@ def run_one(
             "status": "PASS",
             "resumed": True,
             "prediction": existing,
+        }
+    prior_model_failure = terminal_model_failure(
+        task_root,
+        config_fingerprint=config["config_fingerprint"],
+    )
+    if prior_model_failure is not None:
+        return {
+            "sample_id": sample_id,
+            "status": "FAIL",
+            "resumed": True,
+            "error_type": str(
+                prior_model_failure.get("error_type") or "TASK1_MODEL_FAILURE"
+            ),
+            "error": str(
+                prior_model_failure.get("error")
+                or "prior model-owned failure is terminal"
+            )[:1000],
         }
 
     attempt_root = next_attempt_dir(task_root)
