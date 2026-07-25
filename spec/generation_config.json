@@ -1,0 +1,543 @@
+{
+  "schema_version": "obfuscated-session-config/v0.1",
+  "config_id": "covert-entry-stage1-default-v0.3",
+  "entry_policy": "RESERVED_OR_MASKED_ONLY",
+  "homophone_lexicon": {
+    "lexicon_id": "project-curated-zh-similar-sound-v0.2",
+    "phonetic_engine": {
+      "name": "pypinyin",
+      "version": "0.54.0",
+      "style": "TONE3",
+      "heteronym": false,
+      "neutral_tone_with_five": true
+    },
+    "source": {
+      "source_id": "PROJECT_CURATED_ZH_SIMILAR_SOUND_V0.2",
+      "verification_status": "CURATED_NOT_OFFICIAL",
+      "reference": "Internal research seed list; replace with a versioned licensed lexicon before publication.",
+      "license": "INTERNAL_RESEARCH_ONLY"
+    },
+    "rules": [
+      {
+        "rule_id": "zh-tongcheng-001",
+        "source": "同城",
+        "pinyin_key": "tong-cheng",
+        "candidates": ["桐城", "同成"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-jiaoyou-001",
+        "source": "交友",
+        "pinyin_key": "jiao-you",
+        "candidates": ["郊游", "交油"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-lianxi-001",
+        "source": "联系",
+        "pinyin_key": "lian-xi",
+        "candidates": ["连系", "联席"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-kefu-001",
+        "source": "客服",
+        "pinyin_key": "ke-fu",
+        "candidates": ["客福", "课服"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-chongzhi-001",
+        "source": "充值",
+        "pinyin_key": "chong-zhi",
+        "candidates": ["冲值", "充直"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-touzhu-001",
+        "source": "投注",
+        "pinyin_key": "tou-zhu",
+        "candidates": ["投住", "头注"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-xiazhu-001",
+        "source": "下注",
+        "pinyin_key": "xia-zhu",
+        "candidates": ["下住", "夏注"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-xiazai-001",
+        "source": "下载",
+        "pinyin_key": "xia-zai",
+        "candidates": ["下栽", "夏载"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-huodong-001",
+        "source": "活动",
+        "pinyin_key": "huo-dong",
+        "candidates": ["活冻", "获动"],
+        "probability": 0.8
+      },
+      {
+        "rule_id": "zh-yaoqing-001",
+        "source": "邀请",
+        "pinyin_key": "yao-qing",
+        "candidates": ["妖请", "邀清"],
+        "probability": 0.8
+      },
+      {
+        "rule_id": "zh-yuepao-001",
+        "source": "约炮",
+        "pinyin_key": "yue-pao",
+        "candidates": ["月泡", "约跑"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-waiwei-001",
+        "source": "外围",
+        "pinyin_key": "wai-wei",
+        "candidates": ["外维", "外唯"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-siliao-001",
+        "source": "私聊",
+        "pinyin_key": "si-liao",
+        "candidates": ["思聊", "丝聊"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-tianjia-001",
+        "source": "添加",
+        "pinyin_key": "tian-jia",
+        "candidates": ["天加", "添佳"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-zhanghao-001",
+        "source": "账号",
+        "pinyin_key": "zhang-hao",
+        "candidates": ["帐号", "账浩"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-jiaqun-001",
+        "source": "加群",
+        "pinyin_key": "jia-qun",
+        "candidates": ["家群", "加裙"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-kouling-001",
+        "source": "口令",
+        "pinyin_key": "kou-ling",
+        "candidates": ["口玲", "口伶"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-zhuanzhang-001",
+        "source": "转账",
+        "pinyin_key": "zhuan-zhang",
+        "candidates": ["转帐", "专账"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-tixian-001",
+        "source": "提现",
+        "pinyin_key": "ti-xian",
+        "candidates": ["题现", "提线"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-fanli-001",
+        "source": "返利",
+        "pinyin_key": "fan-li",
+        "candidates": ["反利", "返礼"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-touzi-001",
+        "source": "投资",
+        "pinyin_key": "tou-zi",
+        "candidates": ["头资", "投姿"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-licai-001",
+        "source": "理财",
+        "pinyin_key": "li-cai",
+        "candidates": ["礼才", "里财"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-yanzheng-001",
+        "source": "验证",
+        "pinyin_key": "yan-zheng",
+        "candidates": ["燕证", "验正"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-zhuce-001",
+        "source": "注册",
+        "pinyin_key": "zhu-ce",
+        "candidates": ["住册", "注策"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-denglu-001",
+        "source": "登录",
+        "pinyin_key": "deng-lu",
+        "candidates": ["登陆", "登路"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-yinhangka-001",
+        "source": "银行卡",
+        "pinyin_key": "yin-hang-ka",
+        "candidates": ["银航卡", "吟行卡"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-zhifu-001",
+        "source": "支付",
+        "pinyin_key": "zhi-fu",
+        "candidates": ["知付", "支福"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-saoma-001",
+        "source": "扫码",
+        "pinyin_key": "sao-ma",
+        "candidates": ["扫马", "搔码"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-qunliao-001",
+        "source": "群聊",
+        "pinyin_key": "qun-liao",
+        "candidates": ["裙聊", "群辽"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-paofen-001",
+        "source": "跑分",
+        "pinyin_key": "pao-fen",
+        "candidates": ["跑芬", "跑纷"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-shazhupan-001",
+        "source": "杀猪盘",
+        "pinyin_key": "sha-zhu-pan",
+        "candidates": ["沙珠盘", "砂朱盘"],
+        "probability": 1.0
+      },
+      {
+        "rule_id": "zh-luoliao-001",
+        "source": "裸聊",
+        "pinyin_key": "luo-liao",
+        "candidates": ["罗聊", "萝聊"],
+        "probability": 1.0
+      }
+    ]
+  },
+  "entry_confusables": {
+    "mapping_id": "safe-unicode-confusable-entry-v0.3",
+    "replacement_probability": 0.72,
+    "minimum_replacements": 2,
+    "reference_rules": {
+      "path": "data/derived/unicode_confusables_ascii_v17.0.0.json",
+      "sha256": "b5873315b888da4f7ea229f0a3f86110158c0112dabd24a04e8dc1fb62727d89",
+      "mapping_id": "uts39-ascii-inverse-v17.0.0",
+      "unicode_version": "17.0.0",
+      "require_ascii_a_to_z": true,
+      "candidate_limit_per_target": 12,
+      "selection_policy": "PROJECT_CURATED_FIRST_THEN_VERSIONED_UTS39"
+    },
+    "source": {
+      "source_id": "PROJECT_CURATED_UNICODE_CONFUSABLES_V0.2",
+      "verification_status": "CURATED_NOT_UNICODE_OFFICIAL",
+      "reference": "Small research mapping inspired by visual confusables; not a claim of UTS #39 completeness.",
+      "license": "INTERNAL_RESEARCH_ONLY"
+    },
+    "rules": [
+      {
+        "rule_id": "confusable-latin-a-greek-alpha",
+        "source": "a",
+        "candidates": ["α"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-e-greek-epsilon",
+        "source": "e",
+        "candidates": ["ε"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-i-greek-iota",
+        "source": "i",
+        "candidates": ["ι"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-o-greek-omicron",
+        "source": "o",
+        "candidates": ["ο"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-w-greek-omega",
+        "source": "w",
+        "candidates": ["ω"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-c-cyrillic-es",
+        "source": "c",
+        "candidates": ["с"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-h-cyrillic-shha",
+        "source": "h",
+        "candidates": ["һ"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-j-cyrillic-je",
+        "source": "j",
+        "candidates": ["ј"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-l-cyrillic-palochka",
+        "source": "l",
+        "candidates": ["ӏ"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-p-cyrillic-er",
+        "source": "p",
+        "candidates": ["р"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-s-cyrillic-dze",
+        "source": "s",
+        "candidates": ["ѕ"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-x-cyrillic-ha",
+        "source": "x",
+        "candidates": ["х"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-y-cyrillic-u",
+        "source": "y",
+        "candidates": ["у"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      },
+      {
+        "rule_id": "confusable-latin-v-greek-nu",
+        "source": "v",
+        "candidates": ["ν"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-k-greek-kappa",
+        "source": "k",
+        "candidates": ["κ"],
+        "confusable_class": "LATIN_TO_GREEK"
+      },
+      {
+        "rule_id": "confusable-latin-m-cyrillic-em",
+        "source": "m",
+        "candidates": ["м"],
+        "confusable_class": "LATIN_TO_CYRILLIC"
+      }
+    ]
+  },
+  "emoji_insertion": {
+    "chunk_min_characters": 1,
+    "chunk_max_characters": 2,
+    "insertion_probability": 0.68,
+    "min_insertions": 5,
+    "max_insertions": 20,
+    "line_break_probability": 0.12
+  },
+  "platform_profiles": {
+    "bilibili": {
+      "profile_id": "bilibili-mixed-provenance-bracket-tokens-v0.2",
+      "token_format": "BRACKET_CODE",
+      "render_representation": "PLATFORM_IMAGE_AFTER_SEND",
+      "syntax": {
+        "forms": ["[name]"],
+        "surface_constraints": ["chat_or_comment_surface_requires_client_validation"]
+      },
+      "source": {
+        "source_id": "EMOJIALL_BILIBILI_20260720",
+        "verification_status": "SECONDARY_CATALOG_REVIEWED",
+        "source_url": "https://www.emojiall.com/zh-hans/platform-bilibili",
+        "accessed_on": "2026-07-20",
+        "reference": "Secondary catalog documents [name] shortcut syntax and selected token names; not an official Bilibili version manifest.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": [
+        "[微笑]",
+        "[疑惑]",
+        "[笑哭]",
+        "[妙啊]",
+        "[点赞]",
+        "[酸了]",
+        "[大哭]",
+        "[害羞]",
+        "[呆]",
+        "[生病]",
+        "[热词系列_干杯]",
+        "[热词系列_啊?]",
+        "[tv_害羞]",
+        "[tv_流泪]",
+        "[tv_生病]",
+        "[tv_腼腆]",
+        "[蹲蹲]",
+        "[藏狐]",
+        "[tv_生气]",
+        "[tv_大哭]",
+        "[tv_晕]",
+        "[热词系列_念头通达]"
+      ],
+      "token_sources": {
+        "[热词系列_干杯]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[热词系列_啊?]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_害羞]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_流泪]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_生病]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_腼腆]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[蹲蹲]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[藏狐]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_生气]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_大哭]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[tv_晕]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"},
+        "[热词系列_念头通达]": {"source_id": "USER_SUPPLIED_SAMPLE_20260720", "verification_status": "USER_SUPPLIED_UNVERIFIED"}
+      }
+    },
+    "douyin": {
+      "profile_id": "douyin-secondary-catalog-bracket-tokens-v0.2",
+      "token_format": "BRACKET_CODE",
+      "render_representation": "PLATFORM_IMAGE_AFTER_SEND",
+      "syntax": {
+        "forms": ["[name]"],
+        "surface_constraints": ["client_and_surface_version_must_be_recorded"]
+      },
+      "source": {
+        "source_id": "EMOJIALL_DOUYIN_20260720",
+        "verification_status": "SECONDARY_CATALOG_REVIEWED",
+        "source_url": "https://www.emojiall.com/zh-hans/platform-douyin",
+        "accessed_on": "2026-07-20",
+        "reference": "Secondary catalog documents [name] shortcut syntax and selected token names; not an official Douyin version manifest.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["[V5]", "[给力]", "[嘿哈]", "[加好友]", "[机智]", "[灵机一动]", "[困]", "[疑问]", "[泣不成声]", "[小鼓掌]", "[发呆]", "[酷拽]", "[泪奔]", "[微笑]", "[害羞]", "[晕]", "[生病]", "[大哭]"]
+    },
+    "wechat": {
+      "profile_id": "wechat-secondary-catalog-multi-syntax-v0.2",
+      "token_format": "SLASH_OR_BRACKET_CODE",
+      "render_representation": "PLATFORM_IMAGE_AFTER_SEND",
+      "syntax": {
+        "forms": ["/name<space>", "[name]"],
+        "surface_constraints": ["wechat_chat_only", "client_version_must_be_recorded"]
+      },
+      "source": {
+        "source_id": "EMOJIALL_WECHAT_20260720",
+        "verification_status": "SECONDARY_CATALOG_REVIEWED",
+        "source_url": "https://www.emojiall.com/zh-hans/platform-wechat",
+        "accessed_on": "2026-07-20",
+        "reference": "Secondary catalog documents slash/bracket shortcut syntax for WeChat chat; it does not establish WeChat Channels behavior.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["[裂开]", "[苦涩]", "[叹气]", "[让我看看]", "[666]", "/微笑 ", "/疑问 ", "/流泪 ", "/害羞 ", "/大哭 ", "/发怒 ", "/偷笑 ", "/捂脸 ", "/吃瓜 "]
+    },
+    "qq": {
+      "profile_id": "qq-secondary-catalog-slash-tokens-v0.2",
+      "token_format": "SLASH_CODE_WITH_TRAILING_SPACE",
+      "render_representation": "PLATFORM_IMAGE_AFTER_SEND",
+      "syntax": {
+        "forms": ["/name<space>", "/shortcode<space>"],
+        "surface_constraints": ["pc_shortcut_setting_may_be_required", "client_version_must_be_recorded"]
+      },
+      "source": {
+        "source_id": "EMOJIALL_QQ_20260720",
+        "verification_status": "SECONDARY_CATALOG_REVIEWED",
+        "source_url": "https://www.emojiall.com/zh-hans/platform-qq",
+        "accessed_on": "2026-07-20",
+        "reference": "Secondary catalog documents slash-name and slash-shortcode input; not an official QQ version manifest.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["/wx ", "/yiw ", "/ll ", "/hx ", "/dk ", "/fn ", "/tx ", "/dz ", "/cg ", "/doge ", "/xk ", "/azgc "]
+    },
+    "weibo": {
+      "profile_id": "weibo-secondary-catalog-bracket-tokens-v0.2",
+      "token_format": "BRACKET_CODE",
+      "render_representation": "PLATFORM_IMAGE_AFTER_SEND",
+      "syntax": {
+        "forms": ["[name]"],
+        "surface_constraints": ["client_and_surface_version_must_be_recorded"]
+      },
+      "source": {
+        "source_id": "EMOJIALL_WEIBO_20260720",
+        "verification_status": "SECONDARY_CATALOG_REVIEWED",
+        "source_url": "https://www.emojiall.com/zh-hans/platform-weibo",
+        "accessed_on": "2026-07-20",
+        "reference": "Secondary catalog documents [name] shortcut syntax and selected token names; not an official Weibo version manifest.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["[爱你]", "[拜拜]", "[抱抱]", "[悲伤]", "[闭嘴]", "[吃瓜]", "[doge]", "[费解]", "[鼓掌]", "[哈哈]", "[害羞]", "[汗]", "[呵呵]", "[可爱]"]
+    },
+    "baidu_tieba": {
+      "profile_id": "baidu-tieba-secondary-catalog-hash-paren-v0.2",
+      "token_format": "HASH_PAREN_CODE",
+      "render_representation": "PLATFORM_IMAGE_AFTER_SEND",
+      "syntax": {
+        "forms": ["#(name)"],
+        "surface_constraints": ["app_only_according_to_secondary_catalog", "client_version_must_be_recorded"]
+      },
+      "source": {
+        "source_id": "EMOJIALL_BAIDU_20260720",
+        "verification_status": "SECONDARY_CATALOG_REVIEWED",
+        "source_url": "https://www.emojiall.com/zh-hans/platform-baidu",
+        "accessed_on": "2026-07-20",
+        "reference": "Secondary catalog documents #(name) shortcut syntax for Baidu Tieba app; not an official Baidu version manifest.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["#(呵呵)", "#(哈哈)", "#(酷)", "#(开心)", "#(汗)", "#(泪)", "#(疑问)", "#(滑稽)", "#(生气)", "#(惊讶)", "#(爱心)", "#(礼物)"]
+    },
+    "wechat_channels": {
+      "profile_id": "wechat-channels-research-placeholder-unicode-v0.1",
+      "token_format": "UNICODE_EMOJI",
+      "source": {
+        "source_id": "RESEARCH_PLACEHOLDER_WECHAT_CHANNELS_V0.1",
+        "verification_status": "NOT_VERIFIED_FOR_WECHAT_CHANNELS",
+        "reference": "The supplied WeChat catalog does not establish WeChat Channels behavior; do not inherit the WeChat chat profile without client validation.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["🙂", "🥂", "🙈", "😭", "🤧", "🤫", "👍", "😵", "💬"]
+    },
+    "tiktok": {
+      "profile_id": "tiktok-research-placeholder-unicode-v0.1",
+      "token_format": "UNICODE_EMOJI",
+      "render_representation": "UNICODE_GLYPH",
+      "source": {
+        "source_id": "RESEARCH_PLACEHOLDER_TIKTOK_V0.1",
+        "verification_status": "NOT_VERIFIED_FOR_TIKTOK",
+        "reference": "Douyin evidence must not be transferred to TikTok; platform-specific validation is pending.",
+        "license": "RESEARCH_FIXTURE_ONLY"
+      },
+      "tokens": ["🙂", "🥂", "🙈", "😭", "🤧", "🤫", "👍", "😵", "💬"]
+    }
+  }
+}
