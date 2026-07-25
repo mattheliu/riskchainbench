@@ -336,7 +336,7 @@ def build_prediction(
         "sample_id": task["sample_id"],
         "model_id": model,
         "run_id": run_id,
-        "input_view": "TEXT",
+        "input_view": "TOKEN_TEXT",
         "reconstructed_messages": [
             {
                 "message_id": row["message_id"],
@@ -408,7 +408,7 @@ def frozen_config(
         "resolved_model_allowlist": sorted(resolved_model_allowlist),
         "run_id": run_id,
         "evaluation_setting": setting,
-        "input_view": "TEXT",
+        "input_view": "TOKEN_TEXT",
         "temperature_policy": (
             "provider_default_omitted" if model.startswith("gpt-5.") else "explicit_zero"
         ),
@@ -538,7 +538,7 @@ def build_user_payload(
     payload: dict[str, Any] = {
         "phase": "TASK1_RECONSTRUCTION",
         "evaluation_setting": setting,
-        "input_view": "TEXT",
+        "input_view": "TOKEN_TEXT",
         "task": task,
         "output_contract": {
             "keys": sorted(SEMANTIC_KEYS),

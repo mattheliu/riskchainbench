@@ -17,11 +17,11 @@
 {"bytes":8329,"path":"scripts/build_obfuscated_reconstruction_tasks.py","sha256":"93f5b4c2cac2ab72c028f8541ead3e727cfde032b5da6ffb9b9ec9909d13d59b","visibility":"SOURCE_CODE"}
 {"bytes":66042,"path":"scripts/generate_obfuscated_session_dataset.py","sha256":"4800169070c9ca06f1740ce2d040429479bf94813f64088b2d654b4c686da3f1","visibility":"SOURCE_CODE"}
 {"bytes":16363,"path":"scripts/run_task1_four_model_matrix.py","sha256":"de7af179049ef9a940c325fc43ce2dcd52d21a096e7988f18d99b1944568548e","visibility":"SOURCE_CODE"}
-{"bytes":37562,"path":"scripts/run_task1_text_batch.py","sha256":"b859f1acb91c14347dcf1977e5eacfd7a6408413e890b8846cdd2703f6afa350","visibility":"SOURCE_CODE"}
+{"bytes":37580,"path":"scripts/run_task1_text_batch.py","sha256":"1ab6f73177f5bc4e07235078d0750c1af0465ec506629a5264f687fbc655837a","visibility":"SOURCE_CODE"}
 {"bytes":66687,"path":"scripts/run_unified_mllm_smoke.py","sha256":"4d6efc873a5c3c260b225ef763762aa0efee7f2df4f2e3aaf140e7a811489cc1","visibility":"SOURCE_CODE"}
 {"bytes":16041,"path":"scripts/score_obfuscated_reconstruction.py","sha256":"86a7403d1c838a72f4f35e39c057663764549da9488f17178343ecdf94b46732","visibility":"SOURCE_CODE"}
 {"bytes":6236,"path":"scripts/stateful_scope.py","sha256":"20447acf74040a2bd704514e2e3a625cbf8cbbce548025118a9bfc2bdbfb4425","visibility":"SOURCE_CODE"}
-{"bytes":13587,"path":"scripts/validate_task1_text_batch.py","sha256":"be0c6d675852aa3f21fd5c4fe9234fd4173aea9e7d1f531a4cb299534908c147","visibility":"SOURCE_CODE"}
+{"bytes":13622,"path":"scripts/validate_task1_text_batch.py","sha256":"7d3b6e674f3713648504a0a1aca1edab7c6ebc7b81ab24d5c6c4a1bfe6442175","visibility":"SOURCE_CODE"}
 {"bytes":20480,"path":"scripts/validate_unified_mllm_smoke.py","sha256":"c2bc9a128ac1ced63522749d38374a1124501144651258cbbca487928fb21a3e","visibility":"SOURCE_CODE"}
 {"bytes":27017,"path":"scripts/verify_stateful_profile.py","sha256":"11b1ac873bd11acc02d7c2aec237e0017d5f002a02e193ee233a9713b8402c39","visibility":"SOURCE_CODE"}
 {"bytes":3610,"path":"task1_contract.json","sha256":"47f8c6ee9bcbe7aaa69d2a703747ee16284d8a3d2eefe7b90f0ba708853759fc","visibility":"SOURCE_CODE"}

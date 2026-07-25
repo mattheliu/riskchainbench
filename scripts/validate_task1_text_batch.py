@@ -97,7 +97,10 @@ def validate_run(run_dir: Path) -> dict[str, Any]:
         config.get("schema_version") == "task1-text-batch-config/v0.1",
         "CONFIG_SCHEMA_NOT_TEXT",
     )
-    checks.require(config.get("input_view") == "TEXT", "CONFIG_INPUT_VIEW_NOT_TEXT")
+    checks.require(
+        config.get("input_view") == "TOKEN_TEXT",
+        "CONFIG_INPUT_VIEW_NOT_TOKEN_TEXT",
+    )
     checks.require(
         summary.get("config_fingerprint") == config.get("config_fingerprint"),
         "SUMMARY_CONFIG_MISMATCH",

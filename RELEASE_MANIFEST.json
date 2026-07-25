@@ -5,11 +5,11 @@
     "status": "PASS"
   },
   "file_count": 27,
-  "file_manifest_sha256": "02e7408953a685f3cf4bdee244e1b30e1d93ecb8f82f641ed9234a69a5512cba",
-  "generated_at": "2026-07-25T11:50:42+00:00",
-  "release_sha256": "03ba1c957cd323f90cfb8c63c05176e7afed676834aa07b98c44e2ae58433058",
+  "file_manifest_sha256": "fbd75ce121427136ed0f882eb299d9dd4f694ef5eb21a5c30ab97e463ca106f4",
+  "generated_at": "2026-07-25T12:04:14+00:00",
+  "release_sha256": "e6c80f55f2f51232860453488a2099ca6776abfcab9192c820e6d8806a6a8010",
   "schema_version": "riskchainbench-platform-release/v0.1",
   "status": "PASS_STAGED_NOT_UPLOADED",
-  "total_bytes": 872976,
+  "total_bytes": 873029,
   "visibility": "SOURCE_CODE"
 }
