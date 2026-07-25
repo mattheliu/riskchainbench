@@ -1,11 +1,14 @@
-{"bytes":175,"path":"README.md","sha256":"7bfa53eb4f748b7002075716e65494fa5f4eada2acd613e907278705978b7ebe","visibility":"SOURCE_CODE"}
+{"bytes":1060,"path":"README.md","sha256":"5e0d8d27ad0c0aa27cee8c0d3f11af7c293a00b1df1cf01874681fa5a3a3f1fe","visibility":"SOURCE_CODE"}
 {"bytes":935,"path":"configs/obfuscated_reconstruction_prompt_v0.1.md","sha256":"a34855eadd83cdc4595da75348ced409453d961cf4a367cdac17d3dce616557d","visibility":"SOURCE_CODE"}
 {"bytes":19320,"path":"configs/obfuscated_session_generation_v0.1.json","sha256":"2ab5e253c28bee661411b864cd34bc9a0d591ce84f57903ce79569947b2090fb","visibility":"SOURCE_CODE"}
 {"bytes":15957,"path":"configs/platform_token_evidence_v0.1.json","sha256":"f0de777c368c7c323423fb1efd6df20e525816702f4458b35695e93bcda42485","visibility":"SOURCE_CODE"}
 {"bytes":2581,"path":"configs/task1_text_batch_prompt_v0.1.md","sha256":"0ff36d7884742635ea4eec3db72e54ad9bb1c8b895db24c32130ed7839357d6c","visibility":"SOURCE_CODE"}
 {"bytes":3242,"path":"configs/task1_variant_recipes_v0.1.json","sha256":"e4b527ee05aba603ae92c45a4bae449eb4d57c8840407bb8ac4449c1cdd33edb","visibility":"SOURCE_CODE"}
 {"bytes":516019,"path":"data/derived/unicode_confusables_ascii_v17.0.0.json","sha256":"b5873315b888da4f7ea229f0a3f86110158c0112dabd24a04e8dc1fb62727d89","visibility":"SOURCE_CODE"}
+{"bytes":14561,"path":"docs/evaluate_new_models_zh.md","sha256":"6bea18f9894d5351d7bd045fd03fdd65413a31246016ad5ea7749f09d003f52e","visibility":"SOURCE_CODE"}
 {"bytes":1049,"path":"handoff_contract.json","sha256":"b71f56f471a5bd49d4575d6747e1e87494fa62ff7a7f4b412e5704d73c6591eb","visibility":"SOURCE_CODE"}
+{"bytes":3009369,"path":"model_visible/task1_inputs.jsonl","sha256":"de767cb0fc3352c04e186cf6d83f742bd87e20736e31d7d720a5562d08aa9d64","visibility":"SOURCE_CODE"}
+{"bytes":679949,"path":"model_visible/task1_inputs_manifest.json","sha256":"8d242620d3f98d526b5bae1240ac23e79f2af7297b4a38f581ac39900cae64e3","visibility":"SOURCE_CODE"}
 {"bytes":184,"path":"requirements-task1-multimodal.txt","sha256":"d9d689b90620fe8eaf68bce853e7cc0e2548e9ce539cebcab35c5bfa3f85b7af","visibility":"SOURCE_CODE"}
 {"bytes":98,"path":"requirements-task1.txt","sha256":"f5a895f3627106f12005490a13de4b9d196875d2d01510395f9026a479b1a503","visibility":"SOURCE_CODE"}
 {"bytes":2538,"path":"schemas/obfuscated_reconstruction_prediction_v0.1.schema.json","sha256":"d33355c4a3408b4f7c6ebbf43cd263ee826934a02b070b553b0369d4cbd8e2e1","visibility":"SOURCE_CODE"}
@@ -16,7 +19,7 @@
 {"bytes":2908,"path":"schemas/task1_variant_recipes_v0.1.schema.json","sha256":"ad3dfa88eba6688ce1388ba80da08ec5389c547462c08f24f6aa1253c38239ea","visibility":"SOURCE_CODE"}
 {"bytes":8329,"path":"scripts/build_obfuscated_reconstruction_tasks.py","sha256":"93f5b4c2cac2ab72c028f8541ead3e727cfde032b5da6ffb9b9ec9909d13d59b","visibility":"SOURCE_CODE"}
 {"bytes":66042,"path":"scripts/generate_obfuscated_session_dataset.py","sha256":"4800169070c9ca06f1740ce2d040429479bf94813f64088b2d654b4c686da3f1","visibility":"SOURCE_CODE"}
-{"bytes":16363,"path":"scripts/run_task1_four_model_matrix.py","sha256":"de7af179049ef9a940c325fc43ce2dcd52d21a096e7988f18d99b1944568548e","visibility":"SOURCE_CODE"}
+{"bytes":16693,"path":"scripts/run_task1_four_model_matrix.py","sha256":"7558bccec2b6e30ca67eb7cf394ac21bcc3bb0f806cd032506228683aca42dad","visibility":"SOURCE_CODE"}
 {"bytes":37580,"path":"scripts/run_task1_text_batch.py","sha256":"1ab6f73177f5bc4e07235078d0750c1af0465ec506629a5264f687fbc655837a","visibility":"SOURCE_CODE"}
 {"bytes":66687,"path":"scripts/run_unified_mllm_smoke.py","sha256":"4d6efc873a5c3c260b225ef763762aa0efee7f2df4f2e3aaf140e7a811489cc1","visibility":"SOURCE_CODE"}
 {"bytes":16041,"path":"scripts/score_obfuscated_reconstruction.py","sha256":"86a7403d1c838a72f4f35e39c057663764549da9488f17178343ecdf94b46732","visibility":"SOURCE_CODE"}
@@ -24,4 +27,10 @@
 {"bytes":13622,"path":"scripts/validate_task1_text_batch.py","sha256":"7d3b6e674f3713648504a0a1aca1edab7c6ebc7b81ab24d5c6c4a1bfe6442175","visibility":"SOURCE_CODE"}
 {"bytes":20480,"path":"scripts/validate_unified_mllm_smoke.py","sha256":"c2bc9a128ac1ced63522749d38374a1124501144651258cbbca487928fb21a3e","visibility":"SOURCE_CODE"}
 {"bytes":27017,"path":"scripts/verify_stateful_profile.py","sha256":"11b1ac873bd11acc02d7c2aec237e0017d5f002a02e193ee233a9713b8402c39","visibility":"SOURCE_CODE"}
+{"bytes":19320,"path":"spec/generation_config.json","sha256":"2ab5e253c28bee661411b864cd34bc9a0d591ce84f57903ce79569947b2090fb","visibility":"SOURCE_CODE"}
+{"bytes":15517,"path":"spec/generation_record.schema.json","sha256":"2d4e3bc5ea7a597a3d5619c1dd4927b4bebee4c97c7d06a91dd9710c0c50aee5","visibility":"SOURCE_CODE"}
+{"bytes":2581,"path":"spec/model_prompt.md","sha256":"0ff36d7884742635ea4eec3db72e54ad9bb1c8b895db24c32130ed7839357d6c","visibility":"SOURCE_CODE"}
+{"bytes":2622,"path":"spec/task_input.schema.json","sha256":"74c8dd13dcd06287b531187b945f20b7b4c4a50dc111ed86e9a3c52b9c1aac7d","visibility":"SOURCE_CODE"}
+{"bytes":935,"path":"spec/task_prompt.md","sha256":"a34855eadd83cdc4595da75348ced409453d961cf4a367cdac17d3dce616557d","visibility":"SOURCE_CODE"}
+{"bytes":3242,"path":"spec/variant_recipes.json","sha256":"e4b527ee05aba603ae92c45a4bae449eb4d57c8840407bb8ac4449c1cdd33edb","visibility":"SOURCE_CODE"}
 {"bytes":3610,"path":"task1_contract.json","sha256":"47f8c6ee9bcbe7aaa69d2a703747ee16284d8a3d2eefe7b90f0ba708853759fc","visibility":"SOURCE_CODE"}

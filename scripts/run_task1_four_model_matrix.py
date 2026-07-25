@@ -31,6 +31,10 @@ DEFAULT_MODELS = (
     "kimi-k2.6",
     "gemini-3.6-flash",
 )
+EXPECTED_SOURCE_BENCHMARK_ID = "riskchainbench-balanced-600-v0.3"
+EXPECTED_TASK1_CONTRACT_SHA256 = (
+    "28a2fe6bac429d902153f3d9f2b575b89439115a91e9cd882843d5e54e056240"
+)
 TRACK_VARIANTS = {
     "primary": {0},
     "robustness": {1, 2, 3, 4, 5},
@@ -137,6 +141,8 @@ def verify_release(release: Path, route_probe_path: Path, models: list[str]) -> 
         contract.get("status") != "PASS_READY_FOR_INFERENCE"
         or contract.get("benchmark_id")
         != "riskchainbench-task1-obfuscated-reconstruction-v0.4"
+        or contract.get("source_benchmark_id") != EXPECTED_SOURCE_BENCHMARK_ID
+        or contract.get("contract_sha256") != EXPECTED_TASK1_CONTRACT_SHA256
         or contract.get("site_count") != 600
         or contract.get("variants_per_site") != 6
         or contract.get("task_count") != 3600
