@@ -15,6 +15,7 @@ import copy
 import hashlib
 import ipaddress
 import json
+import math
 from pathlib import Path
 import re
 import sys
@@ -48,6 +49,28 @@ DEFAULT_VARIANT_RECIPES_SCHEMA = (
 )
 GENERATOR_VERSION = "0.3.0"
 ENTRY_PLACEHOLDER = "{ENTRY}"
+RECIPE_RECORD_SCHEMA_VERSIONS = (
+    "obfuscated-session-generation/v0.2",
+    "obfuscated-session-generation/v0.3",
+)
+DEFAULT_ENTRY_REPLACEMENT_SCOPE = "FULL_ENTRY"
+ENTRY_REPLACEMENT_SCOPES = ("FULL_ENTRY", "HOST_ONLY", "HOST_AND_PATH")
+ENTRY_SURFACE_TYPE_LABELS = {
+    "SCHEME_DEFANG": "entry_scheme_defang",
+    "DROP_SCHEME": "entry_scheme_omitted",
+    "DOT_DEFANG": "entry_dot_defang",
+    "PUNCTUATION_DOT": "entry_punctuation_separator",
+    "CHARACTER_SPACING": "entry_character_spacing",
+}
+ENTRY_SURFACE_RULE_GROUPS = {
+    "SCHEME_DEFANG": "SCHEME",
+    "DROP_SCHEME": "SCHEME",
+    "DOT_DEFANG": "HOST",
+    "PUNCTUATION_DOT": "HOST",
+    "CHARACTER_SPACING": "HOST",
+}
+READING_ORDER_LAYOUT_MODES = ("VERTICAL_COLUMNS", "DIAGONAL_ACROSTIC")
+PLATFORM_TOKEN_UNIT_RE = re.compile(r"\[[^\]\n]{1,32}\]")
 MASKED_ENTRY_RE = re.compile(r"^\[MASKED_(?:SITE|URL|ACCOUNT|CODE)(?:_[A-Z0-9_-]+)?\]$")
 MASKED_ENTRY_IN_TEXT_RE = re.compile(
     r"\[MASKED_(?:SITE|URL|ACCOUNT|CODE)(?:_[A-Z0-9_-]+)?\]"
@@ -746,11 +769,86 @@ def validate_config(config: dict[str, Any]) -> None:
             f"{pypinyin.__version__} != {phonetic_engine.get('version')}"
         )
     materialize_confusable_rule_map(config["entry_confusables"])
+    entry_replacement_scope(config["entry_confusables"])
+    decomposition = config.get("glyph_decomposition")
+    if decomposition is not None:
+        if not decomposition.get("rules"):
+            raise ValueError("glyph_decomposition has no rules")
+        for rule in decomposition["rules"]:
+            if len(rule["source"]) != 1:
+                raise ValueError(
+                    f"glyph_decomposition rule is not single-character: {rule['rule_id']}"
+                )
+            if any(len(value) < 2 for value in rule["candidates"]):
+                raise ValueError(
+                    f"glyph_decomposition candidate is not a split: {rule['rule_id']}"
+                )
+    similar = config.get("similar_glyph")
+    if similar is not None:
+        if not similar.get("rules"):
+            raise ValueError("similar_glyph has no rules")
+        for rule in similar["rules"]:
+            if len(rule["source"]) != 1:
+                raise ValueError(
+                    f"similar_glyph rule is not single-character: {rule['rule_id']}"
+                )
+            for value in rule["candidates"]:
+                if len(value) != 1:
+                    raise ValueError(
+                        f"similar_glyph candidate is not one character: {rule['rule_id']}"
+                    )
+                if value == rule["source"]:
+                    raise ValueError(
+                        f"similar_glyph candidate equals its source: {rule['rule_id']}"
+                    )
+    reading_order = config.get("reading_order_layout")
+    if reading_order is not None:
+        mode = reading_order.get("mode")
+        if mode not in READING_ORDER_LAYOUT_MODES:
+            raise ValueError(f"unsupported reading-order layout mode: {mode}")
+        for key in ("columns", "diagonal_width"):
+            if int(reading_order.get(key, 0)) < 2:
+                raise ValueError(f"reading_order_layout.{key} must be at least 2")
+        cover_characters = reading_order.get("cover_characters") or []
+        if not cover_characters or any(len(value) != 1 for value in cover_characters):
+            raise ValueError(
+                "reading_order_layout.cover_characters must contain single characters"
+            )
+        if len(set(cover_characters)) != len(cover_characters):
+            raise ValueError("reading_order_layout.cover_characters has duplicates")
     for platform, profile in config["platform_profiles"].items():
         if not profile.get("tokens"):
             raise ValueError(f"platform profile has no tokens: {platform}")
         if len(set(profile["tokens"])) != len(profile["tokens"]):
             raise ValueError(f"platform profile has duplicate tokens: {platform}")
+
+
+VARIANT_RECIPES_SCHEMA_BY_VERSION = {
+    "task1-variant-recipes/v0.1": (
+        PROJECT_ROOT / "schemas/task1_variant_recipes_v0.1.schema.json"
+    ),
+    "task1-variant-recipes/v0.2": (
+        PROJECT_ROOT / "schemas/task1_variant_recipes_v0.2.schema.json"
+    ),
+}
+
+
+def resolve_variant_recipes_schema(
+    recipe_set: dict[str, Any],
+    provided: Path | None,
+) -> Path:
+    """Pick the recipe schema matching the set's own declared version.
+
+    The default path cannot serve both versions, so an explicit flag still wins and
+    otherwise the set selects its own schema.
+    """
+    if provided is not None and provided != DEFAULT_VARIANT_RECIPES_SCHEMA:
+        return provided
+    version = str(recipe_set.get("schema_version", ""))
+    resolved = VARIANT_RECIPES_SCHEMA_BY_VERSION.get(version)
+    if resolved is None:
+        raise ValueError(f"unsupported variant recipe schema_version: {version}")
+    return resolved
 
 
 def validate_variant_recipes(
@@ -807,6 +905,42 @@ def apply_variant_recipe(
             "entry_confusables",
             "minimum_replacements",
         ),
+        "entry_confusable_scope": (
+            "entry_confusables",
+            "replacement_scope",
+        ),
+        "glyph_decomposition_probability": (
+            "glyph_decomposition",
+            "probability",
+        ),
+        "similar_glyph_probability": (
+            "similar_glyph",
+            "probability",
+        ),
+        "redundant_insertion_probability": (
+            "redundant_insertion",
+            "probability",
+        ),
+        "entry_surface_probability": (
+            "entry_surface",
+            "probability",
+        ),
+        "reading_order_probability": (
+            "reading_order_layout",
+            "probability",
+        ),
+        "reading_order_mode": (
+            "reading_order_layout",
+            "mode",
+        ),
+        "reading_order_columns": (
+            "reading_order_layout",
+            "columns",
+        ),
+        "reading_order_diagonal_width": (
+            "reading_order_layout",
+            "diagonal_width",
+        ),
         "emoji_insertion_probability": (
             "emoji_insertion",
             "insertion_probability",
@@ -825,10 +959,24 @@ def apply_variant_recipe(
             "emoji_insertion",
             "chunk_max_characters",
         ),
+        "emoji_insertions_per_character": (
+            "emoji_insertion",
+            "insertions_per_character",
+        ),
     }
     for override_name, (section, key) in scalar_paths.items():
         if override_name in overrides:
-            config[section][key] = overrides[override_name]
+            value = overrides[override_name]
+            if section not in config:
+                if value in (0, 0.0):
+                    # Pinning an absent family to zero is already satisfied, so a
+                    # focused recipe can state its exclusions against any config.
+                    continue
+                raise ValueError(
+                    f"{recipe['recipe_id']}: override {override_name} needs a config "
+                    f"with a {section} section"
+                )
+            config[section][key] = value
     if config["emoji_insertion"]["min_insertions"] > config["emoji_insertion"][
         "max_insertions"
     ]:
@@ -1022,6 +1170,178 @@ def replace_homophones(
     return materialize_edits(text, edits, operation_prefix)
 
 
+def apply_character_lexicon(
+    text: str,
+    lexicon: dict[str, Any],
+    rng: HashRandom,
+    operation_prefix: str,
+    *,
+    operation_type: str,
+    taxonomy_type_id: str,
+    metadata_fn: Any = None,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Rewrite characters from a scaled, hand-curated single-character lexicon.
+
+    Shared by radical decomposition and similar-glyph substitution: both walk the
+    message longest-match-first, draw per rule, and record an exactly reversible
+    edit.  ``lexicon["probability"]`` scales every rule so a variant recipe can turn
+    the whole family on or off with one knob.
+    """
+    rules = sorted(
+        lexicon["rules"],
+        key=lambda rule: (-len(rule["source"]), rule["rule_id"]),
+    )
+    probability_scale = float(lexicon.get("probability", 0.0))
+    edits: list[dict[str, Any]] = []
+    index = 0
+    while index < len(text):
+        if text.startswith(ENTRY_PLACEHOLDER, index):
+            index += len(ENTRY_PLACEHOLDER)
+            continue
+        matched = next(
+            (rule for rule in rules if text.startswith(rule["source"], index)),
+            None,
+        )
+        if matched is None:
+            index += 1
+            continue
+        probability = float(matched.get("probability", 1.0)) * probability_scale
+        selected, draw = rng.probability_draw(probability)
+        if selected:
+            candidate_index = rng.randbelow(len(matched["candidates"]))
+            replacement = matched["candidates"][candidate_index]
+            if replacement != matched["source"]:
+                edits.append(
+                    make_edit(
+                        index,
+                        index + len(matched["source"]),
+                        matched["source"],
+                        replacement,
+                        operation_type,
+                        matched["rule_id"],
+                        lexicon["source"]["source_id"],
+                        {
+                            "probability": probability,
+                            "probability_draw_u64": str(draw),
+                            "candidate_index": candidate_index,
+                            "taxonomy_type_id": taxonomy_type_id,
+                            "lexicon_verification_status": lexicon["source"][
+                                "verification_status"
+                            ],
+                            **(
+                                metadata_fn(lexicon, matched["source"], replacement)
+                                if metadata_fn
+                                else {}
+                            ),
+                        },
+                    )
+                )
+        index += len(matched["source"])
+    return materialize_edits(text, edits, operation_prefix)
+
+
+def decompose_glyphs(
+    text: str,
+    lexicon: dict[str, Any],
+    rng: HashRandom,
+    operation_prefix: str,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Split single characters into the component pair typed on Chinese platforms.
+
+    The mapping is hand-curated rather than derived from Unicode IDS, so each edit
+    records the rule that produced it and stays exactly reversible.
+    """
+    return apply_character_lexicon(
+        text,
+        lexicon,
+        rng,
+        operation_prefix,
+        operation_type="GLYPH_DECOMPOSE",
+        taxonomy_type_id="LEX.RADICAL_DECOMPOSITION",
+        metadata_fn=lambda _lexicon, source, replacement: {
+            "component_sequence": list(replacement),
+            "component_count": len(replacement),
+        },
+    )
+
+
+def replace_similar_glyphs(
+    text: str,
+    lexicon: dict[str, Any],
+    rng: HashRandom,
+    operation_prefix: str,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Swap a character for a hand-verified visual lookalike.
+
+    Visual similarity is font-dependent, so the shipped table is hand-verified and
+    each edit records that basis; a font-derived table can replace it by setting
+    ``similarity_basis`` without changing this operator.
+    """
+    return apply_character_lexicon(
+        text,
+        lexicon,
+        rng,
+        operation_prefix,
+        operation_type="SIMILAR_GLYPH_REPLACE",
+        taxonomy_type_id="LEX.SIMILAR_HAN_GLYPH",
+        metadata_fn=lambda lexicon, source, replacement: {
+            "similarity_basis": lexicon.get("similarity_basis", "HAND_VERIFIED"),
+            "glyph_relation": f"{source}~{replacement}",
+        },
+    )
+
+
+def entry_replacement_scope(confusables: dict[str, Any]) -> str:
+    scope = str(
+        confusables.get("replacement_scope", DEFAULT_ENTRY_REPLACEMENT_SCOPE)
+    )
+    if scope not in ENTRY_REPLACEMENT_SCOPES:
+        raise ValueError(f"unsupported entry replacement_scope: {scope}")
+    return scope
+
+
+def entry_replacement_plan(entry: str, scope: str) -> dict[str, Any]:
+    """Resolve ``scope`` against ``entry`` and report what was actually used.
+
+    A narrowed scope silently degrades to the whole string on entries with no URL
+    shape (account handles, masked placeholders), so the effective scope is reported
+    separately from the requested one.
+    """
+    start, end = entry_replacement_span(entry, scope)
+    effective = scope
+    if scope != "FULL_ENTRY" and (start, end) == (0, len(entry)):
+        effective = "FULL_ENTRY"
+    return {
+        "requested_scope": scope,
+        "effective_scope": effective,
+        "span_start": start,
+        "span_end": end,
+    }
+
+
+def entry_replacement_span(entry: str, scope: str) -> tuple[int, int]:
+    """Return the ``[start, end)`` span of the entry eligible for replacement.
+
+    Observed evaders disguise the host and leave the scheme readable, so a
+    host-scoped span keeps ``http`` out of the substitution set.  Entries without a
+    URL shape (account handles, access codes) fall back to the whole string.
+    """
+    if scope == "FULL_ENTRY":
+        return 0, len(entry)
+    parts = urlsplit(entry)
+    if parts.scheme and "//" in entry:
+        host_start = entry.index("//") + 2
+        host_end = host_start + len(parts.netloc)
+    else:
+        host_start = 0
+        host_end = entry.index("/") if "/" in entry else len(entry)
+    if host_end <= host_start:
+        return 0, len(entry)
+    if scope == "HOST_AND_PATH":
+        return host_start, len(entry)
+    return host_start, host_end
+
+
 def obfuscate_entry(
     entry: str,
     confusables: dict[str, Any],
@@ -1030,9 +1350,13 @@ def obfuscate_entry(
 ) -> tuple[str, list[dict[str, Any]]]:
     rules = materialize_confusable_rule_map(confusables)
     probability = float(confusables["replacement_probability"])
+    scope = entry_replacement_scope(confusables)
+    span_start, span_end = entry_replacement_span(entry, scope)
     eligible: list[tuple[int, dict[str, Any], int, bool]] = []
     selected_positions: set[int] = set()
     for index, character in enumerate(entry):
+        if not span_start <= index < span_end:
+            continue
         rule = rules.get(character.lower())
         if rule is None:
             continue
@@ -1046,6 +1370,13 @@ def obfuscate_entry(
         remaining = [row[0] for row in eligible if row[0] not in selected_positions]
         rng.shuffle(remaining)
         selected_positions.update(remaining[: minimum - len(selected_positions)])
+    if int(confusables["minimum_replacements"]) > 0 and not selected_positions:
+        # A narrowed scope can leave no eligible character (numeric host, masked
+        # placeholder).  Passing the entry through verbatim would leak the gold entry
+        # into the model-visible message, so fail loudly instead.
+        raise ValueError(
+            f"entry has no replaceable character within scope {scope}: {entry}"
+        )
 
     edits: list[dict[str, Any]] = []
     for index, rule, draw, originally_selected in eligible:
@@ -1079,6 +1410,140 @@ def obfuscate_entry(
             )
         )
     return materialize_edits(entry, edits, operation_prefix)
+
+
+def insert_redundant_characters(
+    text: str,
+    settings: dict[str, Any],
+    rng: HashRandom,
+    operation_prefix: str,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Interleave punctuation or whitespace between characters.
+
+    This is the non-emoji half of the redundant-insertion family: the inserted
+    character carries no meaning, so removing it restores the canonical text.
+    """
+    markers = settings["markers"]
+    probability = float(settings.get("probability", 0.0))
+    maximum = int(settings.get("max_insertions", 0))
+    # Insertion at index i splits text[i-1] and text[i], so any index strictly inside
+    # the entry placeholder would corrupt it before the compose stage.
+    forbidden: set[int] = set()
+    search = text.find(ENTRY_PLACEHOLDER)
+    while search >= 0:
+        forbidden.update(range(search + 1, search + len(ENTRY_PLACEHOLDER)))
+        search = text.find(ENTRY_PLACEHOLDER, search + len(ENTRY_PLACEHOLDER))
+    edits: list[dict[str, Any]] = []
+    for index in range(1, len(text)):
+        if len(edits) >= maximum:
+            break
+        if index in forbidden:
+            continue
+        window = text[index - 1 : index + 1]
+        if window.strip() != window:
+            continue
+        accepted, draw = rng.probability_draw(probability)
+        if not accepted:
+            continue
+        marker_index = rng.randbelow(len(markers))
+        marker = markers[marker_index]
+        edits.append(
+            make_edit(
+                index,
+                index,
+                "",
+                marker["value"],
+                "REDUNDANT_CHARACTER_INSERT",
+                marker["rule_id"],
+                settings["source"]["source_id"],
+                {
+                    "probability": probability,
+                    "probability_draw_u64": str(draw),
+                    "marker_index": marker_index,
+                    "marker_class": marker["marker_class"],
+                    "taxonomy_type_id": marker["taxonomy_type_id"],
+                },
+            )
+        )
+    return materialize_edits(text, edits, operation_prefix)
+
+
+def alter_entry_surface(
+    entry: str,
+    settings: dict[str, Any],
+    rng: HashRandom,
+    operation_prefix: str,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Defang the scheme, defang dots, or space out the host.
+
+    These are the link-surface alterations seen in the wild; each rule declares the
+    taxonomy type it instantiates so the record maps back to the registry.
+    """
+    edits: list[dict[str, Any]] = []
+    scale = float(settings.get("probability", 0.0))
+    # Rules within a group compete for the same span, so at most one of each group
+    # applies; otherwise the later one would always be dropped as an overlap.
+    applied_groups: set[str] = set()
+    for rule in settings["rules"]:
+        kind = rule["rule_kind"]
+        group = ENTRY_SURFACE_RULE_GROUPS.get(kind)
+        if group is None:
+            raise ValueError(f"unsupported entry surface rule_kind: {kind}")
+        if group in applied_groups:
+            continue
+        probability = float(rule.get("probability", 0.0)) * scale
+        if probability <= 0:
+            continue
+        accepted, draw = rng.probability_draw(probability)
+        if not accepted:
+            continue
+        if kind == "SCHEME_DEFANG":
+            spans = [(0, len(rule["source"]))] if entry.startswith(rule["source"]) else []
+            replacement = rule["replacement"]
+        elif kind == "DROP_SCHEME":
+            marker = rule["source"]
+            spans = [(0, len(marker))] if entry.startswith(marker) else []
+            replacement = ""
+        elif kind in ("DOT_DEFANG", "PUNCTUATION_DOT"):
+            host_start, host_end = entry_replacement_span(entry, "HOST_ONLY")
+            position = entry.find(".", host_start, host_end)
+            spans = [(position, position + 1)] if position >= 0 else []
+            replacement = rule["replacement"]
+        elif kind == "CHARACTER_SPACING":
+            host_start, host_end = entry_replacement_span(entry, "HOST_ONLY")
+            label = entry[host_start:host_end]
+            spans = [(host_start, host_end)] if len(label) >= 2 else []
+            replacement = rule["replacement"].join(label)
+        else:
+            raise ValueError(f"unsupported entry surface rule_kind: {kind}")
+        if spans:
+            applied_groups.add(group)
+        for start, end in spans:
+            edits.append(
+                make_edit(
+                    start,
+                    end,
+                    entry[start:end],
+                    replacement,
+                    "ENTRY_SURFACE_ALTER",
+                    rule["rule_id"],
+                    settings["source"]["source_id"],
+                    {
+                        "probability": probability,
+                        "probability_draw_u64": str(draw),
+                        "rule_kind": kind,
+                        "taxonomy_type_id": rule["taxonomy_type_id"],
+                    },
+                )
+            )
+    edits.sort(key=lambda edit: (edit["start"], edit["end"]))
+    filtered: list[dict[str, Any]] = []
+    for edit in edits:
+        if filtered and edit["start"] < filtered[-1]["end"]:
+            # Overlapping surface rules would not be independently reversible.
+            continue
+        filtered.append(edit)
+    return materialize_edits(entry, filtered, operation_prefix)
 
 
 def compose_entry(
@@ -1135,7 +1600,13 @@ def insert_platform_emojis(
         accepted, draw = rng.probability_draw(probability)
         (selected if accepted else rejected).append((position, draw))
 
-    maximum = min(int(settings["max_insertions"]), len(boundaries))
+    # A per-character budget keeps density constant as the message grows; the flat
+    # cap alone lets a long message dilute to a fraction of an emoji per character.
+    per_character = float(settings.get("insertions_per_character", 0.0))
+    budget = int(settings["max_insertions"])
+    if per_character > 0:
+        budget = max(budget, math.ceil(len(text) * per_character))
+    maximum = min(budget, len(boundaries))
     minimum = min(int(settings["min_insertions"]), maximum)
     if len(selected) > maximum:
         rng.shuffle(selected)
@@ -1179,6 +1650,142 @@ def insert_platform_emojis(
             )
         )
     return materialize_edits(text, edits, operation_prefix)
+
+
+def reading_order_units(text: str) -> list[str]:
+    """Keep bracket-style platform tokens atomic while laying out rendered text."""
+    units: list[str] = []
+    index = 0
+    while index < len(text):
+        match = PLATFORM_TOKEN_UNIT_RE.match(text, index)
+        if match is not None:
+            units.append(match.group(0))
+            index = match.end()
+        else:
+            units.append(text[index])
+            index += 1
+    return units
+
+
+def display_layout_unit(unit: str, newline_marker: str) -> str:
+    if unit == "\n":
+        return newline_marker
+    if unit == "\r":
+        return "↩"
+    if unit == "\t":
+        return "⇥"
+    return unit
+
+
+def apply_reading_order_layout(
+    text: str,
+    settings: dict[str, Any],
+    rng: HashRandom,
+    operation_prefix: str,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Place logical text units into a deterministic 2-D reading order.
+
+    The visible text intentionally omits the target coordinates.  The operation
+    trace retains them so benchmark generation remains exactly reversible and
+    evaluators can distinguish model difficulty from an underspecified gold.
+    """
+    probability = float(settings.get("probability", 0.0))
+    accepted, draw = rng.probability_draw(probability)
+    if not accepted or not text:
+        return text, []
+
+    mode = settings["mode"]
+    units = reading_order_units(text)
+    separator = settings["cell_separator"]
+    line_separator = settings["line_separator"]
+    newline_marker = settings["newline_marker"]
+    visible_units = [
+        display_layout_unit(unit, newline_marker)
+        for unit in units
+    ]
+    trace: list[dict[str, int]] = []
+
+    if mode == "VERTICAL_COLUMNS":
+        columns = min(int(settings["columns"]), len(units))
+        rows = math.ceil(len(units) / columns)
+        rendered_rows: list[str] = []
+        for row in range(rows):
+            cells: list[str] = []
+            for column in range(columns):
+                source_index = column * rows + row
+                if source_index >= len(units):
+                    continue
+                cells.append(visible_units[source_index])
+                trace.append(
+                    {
+                        "source_index": source_index,
+                        "row": row,
+                        "column": column,
+                    }
+                )
+            rendered_rows.append(separator.join(cells))
+        output = line_separator.join(rendered_rows)
+        dimensions = {"rows": rows, "columns": columns}
+        reading_order = "COLUMN_MAJOR_TOP_TO_BOTTOM_LEFT_TO_RIGHT"
+        ambiguity_set = [
+            reading_order,
+            "ROW_MAJOR_LEFT_TO_RIGHT_TOP_TO_BOTTOM",
+        ]
+    elif mode == "DIAGONAL_ACROSTIC":
+        width = int(settings["diagonal_width"])
+        cover_characters = settings["cover_characters"]
+        rendered_rows = []
+        for row, visible_unit in enumerate(visible_units):
+            target_column = row % width
+            cells: list[str] = []
+            for column in range(width):
+                if column == target_column:
+                    cells.append(visible_unit)
+                else:
+                    cells.append(
+                        cover_characters[rng.randbelow(len(cover_characters))]
+                    )
+            rendered_rows.append(separator.join(cells))
+            trace.append(
+                {
+                    "source_index": row,
+                    "row": row,
+                    "column": target_column,
+                }
+            )
+        output = line_separator.join(rendered_rows)
+        dimensions = {"rows": len(units), "columns": width}
+        reading_order = "DIAGONAL_WRAP_TOP_TO_BOTTOM"
+        ambiguity_set = [
+            reading_order,
+            "FIRST_COLUMN_ACROSTIC",
+            "ROW_MAJOR_LEFT_TO_RIGHT_TOP_TO_BOTTOM",
+        ]
+    else:
+        raise ValueError(f"unsupported reading-order layout mode: {mode}")
+
+    edit = make_edit(
+        0,
+        len(text),
+        text,
+        output,
+        "READING_ORDER_LAYOUT",
+        f"{settings['settings_id']}:{mode.lower()}",
+        settings["source"]["source_id"],
+        {
+            "probability": probability,
+            "probability_draw_u64": str(draw),
+            "taxonomy_type_id": "LAYOUT.ACROSTIC_OR_GRID",
+            "mode": mode,
+            "target_text": text,
+            "layout_trace": trace,
+            "reading_order": reading_order,
+            "ambiguity_set": ambiguity_set,
+            "unit_count": len(units),
+            **dimensions,
+        },
+    )
+    return materialize_edits(text, [edit], operation_prefix)
 
 
 def transform_message(
@@ -1231,6 +1838,80 @@ def transform_message(
         },
     )
 
+    # Optional lexical stages run between the homophone stage and the compose stage.
+    # Each is skipped entirely when its probability is zero, so a config without the
+    # section produces the same five-stage record as before the family was added.
+    optional_lexical_stages = (
+        (
+            "glyph_decomposition",
+            "glyph-decompose",
+            f"{stage_prefix}.s5.decompose",
+            5,
+            "GLYPH_DECOMPOSITION",
+            decompose_glyphs,
+        ),
+        (
+            "similar_glyph",
+            "similar-glyph",
+            f"{stage_prefix}.s6.similar",
+            6,
+            "SIMILAR_GLYPH_SUBSTITUTION",
+            replace_similar_glyphs,
+        ),
+        (
+            "redundant_insertion",
+            "redundant-insertion",
+            f"{stage_prefix}.s7.redundant",
+            7,
+            "REDUNDANT_INSERTION",
+            insert_redundant_characters,
+        ),
+    )
+    lexical_stages: list[dict[str, Any]] = []
+    lexical_operations: dict[str, list[dict[str, Any]]] = {}
+    message_text = homophone_text
+    message_stage_id = homophone_stage_id
+    for (
+        section,
+        seed_tag,
+        stage_id,
+        stage_index,
+        stage_type,
+        operator,
+    ) in optional_lexical_stages:
+        lexicon = config.get(section)
+        lexical_operations[section] = []
+        if not lexicon or float(lexicon.get("probability", 0.0)) <= 0:
+            continue
+        stage_rng = HashRandom(f"{record_seed_material}|{message_id}|{seed_tag}")
+        stage_text, stage_operations = operator(
+            message_text,
+            lexicon,
+            stage_rng,
+            stage_id,
+        )
+        lexical_stages.append(
+            build_stage(
+                stage_id,
+                stage_index,
+                stage_type,
+                "MESSAGE",
+                message_text,
+                stage_text,
+                [message_stage_id],
+                stage_operations,
+                stage_rng.seed_sha256,
+                {
+                    "lexicon_id": lexicon.get("lexicon_id")
+                    or lexicon.get("settings_id", ""),
+                    "longest_match_first": True,
+                },
+            )
+        )
+        lexical_operations[section] = stage_operations
+        message_text = stage_text
+        message_stage_id = stage_id
+
     entry_material = f"{record_seed_material}|{message_id}|entry-confusable"
     entry_rng = HashRandom(entry_material)
     entry_stage_id = f"{stage_prefix}.s2.entry"
@@ -1240,6 +1921,23 @@ def transform_message(
         entry_rng,
         entry_stage_id,
     )
+    entry_stage_parameters = {
+        "mapping_id": config["entry_confusables"]["mapping_id"],
+        "reference_mapping_id": config["entry_confusables"]
+        .get("reference_rules", {})
+        .get("mapping_id", ""),
+        "reference_sha256": config["entry_confusables"]
+        .get("reference_rules", {})
+        .get("sha256", ""),
+    }
+    entry_scope = entry_replacement_scope(config["entry_confusables"])
+    if entry_scope != DEFAULT_ENTRY_REPLACEMENT_SCOPE:
+        # Recorded only when narrowed, so full-entry runs stay byte-identical to
+        # datasets attested before the scope knob existed.  The effective scope is
+        # recorded too because a narrowed request degrades on non-URL entries.
+        entry_stage_parameters.update(
+            entry_replacement_plan(entry["value"], entry_scope)
+        )
     entry_stage = build_stage(
         entry_stage_id,
         2,
@@ -1250,21 +1948,44 @@ def transform_message(
         [],
         entry_operations,
         entry_rng.seed_sha256,
-        {
-            "mapping_id": config["entry_confusables"]["mapping_id"],
-            "reference_mapping_id": config["entry_confusables"]
-            .get("reference_rules", {})
-            .get("mapping_id", ""),
-            "reference_sha256": config["entry_confusables"]
-            .get("reference_rules", {})
-            .get("sha256", ""),
-        },
+        entry_stage_parameters,
     )
+
+    entry_surface_settings = config.get("entry_surface")
+    entry_surface_stage = None
+    entry_surface_operations: list[dict[str, Any]] = []
+    entry_text = obfuscated_entry
+    entry_tail_stage_id = entry_stage_id
+    if (
+        entry_surface_settings
+        and float(entry_surface_settings.get("probability", 0.0)) > 0
+    ):
+        surface_rng = HashRandom(f"{record_seed_material}|{message_id}|entry-surface")
+        entry_surface_stage_id = f"{stage_prefix}.s8.entry_surface"
+        entry_text, entry_surface_operations = alter_entry_surface(
+            obfuscated_entry,
+            entry_surface_settings,
+            surface_rng,
+            entry_surface_stage_id,
+        )
+        entry_surface_stage = build_stage(
+            entry_surface_stage_id,
+            8,
+            "ENTRY_SURFACE_ALTERATION",
+            "ENTRY",
+            obfuscated_entry,
+            entry_text,
+            [entry_stage_id],
+            entry_surface_operations,
+            surface_rng.seed_sha256,
+            {"settings_id": entry_surface_settings["settings_id"]},
+        )
+        entry_tail_stage_id = entry_surface_stage_id
 
     compose_stage_id = f"{stage_prefix}.s3.compose"
     composed_text, compose_operations = compose_entry(
-        homophone_text,
-        obfuscated_entry,
+        message_text,
+        entry_text,
         compose_stage_id,
     )
     compose_stage = build_stage(
@@ -1272,18 +1993,18 @@ def transform_message(
         3,
         "COMPOSE_TEXT_AND_ENTRY",
         "MESSAGE",
-        homophone_text,
+        message_text,
         composed_text,
-        [homophone_stage_id, entry_stage_id],
+        [message_stage_id, entry_tail_stage_id],
         compose_operations,
         None,
-        {"entry_stage_id": entry_stage_id},
+        {"entry_stage_id": entry_tail_stage_id},
     )
 
     emoji_material = f"{record_seed_material}|{message_id}|emoji"
     emoji_rng = HashRandom(emoji_material)
     emoji_stage_id = f"{stage_prefix}.s4.emoji"
-    final_text, emoji_operations = insert_platform_emojis(
+    emoji_text, emoji_operations = insert_platform_emojis(
         composed_text,
         profile,
         config["emoji_insertion"],
@@ -1296,7 +2017,7 @@ def transform_message(
         "PLATFORM_EMOJI_INSERTION",
         "MESSAGE",
         composed_text,
-        final_text,
+        emoji_text,
         [compose_stage_id],
         emoji_operations,
         emoji_rng.seed_sha256,
@@ -1311,27 +2032,76 @@ def transform_message(
         },
     )
 
+    reading_order_settings = config.get("reading_order_layout")
+    reading_order_stage = None
+    reading_order_operations: list[dict[str, Any]] = []
+    final_text = emoji_text
+    if (
+        reading_order_settings
+        and float(reading_order_settings.get("probability", 0.0)) > 0
+    ):
+        reading_order_rng = HashRandom(
+            f"{record_seed_material}|{message_id}|reading-order"
+        )
+        reading_order_stage_id = f"{stage_prefix}.s9.reading_order"
+        final_text, reading_order_operations = apply_reading_order_layout(
+            emoji_text,
+            reading_order_settings,
+            reading_order_rng,
+            reading_order_stage_id,
+        )
+        reading_order_stage = build_stage(
+            reading_order_stage_id,
+            9,
+            "READING_ORDER_LAYOUT",
+            "MESSAGE",
+            emoji_text,
+            final_text,
+            [emoji_stage_id],
+            reading_order_operations,
+            reading_order_rng.seed_sha256,
+            {
+                "settings_id": reading_order_settings["settings_id"],
+                "mode": reading_order_settings["mode"],
+            },
+        )
+
     obfuscation_types: set[str] = set()
     if homophone_operations:
         obfuscation_types.add("homophone_or_similar_sound")
+    if lexical_operations.get("glyph_decomposition"):
+        obfuscation_types.add("radical_decomposition")
+    if lexical_operations.get("similar_glyph"):
+        obfuscation_types.add("similar_han_glyph")
+    for operation in lexical_operations.get("redundant_insertion") or []:
+        if operation["metadata"]["marker_class"] == "WHITESPACE":
+            obfuscation_types.add("whitespace_interleaving")
+        else:
+            obfuscation_types.add("punctuation_interleaving")
+    for operation in entry_surface_operations:
+        obfuscation_types.add(ENTRY_SURFACE_TYPE_LABELS[operation["metadata"]["rule_kind"]])
     if entry_operations:
         obfuscation_types.add("unicode_entry_confusable")
     if emoji_operations:
         obfuscation_types.add("platform_emoji_insertion")
         if any(op["metadata"]["line_break_after"] for op in emoji_operations):
             obfuscation_types.add("line_break_layout")
+    if reading_order_operations:
+        obfuscation_types.add("acrostic_or_grid_layout")
 
+    stages = [source_stage, homophone_stage, entry_stage, compose_stage, emoji_stage]
+    # Appended after the frozen core five so that positional record-schema
+    # constraints on those five stay valid; ordering lives in parent_stage_ids.
+    stages.extend(lexical_stages)
+    if entry_surface_stage is not None:
+        stages.append(entry_surface_stage)
+    if reading_order_stage is not None:
+        stages.append(reading_order_stage)
     transformation = {
         "message_id": message_id,
         "source_text_sha256": sha256_text(source_text),
         "final_text_sha256": sha256_text(final_text),
-        "stages": [
-            source_stage,
-            homophone_stage,
-            entry_stage,
-            compose_stage,
-            emoji_stage,
-        ],
+        "stages": stages,
     }
     return final_text, transformation, obfuscation_types
 
@@ -1343,6 +2113,7 @@ def generate_record(
     global_seed: str,
     variant_index: int,
     variant_recipe: dict[str, Any] | None = None,
+    recipe_record_version: str = "obfuscated-session-generation/v0.1",
 ) -> dict[str, Any]:
     platform = source["platform"]
     if platform not in config["platform_profiles"]:
@@ -1381,11 +2152,7 @@ def generate_record(
 
     source_record_sha256 = sha256_text(canonical_json(source))
     record: dict[str, Any] = {
-        "schema_version": (
-            "obfuscated-session-generation/v0.2"
-            if variant_recipe is not None
-            else "obfuscated-session-generation/v0.1"
-        ),
+        "schema_version": recipe_record_version,
         "sample_id": sample_id,
         "session_id": source["session_id"],
         "variant_index": variant_index,
@@ -1477,21 +2244,70 @@ def verify_record(record: dict[str, Any], schema: dict[str, Any]) -> list[str]:
         stages = transformation["stages"]
         for stage in stages:
             errors.extend(verify_stage(stage))
-        source, homophone, entry, compose, emoji = stages
+        by_type = {stage["stage_type"]: stage for stage in stages}
+        if len(by_type) != len(stages):
+            # Keying by stage_type would silently hide a duplicated stage.
+            errors.append(f"{transformation['message_id']}: duplicate stage_type")
+            continue
+        required = (
+            "SOURCE_TEMPLATE",
+            "HOMOPHONE_REPLACEMENT",
+            "ENTRY_CONFUSABLE",
+            "COMPOSE_TEXT_AND_ENTRY",
+            "PLATFORM_EMOJI_INSERTION",
+        )
+        absent = [kind for kind in required if kind not in by_type]
+        if absent:
+            errors.append(
+                f"{transformation['message_id']}: missing stages {', '.join(absent)}"
+            )
+            continue
+        source = by_type["SOURCE_TEMPLATE"]
+        homophone = by_type["HOMOPHONE_REPLACEMENT"]
+        decompose = by_type.get("GLYPH_DECOMPOSITION")
+        similar = by_type.get("SIMILAR_GLYPH_SUBSTITUTION")
+        redundant = by_type.get("REDUNDANT_INSERTION")
+        entry = by_type["ENTRY_CONFUSABLE"]
+        entry_surface = by_type.get("ENTRY_SURFACE_ALTERATION")
+        compose = by_type["COMPOSE_TEXT_AND_ENTRY"]
+        emoji = by_type["PLATFORM_EMOJI_INSERTION"]
+        reading_order = by_type.get("READING_ORDER_LAYOUT")
+        # The message chain is source -> homophone -> [decompose] -> [similar] ->
+        # [redundant] -> compose -> emoji -> [reading order]; the entry chain is
+        # entry -> [entry surface] and joins at compose.
+        message_chain = [homophone]
+        message_chain.extend(
+            stage for stage in (decompose, similar, redundant) if stage is not None
+        )
+        message_tail = message_chain[-1]
+        entry_tail = entry_surface if entry_surface is not None else entry
         if homophone["input_text"] != source["output_text"]:
             errors.append(f"{transformation['message_id']}: source/homophone chain mismatch")
+        for parent, child in zip(message_chain, message_chain[1:]):
+            if child["input_text"] != parent["output_text"]:
+                errors.append(
+                    f"{transformation['message_id']}: "
+                    f"{parent['stage_type']}/{child['stage_type']} chain mismatch"
+                )
         if entry["input_text"] != record["entry"]["value"]:
             errors.append(f"{transformation['message_id']}: entry source mismatch")
-        if compose["input_text"] != homophone["output_text"]:
+        if entry_surface is not None and entry_surface["input_text"] != entry["output_text"]:
+            errors.append(f"{transformation['message_id']}: entry/entry-surface chain mismatch")
+        if compose["input_text"] != message_tail["output_text"]:
             errors.append(f"{transformation['message_id']}: homophone/compose chain mismatch")
-        if not compose["operations"] or compose["operations"][0]["after"] != entry["output_text"]:
+        if not compose["operations"] or compose["operations"][0]["after"] != entry_tail["output_text"]:
             errors.append(f"{transformation['message_id']}: entry/compose chain mismatch")
         if emoji["input_text"] != compose["output_text"]:
             errors.append(f"{transformation['message_id']}: compose/emoji chain mismatch")
+        if reading_order is not None and reading_order["input_text"] != emoji["output_text"]:
+            errors.append(
+                f"{transformation['message_id']}: emoji/reading-order chain mismatch"
+            )
+        final_stage = reading_order if reading_order is not None else emoji
         final_message = transformed_by_id.get(transformation["message_id"])
-        if final_message is None or final_message["text"] != emoji["output_text"]:
+        if final_message is None or final_message["text"] != final_stage["output_text"]:
             errors.append(f"{transformation['message_id']}: final message mismatch")
-        if sha256_text(emoji["output_text"]) != transformation["final_text_sha256"]:
+        if sha256_text(final_stage["output_text"]) != transformation["final_text_sha256"]:
             errors.append(f"{transformation['message_id']}: final text hash mismatch")
     return errors
 
@@ -1562,22 +2378,48 @@ def generate_dataset(
     Draft202012Validator.check_schema(record_schema)
     Draft202012Validator.check_schema(manifest_schema)
     recipes_by_index: dict[int, dict[str, Any]] = {}
+    # Derived unconditionally so a config-only run (no recipe set) is still stamped
+    # with the version its record schema declares.
+    expected_record_version = (
+        record_schema.get("properties", {}).get("schema_version", {}).get("const")
+    )
+    optional_lexical_enabled = any(
+        float((config.get(section) or {}).get("probability", 0.0)) > 0
+        for section in (
+            "glyph_decomposition",
+            "similar_glyph",
+            "redundant_insertion",
+            "entry_surface",
+            "reading_order_layout",
+        )
+    )
+    if optional_lexical_enabled and variant_recipes_path is None:
+        raise ValueError(
+            "an optional v0.3 obfuscation stage is enabled, which requires a variant "
+            "recipe set so the record carries variant provenance "
+            "(pass --variant-recipes)"
+        )
+    if optional_lexical_enabled and expected_record_version not in RECIPE_RECORD_SCHEMA_VERSIONS[1:]:
+        raise ValueError(
+            "an optional v0.3 obfuscation stage is enabled, which needs the "
+            f"{RECIPE_RECORD_SCHEMA_VERSIONS[1]} record schema "
+            "(pass --record-schema schemas/obfuscated_session_generation_v0.3.schema.json)"
+        )
     if variant_recipes_path is not None:
-        recipe_schema = read_json(variant_recipes_schema_path)
+        recipe_set = read_json(variant_recipes_path)
+        recipe_schema = read_json(
+            resolve_variant_recipes_schema(recipe_set, variant_recipes_schema_path)
+        )
         Draft202012Validator.check_schema(recipe_schema)
         recipes_by_index = validate_variant_recipes(
-            read_json(variant_recipes_path),
+            recipe_set,
             recipe_schema,
             variants,
         )
-        expected_record_version = (
-            record_schema.get("properties", {})
-            .get("schema_version", {})
-            .get("const")
-        )
-        if expected_record_version != "obfuscated-session-generation/v0.2":
+        if expected_record_version not in RECIPE_RECORD_SCHEMA_VERSIONS:
             raise ValueError(
-                "variant recipes require the v0.2 generation record schema"
+                "variant recipes require one of the record schema versions: "
+                + ", ".join(RECIPE_RECORD_SCHEMA_VERSIONS)
             )
     sources = read_jsonl(input_path)
     if not sources:
@@ -1605,6 +2447,7 @@ def generate_dataset(
                 global_seed,
                 variant_index,
                 variant_recipe,
+                expected_record_version or "obfuscated-session-generation/v0.1",
             )
             errors = verify_record(record, record_schema)
             if errors:

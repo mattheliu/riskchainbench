@@ -312,8 +312,11 @@
         "variant_recipe_family": {
           "enum": [
             "COMPOSITE",
-            "ENTRY_CONFUSABLE",
+            "PHONETIC",
             "LEXICAL_PLATFORM",
+            "ENTRY_CONFUSABLE",
+            "ENTRY_ENCODING",
+            "LAYOUT_NOISE",
             "LAYOUT_STRESS"
           ]
         },

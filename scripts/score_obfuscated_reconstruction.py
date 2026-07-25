@@ -7,7 +7,9 @@ import argparse
 import hashlib
 import ipaddress
 import json
+import math
 from pathlib import Path
+import random
 import re
 import sys
 from typing import Any, Iterable, Sequence
@@ -125,8 +127,22 @@ def parse_entry(value: str) -> dict[str, str]:
             "fragment": "",
         }
     candidate = normalized if "://" in normalized else f"https://{normalized}"
-    parsed = urlsplit(candidate)
-    host = (parsed.hostname or "").casefold().rstrip(".")
+    try:
+        parsed = urlsplit(candidate)
+        host = (parsed.hostname or "").casefold().rstrip(".")
+    except ValueError:
+        # A model may echo a defanged host such as example[.]invalid, which urlsplit
+        # rejects as a malformed IPv6 literal.  Treat it as an opaque entry rather
+        # than aborting the whole scoring run.
+        return {
+            "canonical": normalized,
+            "scheme": "",
+            "host": normalized.casefold(),
+            "port": "UNPARSEABLE",
+            "path": "",
+            "query": "",
+            "fragment": "",
+        }
     try:
         port = str(parsed.port or "")
     except ValueError:
@@ -152,8 +168,13 @@ def is_reserved_candidate(value: str) -> bool:
     normalized = value.strip()
     if MASKED_ENTRY_RE.fullmatch(normalized):
         return True
-    parsed = urlsplit(normalized if "://" in normalized else f"//{normalized}")
-    host = (parsed.hostname or "").rstrip(".").casefold()
+    try:
+        parsed = urlsplit(normalized if "://" in normalized else f"//{normalized}")
+        host = (parsed.hostname or "").rstrip(".").casefold()
+    except ValueError:
+        # Defanged hosts are unparseable; they are not reserved, so a model that
+        # echoes one is still flagged as predicting a non-reserved entry.
+        return False
     if host == "localhost" or host.endswith(".localhost"):
         return True
     try:
@@ -248,8 +269,14 @@ def score_case(
     intent_exact = normalize_intent(prediction["intent"]) == normalize_intent(record["intent"])
     platform_exact = prediction["platform"] == record["platform"]
     full_success = all_messages_exact and intent_exact and platform_exact and topk_exact
+    # The committed-restoration protocol consumes entry_candidates[0], so the
+    # top-1 variant is primary; top-k stays as a ranking diagnostic.
+    full_success_top1 = (
+        all_messages_exact and intent_exact and platform_exact and top1_exact
+    )
     return {
         "sample_id": record["sample_id"],
+        "site_id": record["session_id"],
         "platform": record["platform"],
         "input_view": prediction["input_view"],
         "abstain": prediction["abstain"],
@@ -259,6 +286,8 @@ def score_case(
         "mixed_token_edits": token_edits,
         "reference_mixed_tokens": token_references,
         "all_target_messages_exact": all_messages_exact,
+        "target_message_count": len(gold_messages),
+        "exact_message_count": exact_messages,
         "intent_exact": intent_exact,
         "platform_exact": platform_exact,
         "entry_top1_exact": top1_exact,
@@ -269,6 +298,7 @@ def score_case(
             not row["reserved_or_masked"] for row in candidate_rows
         ),
         "full_reconstruction_success": full_success,
+        "full_reconstruction_success_top1": full_success_top1,
         "obfuscation_types": record["obfuscation_types"],
     }
 
@@ -280,14 +310,23 @@ def aggregate_cases(cases: Iterable[dict[str, Any]]) -> dict[str, Any]:
     char_references = sum(row["reference_characters"] for row in rows)
     token_edits = sum(row["mixed_token_edits"] for row in rows)
     token_references = sum(row["reference_mixed_tokens"] for row in rows)
+    target_messages = sum(row["target_message_count"] for row in rows)
+    exact_messages = sum(row["exact_message_count"] for row in rows)
 
     def rate(field: str) -> float:
         return sum(bool(row[field]) for row in rows) / count if count else 0.0
 
     return {
         "case_count": count,
+        "target_message_count": target_messages,
         "character_error_rate": char_edits / char_references if char_references else 0.0,
         "mixed_token_error_rate": token_edits / token_references if token_references else 0.0,
+        # Per-message exact match, the reported EM_msg.  message_exact_rate below is
+        # the stricter per-case conjunction (every target message in the session
+        # correct) and is kept for backward comparability.
+        "message_exact_rate_per_message": (
+            exact_messages / target_messages if target_messages else 0.0
+        ),
         "message_exact_rate": rate("all_target_messages_exact"),
         "intent_accuracy": rate("intent_exact"),
         "platform_accuracy": rate("platform_exact"),
@@ -296,7 +335,77 @@ def aggregate_cases(cases: Iterable[dict[str, Any]]) -> dict[str, Any]:
         "local_resolution_success_rate_at_k": rate("local_resolution_success_at_k"),
         "abstain_rate": rate("abstain"),
         "full_reconstruction_success_rate": rate("full_reconstruction_success"),
+        "full_reconstruction_success_rate_top1": rate("full_reconstruction_success_top1"),
         "predicted_live_entry_count": sum(row["predicted_live_entry_count"] for row in rows),
+    }
+
+
+def percentile(values: list[float], quantile: float) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    index = (len(ordered) - 1) * quantile
+    lower = math.floor(index)
+    upper = math.ceil(index)
+    if lower == upper:
+        return ordered[lower]
+    fraction = index - lower
+    return ordered[lower] * (1 - fraction) + ordered[upper] * fraction
+
+
+INTEGER_AGGREGATE_FIELDS = frozenset(
+    {"case_count", "target_message_count", "predicted_live_entry_count"}
+)
+
+
+def site_clusters(cases: Iterable[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+    """Group cases by website so a replicate resamples sites, not variants.
+
+    Message variants of one website are not independent samples; resampling them
+    individually would shrink the interval by roughly the variant count.
+    """
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for row in cases:
+        grouped.setdefault(row["site_id"], []).append(row)
+    return [grouped[key] for key in sorted(grouped)]
+
+
+def bootstrap_site_clustered(
+    cases: Sequence[dict[str, Any]],
+    *,
+    replicates: int,
+    seed: int,
+) -> dict[str, Any]:
+    clusters = site_clusters(cases)
+    if not clusters or replicates <= 0:
+        return {
+            "replicates": 0,
+            "site_count": len(clusters),
+            "seed": seed,
+            "ci95": {},
+        }
+    rng = random.Random(seed)
+    samples: dict[str, list[float]] = {}
+    for _ in range(replicates):
+        drawn: list[dict[str, Any]] = []
+        for _ in clusters:
+            drawn.extend(clusters[rng.randrange(len(clusters))])
+        for field, value in aggregate_cases(drawn).items():
+            if field in INTEGER_AGGREGATE_FIELDS:
+                continue
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                continue
+            if not math.isfinite(value):
+                continue
+            samples.setdefault(field, []).append(float(value))
+    return {
+        "replicates": replicates,
+        "site_count": len(clusters),
+        "seed": seed,
+        "ci95": {
+            field: [percentile(values, 0.025), percentile(values, 0.975)]
+            for field, values in sorted(samples.items())
+        },
     }
 
 
@@ -306,6 +415,8 @@ def score_dataset(
     schema_path: Path,
     top_k: int,
     allow_missing: bool,
+    bootstrap_replicates: int = 0,
+    bootstrap_seed: int = 20260726,
 ) -> dict[str, Any]:
     if top_k <= 0 or top_k > 10:
         raise ValueError("top-k must be in [1, 10]")
@@ -362,6 +473,11 @@ def score_dataset(
         "network_access_performed": False,
         "missing_prediction_count": len(missing),
         "aggregate": aggregate_cases(cases),
+        "aggregate_bootstrap": bootstrap_site_clustered(
+            cases,
+            replicates=bootstrap_replicates,
+            seed=bootstrap_seed,
+        ),
         "by_platform": {
             platform: aggregate_cases(row for row in cases if row["platform"] == platform)
             for platform in platforms
@@ -394,6 +510,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--schema", type=Path, default=DEFAULT_PREDICTION_SCHEMA)
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--allow-missing", action="store_true")
+    parser.add_argument(
+        "--bootstrap-replicates",
+        type=int,
+        default=2000,
+        help="site-clustered bootstrap replicates for 95%% CIs; 0 disables",
+    )
+    parser.add_argument("--bootstrap-seed", type=int, default=20260726)
     return parser
 
 
@@ -407,6 +530,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.schema,
                 args.top_k,
                 args.allow_missing,
+                args.bootstrap_replicates,
+                args.bootstrap_seed,
             )
         )
         write_json(args.output, report)

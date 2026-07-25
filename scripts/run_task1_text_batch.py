@@ -130,6 +130,7 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def passing_models(route_probe: dict[str, Any]) -> set[str]:
+    """Return models attested by the legacy multimodal preflight."""
     return {
         str(row["model"])
         for row in route_probe.get("results") or []
@@ -137,6 +138,51 @@ def passing_models(route_probe: dict[str, Any]) -> set[str]:
         and isinstance(row.get("model"), str)
         and row.get("status") == "PASS_MULTIMODAL_ROUTE"
     }
+
+
+def passing_text_models(route_probe: dict[str, Any]) -> set[str]:
+    """Accept a text-native probe or the stronger legacy multimodal probe."""
+    return {
+        str(row["model"])
+        for row in route_probe.get("results") or []
+        if isinstance(row, dict)
+        and isinstance(row.get("model"), str)
+        and row.get("status") in {"PASS_TEXT_ROUTE", "PASS_MULTIMODAL_ROUTE"}
+    }
+
+
+def pinned_text_response_models(
+    route_probe: dict[str, Any], requested_model: str
+) -> set[str]:
+    """Return the single response-model identity attested by a passing text probe."""
+    row = next(
+        (
+            candidate
+            for candidate in route_probe.get("results") or []
+            if isinstance(candidate, dict)
+            and candidate.get("model") == requested_model
+            and candidate.get("status")
+            in {"PASS_TEXT_ROUTE", "PASS_MULTIMODAL_ROUTE"}
+        ),
+        None,
+    )
+    if row is None:
+        raise ValueError("requested model lacks a passing text model probe")
+    resolved = {
+        str(probe["response_model"])
+        for probe in row.get("probes") or []
+        if isinstance(probe, dict)
+        and probe.get("status") == "PASS"
+        and isinstance(probe.get("response_model"), str)
+        and probe["response_model"]
+    }
+    if isinstance(row.get("response_model"), str) and row["response_model"]:
+        resolved.add(str(row["response_model"]))
+    if not resolved:
+        resolved.add(requested_model)
+    if len(resolved) != 1:
+        raise ValueError("route probe resolved to multiple response-model identities")
+    return resolved
 
 
 def atomic_text(path: Path, value: str) -> None:
@@ -813,9 +859,9 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError("route probe did not pass")
         if route_probe.get("transport") != "libinfer-neo" or route_probe.get("oneapi_used"):
             raise ValueError("route probe transport policy mismatch")
-        if args.model not in passing_models(route_probe):
-            raise ValueError("requested model lacks a passing model probe")
-        resolved_model_allowlist = pinned_response_models(route_probe, args.model)
+        if args.model not in passing_text_models(route_probe):
+            raise ValueError("requested model lacks a passing text model probe")
+        resolved_model_allowlist = pinned_text_response_models(route_probe, args.model)
 
         environment = load_export_env(args.env_file)
         base_url = environment.get("LIBINFER_NEO_URL") or os.environ.get("LIBINFER_NEO_URL")

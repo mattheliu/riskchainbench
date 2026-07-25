@@ -220,8 +220,15 @@ Task 2 数据包保存的是 600 个经过 SHA-256 固定的 OCI/Docker 归档�
 1. 校验 Task 2 和 runtime supplement；
 2. 校验 600 个 archive manifest；
 3. 按需解压 OCI layer；
-4. 校验 `mirrorserve` 二进制 hash；
+4. 以冻结 archive/image/layer SHA 为信任根，固定镜像内 `mirrorserve` 指纹；
 5. 将 L2 observation plan 和 L3 stateful profile 放入同一 runtime root。
+
+少量历史镜像的镜像内二进制指纹与 resolver 记录的源工作树指纹不同。该差异
+不能通过关闭校验解决：Materializer 会同时保留
+`source_runtime_binary_sha256` 与 `archive_runtime_binary_sha256`，为每个站点
+生成 `.riskchainbench-runtime-attestation.json`，并在全量 report 中公开差异
+数量。后续 Runner 只接受由冻结 OCI 归档产生且 report/attestation 均通过校验的
+运行时。
 
 先做单案例 smoke：
 
@@ -241,11 +248,13 @@ python code/task2/scripts/materialize_task2_runtime.py \
   --task2-release data/task2 \
   --runtime-root runtime \
   --workers 4 \
-  --report runs/preflight/materialize-600.json
+  --report runs/preflight/materialize-600.json \
+  --replace
 ```
 
-重复运行默认会复核并跳过已正确还原的站点。只有明确需要重建损坏目录时才使用
-`--replace`。不要手动修改 materialized site、profile 或 observation plan。
+首次从旧版 runtime 升级到带逐站 attestation 的版本时使用 `--replace`。此后
+重复运行会复核 attestation 并跳过已正确还原的站点。不要手动修改 materialized
+site、profile、observation plan 或 attestation。
 
 ## 9. 运行 Task 1
 
@@ -293,6 +302,7 @@ python code/task2/scripts/run_task2_four_model_matrix.py \
   --task1-results runs/task1 \
   --route-probe runs/preflight/all_routes.json \
   --runtime-root runtime \
+  --runtime-materialization-report runs/preflight/materialize-600.json \
   --out runs/task2 \
   --models "$MODELS" \
   --model-workers 2 \
@@ -311,6 +321,14 @@ python code/task2/scripts/run_task2_four_model_matrix.py \
 - viewport-only 截图
 
 未经统一实验协议变更，不要单独为某个模型放宽这些参数。
+portable runtime 必须同时提供 `--runtime-materialization-report`；遗漏、哈希
+错误、非 600 条、存在 materialization failure 或 attestation 不一致都会在模型
+调用前阻断，不能降级为仅检查目录存在。
+
+每个模型必须得到 `600 reference + 600 model = 1,200` 条条件级终态，四模型合计
+`4,800` 条。model-restoration 中 Task 1 未恢复、恢复错误、拒答或坏格式的案例
+不会发起网页调用，但仍必须在 `condition_accounting.jsonl` 中记为
+`NON_INVESTIGABLE`；禁止使用 reference/gold entry 补齐后继续运行。
 
 ## 11. 查看进度
 
@@ -337,8 +355,11 @@ runs/task1/models/<model>/primary/run/predictions.jsonl
 runs/task2/models/<model>/handoff/handoff_manifest.json
 runs/task2/models/<model>/reference_restoration/condition_report.json
 runs/task2/models/<model>/model_restoration/condition_report.json
+runs/task2/models/<model>/*/condition_accounting.jsonl
+runs/task2/models/<model>/*/condition_validation.json
 runs/task2/models/<model>/*/base/cases/<CASE>/case_result.json
 runs/task2/models/<model>/*/base/cases/<CASE>/model_calls.json
+runs/task2/models/<model>/*/retries/round-<N>/<CASE>/summary.json
 ```
 
 ## 12. 结果解释
@@ -354,8 +375,12 @@ runs/task2/models/<model>/*/base/cases/<CASE>/model_calls.json
 
 - `PASS`：系统执行完整且产生可评估轨迹；
 - `MODEL_FAILURE`：路由可用，但模型拒答、格式错误、无效动作或未完成协议；
-- `CASE_SYSTEM_FAILURE`：浏览器、运行时、文件、传输等系统问题；
-- 只有 `CASE_SYSTEM_FAILURE` 进入有限系统重试；
+- `NON_INVESTIGABLE`：model-restoration 的 Task 1 入口未通过冻结 handoff，
+  不执行网页阶段，也不使用 gold 修复；
+- `SYSTEM_FAILURE_EXHAUSTED`：浏览器、运行时、文件或传输等系统问题经过固定
+  重试预算后仍失败；
+- runner `summary.failures` 中的系统失败才进入有限重试；已经形成模型响应的
+  拒答、坏 JSON、无效动作和未完成协议保留为 `MODEL_FAILURE`，不得重试掩盖；
 - 网页不可达、页面缺失、动作预算耗尽和证据不足必须分别记录，不能都改写为
   `NON_VIOLATION`。
 
@@ -397,6 +422,8 @@ accuracy/F1。
 7. **上游 502、超时与模型失败混淆**
    - 502/网络超时属于系统失败，可有限重试；拒答、坏 JSON、无效动作属于模型
      失败，不得无限重试到成功。
+   - 不要只筛选 `error_type=CASE_SYSTEM_FAILURE`；浏览器异常可能保留具体异常类名，
+     是否重试应以 runner 的 `summary.failures` 边界为准。
 8. **WordPress `wp-skip-link` 被当成可点击主控件**
    - 新 runner 会过滤 `screen-reader-text`、`sr-only`、`visually-hidden`、
      `aria-hidden`、`inert` 及微小 clipped 控件；旧 runner 可能等待 30 秒超时。
@@ -436,6 +463,250 @@ accuracy/F1。
 - smoke case 能启动本地 runtime，且零外网请求；
 - Task 1 目标题数全部 accounted；
 - Task 2 reference/predicted 两列分开；
+- 四模型各有 `600 + 600` 条条件级终态，合计 4,800 条，无静默缺失；
+- 每个 `condition_validation.json` 为 `PASS`，且对应 accounting 恰好覆盖 resolver
+  的 600 个唯一 case；
 - 系统失败、模型失败、弃答和不可调查没有混算；
 - 结果中没有凭证、原始 resolver、真实入口或未脱敏截图；
 - 未完成 Human Gold/Judge 校准时，没有发布 accuracy/F1 或正式证据链总分。
+
+## 15. Task 1 hard 结构变体复现
+
+本节是 Task 1 的补充教程，只覆盖文本恢复数据的生成、可逆性验证、推理和评分。
+普通参评者应直接使用冻结发布；只有数据维护者才需要重新生成。
+
+本次 hard-layout 发布在两个 Task 1 数据仓库中使用相同的版本目录：
+
+```text
+releases/task1-hard-layout-v0.1/
+```
+
+原有根目录冻结发布保持不变。下载后优先读取该版本目录中的
+`RELEASE_MANIFEST.json` 和 `FILE_MANIFEST.jsonl`，并按清单逐文件验哈希。
+
+### 15.1 六变体定义
+
+每个源会话生成六个确定性变体，实际参数由
+`configs/task1_variant_recipes_v0.2.json` 固定：
+
+| 变体 | 角色 | 主要变换 |
+|---|---|---|
+| `v000` | 主变体 | 基础混淆组合 |
+| `v001` | 稳健性 | 相似字形替换 |
+| `v002` | 稳健性 | 入口表面变换 |
+| `v003` | 稳健性 | 冗余插入和表情增强 |
+| `v004` | hard 结构变体 | 竖排分栏阅读顺序 |
+| `v005` | hard 结构变体 | 对角线/藏头阅读顺序 |
+
+`v004` 和 `v005` 改变可见阅读顺序，但不能改变 gold。生成记录中的
+`READING_ORDER_LAYOUT` 操作必须保存目标文本、单元坐标、阅读顺序、歧义集合和
+二维尺寸，且必须能由 trace 精确反演。方括号平台 token 作为一个原子单元，不能
+在布局阶段拆开。
+
+### 15.2 开发者重新生成
+
+假设受控源会话位于 `/secure/task1/source_sessions.jsonl`：
+
+```bash
+python scripts/generate_obfuscated_session_dataset.py generate \
+  --input /secure/task1/source_sessions.jsonl \
+  --config configs/obfuscated_session_generation_v0.2.json \
+  --variant-recipes configs/task1_variant_recipes_v0.2.json \
+  --variant-recipes-schema schemas/task1_variant_recipes_v0.2.schema.json \
+  --record-schema schemas/obfuscated_session_generation_v0.3.schema.json \
+  --output /secure/task1/generated_sessions.jsonl \
+  --manifest /secure/task1/generated_sessions.manifest.json \
+  --variants 6
+```
+
+随后验证 Schema、文件哈希、源记录对应关系和逐操作可逆性：
+
+```bash
+python scripts/generate_obfuscated_session_dataset.py verify \
+  --dataset /secure/task1/generated_sessions.jsonl \
+  --manifest /secure/task1/generated_sessions.manifest.json \
+  --record-schema schemas/obfuscated_session_generation_v0.3.schema.json \
+  --source /secure/task1/source_sessions.jsonl \
+  --config configs/obfuscated_session_generation_v0.2.json
+```
+
+验证必须返回：
+
+```json
+{"errors": [], "status": "PASS"}
+```
+
+### 15.3 构建模型可见输入
+
+```bash
+python scripts/build_obfuscated_reconstruction_tasks.py \
+  --dataset /secure/task1/generated_sessions.jsonl \
+  --output /release/task1/model_visible/task1_inputs.jsonl \
+  --manifest /release/task1/model_visible/task1_inputs_manifest.json \
+  --prompt configs/obfuscated_reconstruction_prompt_v0.1.md \
+  --schema schemas/obfuscated_reconstruction_task_v0.1.schema.json \
+  --prompt-id task1-blind-v0.1
+```
+
+模型可见 JSONL 中不得出现：
+
+- `gold_reconstruction`
+- `source_session`
+- `operations`
+- `message_transformations`
+- `local_mirror_ref`
+- 私有入口、解析映射或任何凭证
+
+### 15.4 单模型运行
+
+凭证只放在权限受控的 env 文件中，不要写入命令、Git 或结果文件：
+
+```bash
+python scripts/run_task1_text_batch.py \
+  --tasks data/task1/model_visible/task1_inputs.jsonl \
+  --task-manifest data/task1/model_visible/task1_inputs_manifest.json \
+  --prompt data/task1/spec/model_prompt.md \
+  --route-probe runs/preflight/all_routes.json \
+  --model MODEL_ID \
+  --setting BLIND \
+  --concurrency 3 \
+  --max-attempts 3 \
+  --timeout-seconds 240 \
+  --out runs/task1/MODEL_ID/blind
+```
+
+只跑 hard 子集时添加：
+
+```bash
+--variant-indices 4,5
+```
+
+只做三站连通性检查时添加：
+
+```bash
+--source-limit 3
+```
+
+小规模结果必须标为 pilot，不能写成完整基准结果。模型拒答、坏 JSON、Schema
+失败和缺失恢复都是模型失败，必须保留在分母中。
+
+### 15.5 预测格式
+
+每个任务必须恰好有一条符合
+`schemas/obfuscated_reconstruction_prediction_v0.1.schema.json` 的预测：
+
+```json
+{
+  "schema_version": "obfuscated-reconstruction-prediction/v0.1",
+  "sample_id": "SITE001--v004",
+  "model_id": "MODEL_ID",
+  "run_id": "task1-hard-pilot",
+  "input_view": "TOKEN_TEXT",
+  "reconstructed_messages": [
+    {
+      "message_id": "M1",
+      "text": "恢复后的规范文本"
+    }
+  ],
+  "intent": "OPEN_SITE",
+  "platform": "unknown",
+  "entry_candidates": [
+    {
+      "rank": 1,
+      "value": "https://example.invalid/path",
+      "confidence": 0.8
+    }
+  ],
+  "abstain": false,
+  "uncertainties": []
+}
+```
+
+`sample_id` 和 `message_id` 必须原样返回。入口不确定时应降低置信度、保留多个
+候选或弃答，不能凭常识替换成真实站点。
+
+### 15.6 离线评分
+
+```bash
+python scripts/score_obfuscated_reconstruction.py \
+  --dataset data/task1/evaluator_only/generated_sessions.jsonl \
+  --predictions runs/task1/MODEL_ID/blind/predictions.jsonl \
+  --output runs/task1/MODEL_ID/blind/score.json \
+  --top-k 5 \
+  --bootstrap-replicates 2000 \
+  --bootstrap-seed 20260726
+```
+
+论文一致的主 CER 是全体目标字符上的 micro average：
+
+```text
+CER = Σ Levenshtein(gold, prediction) / Σ len(gold)
+```
+
+同时报告：
+
+- `message_exact_rate_per_message`
+- `intent_accuracy`
+- `platform_accuracy`
+- `entry_top1_exact_rate`
+- `entry_topk_recall`
+- `full_reconstruction_success_rate_top1`
+- 站点聚类 bootstrap 的 95% 置信区间
+
+正式结果不要使用 `--allow-missing`。该参数只用于中途诊断；若使用，必须同时
+报告缺失数。
+
+六变体总体 CER、`v000` 主变体 CER 与 `v004+v005` hard 子集 CER 必须分开。
+hard 子集超过 50% 不能写成总体超过 50%。
+
+### 15.7 Task 1 核心测试
+
+```bash
+PYTHONPATH=.:scripts python -m pytest -q \
+  tests/test_generate_obfuscated_session_dataset.py \
+  tests/test_config_and_schema_parse.py \
+  tests/test_entry_replacement_scope.py \
+  tests/test_glyph_decomposition.py \
+  tests/test_optional_lexical_stages.py \
+  tests/test_reading_order_layout.py \
+  tests/test_redundant_and_entry_surface.py \
+  tests/test_similar_glyph_substitution.py \
+  tests/test_obfuscation_type_registry.py \
+  tests/test_obfuscation_type_canary_matrix.py \
+  tests/test_build_obfuscated_reconstruction_tasks.py \
+  tests/test_score_obfuscated_reconstruction.py \
+  tests/test_site_clustered_bootstrap.py \
+  tests/test_task1_paper_conformant_metrics.py
+```
+
+再执行：
+
+```bash
+PYTHONPATH=.:scripts python -m pytest -q
+python -m py_compile scripts/*.py
+```
+
+如果完整测试因未安装可选运行时或未下载私有/大文件 fixture 而失败，应将环境
+缺失、fixture 缺失和断言失败分别报告，不能笼统写成“全部通过”。
+
+### 15.8 Task 1 发布验收
+
+1. 数据、prompt、Schema、代码提交和 route probe 均有固定 SHA-256；
+2. 每个预期 `sample_id` 恰好一条预测；
+3. 每个目标 `message_id` 恰好一个恢复文本；
+4. 模型可见层无 gold、trace、源消息、私有映射或凭证；
+5. 预测和评分 Schema 均通过；
+6. 缺失、弃答、拒答和格式失败均保留在分母；
+7. `BLIND` 与诊断设置分开；
+8. `v004+v005` hard 子集与六变体总体分开；
+9. 同时记录请求模型 ID 和 route probe 解析出的响应模型 ID；
+10. GitHub、Hugging Face 和 ModelScope 发布后均按远端内容重新计算哈希。
+
+### 15.9 本次 hard 结构变体 pilot 记录
+
+本次固定 3 站点、18 任务的五模型 BLIND pilot 结果见：
+
+- [人类可读结果](task1_hard_variant_pilot_results_20260726.md)
+- [机器可读证据](task1_hard_variant_pilot_results_20260726.json)
+
+这两份文件是小规模连通性与难度证据，不是 600 站点正式榜单。

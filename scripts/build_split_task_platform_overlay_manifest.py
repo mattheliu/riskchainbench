@@ -40,6 +40,15 @@ EXPECTED_HANDOFF_MAP_SHA256 = (
 )
 MANIFEST_NAME = "PORTABLE_OVERLAY_FILE_MANIFEST.jsonl"
 RELEASE_NAME = "PORTABLE_OVERLAY_MANIFEST.json"
+EXCLUDED_PATH_PARTS = {
+    ".cache",
+    ".git",
+    ".hf_cache",
+    ".ms_upload_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    "__pycache__",
+}
 SECRET_PATTERNS = {
     "github_token": re.compile(rb"\bghp_[A-Za-z0-9]{20,}\b"),
     "huggingface_token": re.compile(rb"\bhf_[A-Za-z0-9]{20,}\b"),
@@ -84,8 +93,7 @@ def is_payload(path: Path, root: Path) -> bool:
     return (
         path.is_file()
         and path.name not in {MANIFEST_NAME, RELEASE_NAME}
-        and ".git" not in relative.parts
-        and "__pycache__" not in relative.parts
+        and not EXCLUDED_PATH_PARTS.intersection(relative.parts)
         and path.suffix != ".pyc"
     )
 
