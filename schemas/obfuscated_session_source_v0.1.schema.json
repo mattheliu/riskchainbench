@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/obfuscated_session_source_v0.1.schema.json",
+  "title": "CovertEntryWalker sanitized source session v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "session_id",
+    "platform",
+    "surface",
+    "client_context",
+    "risk_type",
+    "intent",
+    "entry",
+    "source_provenance",
+    "text_generation",
+    "messages"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "obfuscated-session-source/v0.1"
+    },
+    "session_id": {
+      "$ref": "#/$defs/id"
+    },
+    "platform": {
+      "enum": [
+        "bilibili",
+        "douyin",
+        "wechat",
+        "wechat_channels",
+        "qq",
+        "weibo",
+        "baidu_tieba",
+        "tiktok"
+      ]
+    },
+    "surface": {
+      "enum": [
+        "PRIVATE_MESSAGE",
+        "GROUP_CHAT",
+        "COMMENT",
+        "DYNAMIC_REPLY",
+        "LIVE_CHAT"
+      ]
+    },
+    "client_context": {
+      "$ref": "#/$defs/client_context"
+    },
+    "risk_type": {
+      "enum": [
+        "adult_service_risk",
+        "gambling_risk",
+        "phishing_risk",
+        "investment_risk",
+        "impersonation_risk",
+        "benign_control",
+        "unknown_risk"
+      ]
+    },
+    "intent": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "entry": {
+      "$ref": "#/$defs/entry"
+    },
+    "source_provenance": {
+      "$ref": "#/$defs/source_provenance"
+    },
+    "text_generation": {
+      "$ref": "#/$defs/text_generation"
+    },
+    "messages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/message"
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value", "placeholder", "local_mirror_ref"],
+      "properties": {
+        "type": {
+          "enum": ["SITE", "ACCOUNT", "CODE"]
+        },
+        "value": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "placeholder": {
+          "const": "{ENTRY}"
+        },
+        "local_mirror_ref": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "client_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "client_type",
+        "os",
+        "client_version",
+        "locale",
+        "profile_validation_status"
+      ],
+      "properties": {
+        "client_type": {
+          "enum": ["APP", "WEB", "PC", "SYNTHETIC"]
+        },
+        "os": {
+          "enum": ["ANDROID", "IOS", "WINDOWS", "MACOS", "WEB", "UNSPECIFIED"]
+        },
+        "client_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "locale": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "profile_validation_status": {
+          "enum": [
+            "PRIMARY_PLATFORM_VERIFIED",
+            "CLIENT_OBSERVED",
+            "SECONDARY_ONLY",
+            "NOT_VERIFIED"
+          ]
+        }
+      }
+    },
+    "source_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_type",
+        "source_ref",
+        "sanitization_status",
+        "authorization_basis"
+      ],
+      "properties": {
+        "source_type": {
+          "enum": ["SYNTHETIC", "HUMAN_AUTHORED", "REPORTED_SANITIZED"]
+        },
+        "source_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "source_artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sanitization_status": {
+          "enum": ["SYNTHETIC_SAFE", "SANITIZED_REVIEWED", "REVIEW_REQUIRED"]
+        },
+        "authorization_basis": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "text_generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "generator_name",
+        "generator_version",
+        "prompt_id",
+        "prompt_sha256",
+        "generation_seed"
+      ],
+      "properties": {
+        "method": {
+          "enum": ["HUMAN_TEMPLATE", "LLM", "RULE_TEMPLATE"]
+        },
+        "generator_name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "generator_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "prompt_id": {
+          "$ref": "#/$defs/id"
+        },
+        "prompt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generation_seed": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message_id", "role", "text", "transform"],
+      "properties": {
+        "message_id": {
+          "$ref": "#/$defs/id"
+        },
+        "role": {
+          "enum": ["sender", "recipient", "system"]
+        },
+        "text": {
+          "type": "string"
+        },
+        "transform": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

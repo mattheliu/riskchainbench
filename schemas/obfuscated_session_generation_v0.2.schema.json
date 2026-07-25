@@ -1,0 +1,648 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/obfuscated_session_generation_v0.2.schema.json",
+  "title": "RiskChainBench traceable multi-recipe obfuscated session record v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sample_id",
+    "session_id",
+    "variant_index",
+    "platform",
+    "surface",
+    "client_context",
+    "risk_type",
+    "intent",
+    "entry",
+    "source_provenance",
+    "text_generation",
+    "generation",
+    "safety",
+    "source_session",
+    "transformed_session",
+    "message_transformations",
+    "gold_reconstruction",
+    "obfuscation_types",
+    "record_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "obfuscated-session-generation/v0.2"
+    },
+    "sample_id": {
+      "$ref": "#/$defs/id"
+    },
+    "session_id": {
+      "$ref": "#/$defs/id"
+    },
+    "variant_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "platform": {
+      "enum": [
+        "bilibili",
+        "douyin",
+        "wechat",
+        "wechat_channels",
+        "qq",
+        "weibo",
+        "baidu_tieba",
+        "tiktok"
+      ]
+    },
+    "surface": {
+      "enum": [
+        "PRIVATE_MESSAGE",
+        "GROUP_CHAT",
+        "COMMENT",
+        "DYNAMIC_REPLY",
+        "LIVE_CHAT"
+      ]
+    },
+    "client_context": {
+      "$ref": "#/$defs/client_context"
+    },
+    "risk_type": {
+      "enum": [
+        "adult_service_risk",
+        "gambling_risk",
+        "phishing_risk",
+        "investment_risk",
+        "impersonation_risk",
+        "benign_control",
+        "unknown_risk"
+      ]
+    },
+    "intent": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "entry": {
+      "$ref": "#/$defs/entry"
+    },
+    "source_provenance": {
+      "$ref": "#/$defs/source_provenance"
+    },
+    "text_generation": {
+      "$ref": "#/$defs/text_generation"
+    },
+    "generation": {
+      "$ref": "#/$defs/generation"
+    },
+    "safety": {
+      "$ref": "#/$defs/safety"
+    },
+    "source_session": {
+      "$ref": "#/$defs/session"
+    },
+    "transformed_session": {
+      "$ref": "#/$defs/session"
+    },
+    "message_transformations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/message_transformation"
+      }
+    },
+    "gold_reconstruction": {
+      "$ref": "#/$defs/gold_reconstruction"
+    },
+    "obfuscation_types": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "homophone_or_similar_sound",
+          "unicode_entry_confusable",
+          "platform_emoji_insertion",
+          "line_break_layout"
+        ]
+      }
+    },
+    "record_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullable_sha256": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/sha256"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value", "placeholder", "local_mirror_ref"],
+      "properties": {
+        "type": {
+          "enum": ["SITE", "ACCOUNT", "CODE"]
+        },
+        "value": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "placeholder": {
+          "const": "{ENTRY}"
+        },
+        "local_mirror_ref": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "client_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "client_type",
+        "os",
+        "client_version",
+        "locale",
+        "profile_validation_status"
+      ],
+      "properties": {
+        "client_type": {
+          "enum": ["APP", "WEB", "PC", "SYNTHETIC"]
+        },
+        "os": {
+          "enum": ["ANDROID", "IOS", "WINDOWS", "MACOS", "WEB", "UNSPECIFIED"]
+        },
+        "client_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "locale": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "profile_validation_status": {
+          "enum": [
+            "PRIMARY_PLATFORM_VERIFIED",
+            "CLIENT_OBSERVED",
+            "SECONDARY_ONLY",
+            "NOT_VERIFIED"
+          ]
+        }
+      }
+    },
+    "source_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_type",
+        "source_ref",
+        "sanitization_status",
+        "authorization_basis"
+      ],
+      "properties": {
+        "source_type": {
+          "enum": ["SYNTHETIC", "HUMAN_AUTHORED", "REPORTED_SANITIZED"]
+        },
+        "source_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "source_artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sanitization_status": {
+          "enum": ["SYNTHETIC_SAFE", "SANITIZED_REVIEWED", "REVIEW_REQUIRED"]
+        },
+        "authorization_basis": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "text_generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "generator_name",
+        "generator_version",
+        "prompt_id",
+        "prompt_sha256",
+        "generation_seed"
+      ],
+      "properties": {
+        "method": {
+          "enum": ["HUMAN_TEMPLATE", "LLM", "RULE_TEMPLATE"]
+        },
+        "generator_name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "generator_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "prompt_id": {
+          "$ref": "#/$defs/id"
+        },
+        "prompt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generation_seed": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generator_version",
+        "config_id",
+        "config_sha256",
+        "global_seed",
+        "record_seed_sha256",
+        "source_record_sha256",
+        "platform_profile_id",
+        "platform_profile_verification_status",
+        "variant_recipe_id",
+        "variant_recipe_family",
+        "variant_difficulty",
+        "variant_recipe_sha256",
+        "primary_for_e2e"
+      ],
+      "properties": {
+        "generator_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "config_id": {
+          "$ref": "#/$defs/id"
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "global_seed": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "record_seed_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_record_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "platform_profile_id": {
+          "$ref": "#/$defs/id"
+        },
+        "platform_profile_verification_status": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "variant_recipe_id": {
+          "$ref": "#/$defs/id"
+        },
+        "variant_recipe_family": {
+          "enum": [
+            "COMPOSITE",
+            "ENTRY_CONFUSABLE",
+            "LEXICAL_PLATFORM",
+            "LAYOUT_STRESS"
+          ]
+        },
+        "variant_difficulty": {
+          "enum": ["EASY", "MEDIUM", "HARD"]
+        },
+        "variant_recipe_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "primary_for_e2e": {
+          "type": "boolean"
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entry_policy",
+        "contains_live_entry",
+        "external_network_required",
+        "downstream_execution_allowed"
+      ],
+      "properties": {
+        "entry_policy": {
+          "const": "RESERVED_OR_MASKED_ONLY"
+        },
+        "contains_live_entry": {
+          "const": false
+        },
+        "external_network_required": {
+          "const": false
+        },
+        "downstream_execution_allowed": {
+          "const": false
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message_id", "role", "text", "transform"],
+      "properties": {
+        "message_id": {
+          "$ref": "#/$defs/id"
+        },
+        "role": {
+          "enum": ["sender", "recipient", "system"]
+        },
+        "text": {
+          "type": "string"
+        },
+        "transform": {
+          "type": "boolean"
+        }
+      }
+    },
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messages"],
+      "properties": {
+        "messages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/message"
+          }
+        }
+      }
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "text"],
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "operation_type",
+        "rule_id",
+        "rule_source",
+        "input_span",
+        "output_span",
+        "before",
+        "after",
+        "metadata"
+      ],
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "operation_type": {
+          "enum": [
+            "HOMOPHONE_REPLACE",
+            "ENTRY_CONFUSABLE_REPLACE",
+            "COMPOSE_ENTRY",
+            "PLATFORM_EMOJI_INSERT"
+          ]
+        },
+        "rule_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "rule_source": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "input_span": {
+          "$ref": "#/$defs/span"
+        },
+        "output_span": {
+          "$ref": "#/$defs/span"
+        },
+        "before": {
+          "type": "string"
+        },
+        "after": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage_id",
+        "stage_index",
+        "stage_type",
+        "subject",
+        "parent_stage_ids",
+        "input_text",
+        "output_text",
+        "input_sha256",
+        "output_sha256",
+        "rng_seed_sha256",
+        "parameters",
+        "operations"
+      ],
+      "properties": {
+        "stage_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "stage_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "stage_type": {
+          "enum": [
+            "SOURCE_TEMPLATE",
+            "HOMOPHONE_REPLACEMENT",
+            "ENTRY_CONFUSABLE",
+            "COMPOSE_TEXT_AND_ENTRY",
+            "PLATFORM_EMOJI_INSERTION"
+          ]
+        },
+        "subject": {
+          "enum": ["MESSAGE", "ENTRY"]
+        },
+        "parent_stage_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "input_text": {
+          "type": "string"
+        },
+        "output_text": {
+          "type": "string"
+        },
+        "input_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "rng_seed_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/operation"
+          }
+        }
+      }
+    },
+    "message_transformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "message_id",
+        "source_text_sha256",
+        "final_text_sha256",
+        "stages"
+      ],
+      "properties": {
+        "message_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_text_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "final_text_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "prefixItems": [
+            {
+              "allOf": [
+                {"$ref": "#/$defs/stage"},
+                {
+                  "properties": {
+                    "stage_index": {"const": 0},
+                    "stage_type": {"const": "SOURCE_TEMPLATE"},
+                    "subject": {"const": "MESSAGE"}
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {"$ref": "#/$defs/stage"},
+                {
+                  "properties": {
+                    "stage_index": {"const": 1},
+                    "stage_type": {"const": "HOMOPHONE_REPLACEMENT"},
+                    "subject": {"const": "MESSAGE"}
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {"$ref": "#/$defs/stage"},
+                {
+                  "properties": {
+                    "stage_index": {"const": 2},
+                    "stage_type": {"const": "ENTRY_CONFUSABLE"},
+                    "subject": {"const": "ENTRY"}
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {"$ref": "#/$defs/stage"},
+                {
+                  "properties": {
+                    "stage_index": {"const": 3},
+                    "stage_type": {"const": "COMPOSE_TEXT_AND_ENTRY"},
+                    "subject": {"const": "MESSAGE"}
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {"$ref": "#/$defs/stage"},
+                {
+                  "properties": {
+                    "stage_index": {"const": 4},
+                    "stage_type": {"const": "PLATFORM_EMOJI_INSERTION"},
+                    "subject": {"const": "MESSAGE"}
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "gold_message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message_id", "text"],
+      "properties": {
+        "message_id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "gold_reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entry_type", "entry_value", "messages"],
+      "properties": {
+        "entry_type": {
+          "enum": ["SITE", "ACCOUNT", "CODE"]
+        },
+        "entry_value": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "messages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/gold_message"
+          }
+        }
+      }
+    }
+  }
+}

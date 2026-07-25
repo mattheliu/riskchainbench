@@ -1,0 +1,95 @@
+{
+  "benchmark_id": "riskchainbench-task1-obfuscated-reconstruction-v0.4",
+  "contract_sha256": "fba49afafbf14bc375716754152163afc57759c90a4d904dd53c8eb4e6986dda",
+  "files": {
+    "generated_gold": {
+      "bytes": 121835617,
+      "path": "evaluator_only/generated_sessions.jsonl",
+      "sha256": "01454bd902966a0fa0876dc90b70265b98168b1efe5cec09ad50652bd0e1eb39",
+      "visibility": "EVALUATOR_ONLY"
+    },
+    "generated_manifest": {
+      "bytes": 687384,
+      "path": "evaluator_only/generated_sessions_manifest.json",
+      "sha256": "0e4423749cd62dc5719b096bf7adfa480c56311c82b7c10eaca81c32d779b7c6",
+      "visibility": "EVALUATOR_ONLY"
+    },
+    "source_sessions": {
+      "bytes": 828747,
+      "path": "internal/source_sessions.jsonl",
+      "sha256": "ddc2bea26bc9c7d065770186295c6b113ee04c9f2d88a13eb2e07d2059c4dcbf",
+      "visibility": "INTERNAL_ONLY"
+    },
+    "spec_generation_config.json": {
+      "bytes": 19320,
+      "path": "spec/generation_config.json",
+      "sha256": "2ab5e253c28bee661411b864cd34bc9a0d591ce84f57903ce79569947b2090fb",
+      "visibility": "MODEL_VISIBLE_SPEC"
+    },
+    "spec_generation_record.schema.json": {
+      "bytes": 15517,
+      "path": "spec/generation_record.schema.json",
+      "sha256": "2d4e3bc5ea7a597a3d5619c1dd4927b4bebee4c97c7d06a91dd9710c0c50aee5",
+      "visibility": "MODEL_VISIBLE_SPEC"
+    },
+    "spec_model_prompt.md": {
+      "bytes": 2629,
+      "path": "spec/model_prompt.md",
+      "sha256": "d7dbe332622683bc356a7f2b9eb7b0237b88a4c8b0944a53884fe9d97e92e12d",
+      "visibility": "MODEL_VISIBLE_SPEC"
+    },
+    "spec_task_input.schema.json": {
+      "bytes": 2622,
+      "path": "spec/task_input.schema.json",
+      "sha256": "74c8dd13dcd06287b531187b945f20b7b4c4a50dc111ed86e9a3c52b9c1aac7d",
+      "visibility": "MODEL_VISIBLE_SPEC"
+    },
+    "spec_task_prompt.md": {
+      "bytes": 935,
+      "path": "spec/task_prompt.md",
+      "sha256": "a34855eadd83cdc4595da75348ced409453d961cf4a367cdac17d3dce616557d",
+      "visibility": "MODEL_VISIBLE_SPEC"
+    },
+    "spec_variant_recipes.json": {
+      "bytes": 3242,
+      "path": "spec/variant_recipes.json",
+      "sha256": "e4b527ee05aba603ae92c45a4bae449eb4d57c8840407bb8ac4449c1cdd33edb",
+      "visibility": "MODEL_VISIBLE_SPEC"
+    },
+    "task_manifest": {
+      "bytes": 679949,
+      "path": "model_visible/task1_inputs_manifest.json",
+      "sha256": "8d242620d3f98d526b5bae1240ac23e79f2af7297b4a38f581ac39900cae64e3",
+      "visibility": "MODEL_VISIBLE"
+    },
+    "tasks": {
+      "bytes": 3009369,
+      "path": "model_visible/task1_inputs.jsonl",
+      "sha256": "de767cb0fc3352c04e186cf6d83f742bd87e20736e31d7d720a5562d08aa9d64",
+      "visibility": "MODEL_VISIBLE"
+    }
+  },
+  "ordered_site_ids_sha256": "c994754d4c42fc60302ee8970f5951cea8e9f46bc906005400f836fdbf05ff35",
+  "primary_sample_ids_sha256": "56dab3373ec4cafd3b7aff36d81f48a38ea767391bca3ab12cde72fc2d58e905",
+  "primary_task_count": 600,
+  "primary_variant_index": 0,
+  "recipe_counts": {
+    "composite-replicate-medium": 600,
+    "entry-confusable-focused": 600,
+    "hard-composite": 600,
+    "layout-stress-hard": 600,
+    "lexical-platform-focused": 600,
+    "primary-composite-medium": 600
+  },
+  "schema_version": "riskchainbench-task1-contract/v0.1",
+  "scoring_boundary": {
+    "task1_only": "ALL_SIX_VARIANTS",
+    "task1_to_task2": "PRIMARY_VARIANT_V000_ONLY",
+    "task2_repetition_for_robustness_variants": false
+  },
+  "site_count": 600,
+  "source_benchmark_id": "riskchainbench-balanced-600-v0.3",
+  "status": "PASS_READY_FOR_INFERENCE",
+  "task_count": 3600,
+  "variants_per_site": 6
+}

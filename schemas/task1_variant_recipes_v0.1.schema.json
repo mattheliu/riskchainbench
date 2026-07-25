@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/task1_variant_recipes_v0.1.schema.json",
+  "title": "RiskChainBench Task 1 deterministic variant recipes v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recipe_set_id",
+    "primary_variant_index",
+    "variants"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "task1-variant-recipes/v0.1"
+    },
+    "recipe_set_id": {
+      "$ref": "#/$defs/id"
+    },
+    "primary_variant_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/variant"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "probability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_index",
+        "recipe_id",
+        "family",
+        "difficulty",
+        "primary_for_e2e",
+        "description",
+        "overrides"
+      ],
+      "properties": {
+        "variant_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "recipe_id": {
+          "$ref": "#/$defs/id"
+        },
+        "family": {
+          "enum": [
+            "COMPOSITE",
+            "ENTRY_CONFUSABLE",
+            "LEXICAL_PLATFORM",
+            "LAYOUT_STRESS"
+          ]
+        },
+        "difficulty": {
+          "enum": ["EASY", "MEDIUM", "HARD"]
+        },
+        "primary_for_e2e": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "overrides": {
+          "$ref": "#/$defs/overrides"
+        }
+      }
+    },
+    "overrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "homophone_probability_scale": {
+          "$ref": "#/$defs/probability"
+        },
+        "entry_replacement_probability": {
+          "$ref": "#/$defs/probability"
+        },
+        "entry_minimum_replacements": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "emoji_insertion_probability": {
+          "$ref": "#/$defs/probability"
+        },
+        "emoji_min_insertions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "emoji_max_insertions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "emoji_line_break_probability": {
+          "$ref": "#/$defs/probability"
+        },
+        "emoji_chunk_min_characters": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "emoji_chunk_max_characters": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

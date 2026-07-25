@@ -1,0 +1,15 @@
+{
+  "credential_scan": {
+    "scanned_root": "riskchainbench-task1",
+    "secret_hits": [],
+    "status": "PASS"
+  },
+  "file_count": 25,
+  "file_manifest_sha256": "58820db66b4b08ca5589ac21137086f122cfb489f94dc687ad1c82ec5bcb8139",
+  "generated_at": "2026-07-25T08:52:53+00:00",
+  "release_sha256": "6d3ecb41a66e1bb15a58d92ea8d9c34aeef35808748fb18b7bd051d7e116e8fc",
+  "schema_version": "riskchainbench-platform-release/v0.1",
+  "status": "PASS_STAGED_NOT_UPLOADED",
+  "total_bytes": 845675,
+  "visibility": "SOURCE_CODE"
+}

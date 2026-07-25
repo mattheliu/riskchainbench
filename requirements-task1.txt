@@ -1,0 +1,6 @@
+jsonschema==4.23.0
+pypinyin==0.54.0
+idna==3.18
+regex==2026.5.9
+unicodedata2==17.0.0
+pytest==8.3.4

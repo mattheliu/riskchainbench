@@ -1,0 +1,8 @@
+-r requirements-task1.txt
+numpy==2.2.6
+Pillow==11.2.1
+qrcode==8.2
+zxing-cpp==2.3.0
+onnxruntime==1.21.1
+opencv-python-headless==4.11.0.86
+rapidocr-onnxruntime==1.4.4
