@@ -10,6 +10,11 @@ Independent code and contracts for obfuscated-message reconstruction.
 - Robustness track: `v001` through `v005`
 - Transport: `libinfer/libinfer-neo` only
 
+The benchmark has no model allowlist. Pass any route-qualified model IDs with
+`scripts/run_task1_model_matrix.py --models ...`. The four-model defaults in
+the compatibility entry point describe the current paper experiment only;
+see `MODEL_SELECTION_AMENDMENT.json`.
+
 The repository contains model-visible inputs, prompts, schemas, and runners.
 Scoring and Task 2 handoff additionally require the authorized evaluator files
 from one of the private dataset mirrors:

@@ -197,6 +197,12 @@ python -m playwright install chromium
 每个待评模型必须先通过两次本地生成图片的读取探针。探针只证明该
 `libinfer-neo` 路由支持图像输入，不代表模型任务得分。
 
+Benchmark 不设置模型 allowlist。下面四个 ID 只是当前论文实验的示例 roster；
+评估其他模型时直接替换 `MODELS`，不需要改数据集、runner 常量或合同。
+冻结的早期合同中 `required_models` 与 “four-model” 状态名仅作历史 provenance，
+不再具有准入语义；解释优先级见
+`manifests/balanced600_model_selection_amendment_20260726.json`。
+
 ```bash
 MODELS='gpt-5.4,claude-opus-4-8-kiro,kimi-k2.6,gemini-3.5-flash'
 
@@ -268,7 +274,7 @@ site、profile、observation plan 或 attestation。
 建议先只跑主任务 `v000`，得到 Task 2 所需的冻结输入：
 
 ```bash
-python code/task1/scripts/run_task1_four_model_matrix.py \
+python code/task1/scripts/run_task1_model_matrix.py \
   --release data/task1 \
   --route-probe runs/preflight/all_routes.json \
   --out runs/task1 \
@@ -282,7 +288,7 @@ python code/task1/scripts/run_task1_four_model_matrix.py \
 主结果完成后，可单独跑五个恢复鲁棒性变体：
 
 ```bash
-python code/task1/scripts/run_task1_four_model_matrix.py \
+python code/task1/scripts/run_task1_model_matrix.py \
   --release data/task1 \
   --route-probe runs/preflight/all_routes.json \
   --out runs/task1-robustness \
@@ -323,7 +329,7 @@ Task 2 会先等待每个模型的 Task 1 主任务完成，然后分别跑 refe
 和 model restoration：
 
 ```bash
-python code/task2/scripts/run_task2_four_model_matrix.py \
+python code/task2/scripts/run_task2_model_matrix.py \
   --task1-release data/task1 \
   --task2-release data/task2 \
   --handoff-release data/task2 \
@@ -353,25 +359,28 @@ portable runtime 必须同时提供 `--runtime-materialization-report`；遗漏�
 错误、非 600 条、存在 materialization failure 或 attestation 不一致都会在模型
 调用前阻断，不能降级为仅检查目录存在。
 
-每个模型必须得到 `600 reference + 600 model = 1,200` 条条件级终态，四模型合计
-`4,800` 条。model-restoration 中 Task 1 未恢复、恢复错误、拒答或坏格式的案例
+每个模型必须得到 `600 reference + 600 model = 1,200` 条条件级终态。若本次
+运行包含 \(M\) 个模型，总计必须为 `1,200 × M` 条。model-restoration 中
+Task 1 未恢复、恢复错误、拒答或坏格式的案例
 不会发起网页调用，但仍必须在 `condition_accounting.jsonl` 中记为
 `NON_INVESTIGABLE`；禁止使用 reference/gold entry 补齐后继续运行。
 
 ## 11. 查看进度
 
 ```bash
-python code/task2/scripts/report_split_four_model_progress.py \
+python code/task2/scripts/report_split_model_progress.py \
   --task1-root runs/task1 \
-  --task2-root runs/task2
+  --task2-root runs/task2 \
+  --models "$MODELS"
 ```
 
 机器可读版本：
 
 ```bash
-python code/task2/scripts/report_split_four_model_progress.py \
+python code/task2/scripts/report_split_model_progress.py \
   --task1-root runs/task1 \
   --task2-root runs/task2 \
+  --models "$MODELS" \
   --json
 ```
 
@@ -389,6 +398,29 @@ runs/task2/models/<model>/*/base/cases/<CASE>/case_result.json
 runs/task2/models/<model>/*/base/cases/<CASE>/model_calls.json
 runs/task2/models/<model>/*/retries/round-<N>/<CASE>/summary.json
 ```
+
+本次模型矩阵的双条件全部结束后，运行总体验收器：
+
+```bash
+python code/task2/scripts/audit_task2_model_matrix.py \
+  --task1-release data/task1 \
+  --task2-release data/task2 \
+  --handoff-release data/task2 \
+  --task1-results runs/task1 \
+  --matrix-root runs/task2 \
+  --runtime-materialization-report runs/preflight/materialize-600.json \
+  --models "$MODELS" \
+  --out runs/task2/final_matrix_audit.json
+```
+
+只有进程退出码为 0，且 `final_matrix_audit.json` 同时满足
+`status=PASS`、`terminal_condition_result_count=1200×模型数`、
+`checks_failed=0` 和
+`successful_external_network_request_count=0`，才算本次模型矩阵轨迹评测完成。
+省略 `--models` 时，验收器使用 `matrix_config.json` 中冻结的有序模型列表；
+显式传入时会额外检查二者完全一致。
+该门禁只证明合同、终态、重试、轨迹和网络协议完整，不产生 accuracy、F1
+或正式证据链总分。
 
 ## 12. 结果解释
 
@@ -482,6 +514,24 @@ accuracy/F1。
 18. **修改 Prompt 后继续沿用旧结果**
     - Prompt、Schema、codebook、模型路由或动作预算变化都必须生成新 run ID，
       不能与旧结果直接合并。
+19. **旧静态 `mirrorserve` 不支持 `-state-dir`**
+    - 少量 L2 archive 使用早期静态 runtime；直接统一传入 `-state-dir` 会以退出码
+      2 失败并打印 `flag provided but not defined`。
+    - 当前 launcher 只在该退出码出现后探测 runtime 能力，并对确认不支持该参数的
+      静态站原端口重启一次；L3 runtime 仍必须使用 `-state-dir`，不得为绕过错误而
+      全局删除该参数。此类兼容重启按系统重试记录，不计为模型失败。
+20. **从空状态运行依赖前置场景的 L4 workflow**
+    - profile 中带 `depends_on_scenarios` 的深层场景不能直接作为单案例入口，否则
+      前置记录尚未创建时会出现状态查询 404。
+    - Runner 从干净状态启动每个 case，不预灌 Gold 数据，也不在模型不可见处执行
+      前置业务动作；如果最高分场景存在依赖，会选择同一 profile 中交互最深且可独立
+      执行的场景。若不存在独立场景，则按环境系统失败处理并进入有限重试。
+21. **用过小输出预算做多模态路由探针**
+    - 部分 reasoning route 会先消耗隐藏推理 token；`--max-tokens 64` 可能返回空
+      `message.content` 或残缺答案，从而把“输出被截断”误判成“不支持图片”。
+    - 正式探针使用至少 512 tokens、每模型至少两张本地随机图，并要求两次都正确；
+      HTTP 503 与图像识别错误分开记录。能力历史 PASS 不能替代运行前实时探针，但
+      短时实时故障也不能被改写成模型任务失败。
 
 ## 14. 外发前验收
 
@@ -491,9 +541,11 @@ accuracy/F1。
 - smoke case 能启动本地 runtime，且零外网请求；
 - Task 1 目标题数全部 accounted；
 - Task 2 reference/predicted 两列分开；
-- 四模型各有 `600 + 600` 条条件级终态，合计 4,800 条，无静默缺失；
+- 每个模型各有 `600 + 600` 条条件级终态，合计 `1,200 × 模型数` 条，无静默缺失；
 - 每个 `condition_validation.json` 为 `PASS`，且对应 accounting 恰好覆盖 resolver
   的 600 个唯一 case；
+- `matrix_config.json` 中的源码快照可回读，`2 × 模型数` 个条件的 runner、状态机验证器、
+  Prompt、codebook、路由探针、动作预算和截图策略形成唯一公共协议指纹；
 - 系统失败、模型失败、弃答和不可调查没有混算；
 - 结果中没有凭证、原始 resolver、真实入口或未脱敏截图；
 - 未完成 Human Gold/Judge 校准时，没有发布 accuracy/F1 或正式证据链总分。

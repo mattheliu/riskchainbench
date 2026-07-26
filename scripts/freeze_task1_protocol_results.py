@@ -23,6 +23,7 @@ if str(SCRIPT_DIR) not in sys.path:
 from run_unified_mllm_smoke import provider_output_observed  # noqa: E402
 
 
+# Convenience default for the current paper experiment; never an allowlist.
 DEFAULT_MODELS = (
     "gpt-5.4",
     "claude-opus-4-8-kiro",

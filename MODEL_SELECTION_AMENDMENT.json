@@ -1,0 +1,23 @@
+{
+  "schema_version": "riskchainbench-model-selection-amendment/v0.1",
+  "benchmark_id": "riskchainbench-balanced-600-v0.3",
+  "status": "ACTIVE",
+  "effective_date": "2026-07-26",
+  "frozen_benchmark_contract_sha256": "91f0e951495ecf120b31889993ba1b010174a5d9b72ec41ecbb3976069687993",
+  "preserves_frozen_dataset_bytes": true,
+  "benchmark_model_allowlist": null,
+  "model_selection_policy": "CALLER_SUPPLIED_LIBINFER_NEO_ROUTE_QUALIFIED",
+  "historical_fields_without_admission_semantics": [
+    "status=PASS_READY_FOR_FOUR_MODEL_EVALUATION",
+    "required_models",
+    "models_must_share_exact_contract"
+  ],
+  "interpretation": {
+    "required_models": "Historical paper-experiment provenance only.",
+    "models_must_share_exact_contract": "Every compared model uses the same frozen data, prompt, codebook, action budget, and retry protocol; it does not constrain model identity.",
+    "route_requirement": "Every requested model ID must pass the same-run libinfer-neo multimodal route probe."
+  },
+  "paper_experiment_roster": "manifests/four_model_eval_roster_20260726.json",
+  "runner": "scripts/run_libinfer_neo_600_matrix.py",
+  "audit": "scripts/audit_task2_model_matrix.py"
+}

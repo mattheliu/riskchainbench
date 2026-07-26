@@ -1,11 +1,12 @@
-{"bytes":1060,"path":"README.md","sha256":"5e0d8d27ad0c0aa27cee8c0d3f11af7c293a00b1df1cf01874681fa5a3a3f1fe","visibility":"SOURCE_CODE"}
+{"bytes":1189,"path":"MODEL_SELECTION_AMENDMENT.json","sha256":"e95548f0c58fb8170c8f262947efe220e41434b02403ecaee35df21ffa322f63","visibility":"SOURCE_CODE"}
+{"bytes":1328,"path":"README.md","sha256":"f7321abc9bf069a2a512f7ca536a01fa8d14ad2629af97ceda4e47f0c4d886bc","visibility":"SOURCE_CODE"}
 {"bytes":935,"path":"configs/obfuscated_reconstruction_prompt_v0.1.md","sha256":"a34855eadd83cdc4595da75348ced409453d961cf4a367cdac17d3dce616557d","visibility":"SOURCE_CODE"}
 {"bytes":19320,"path":"configs/obfuscated_session_generation_v0.1.json","sha256":"2ab5e253c28bee661411b864cd34bc9a0d591ce84f57903ce79569947b2090fb","visibility":"SOURCE_CODE"}
 {"bytes":15957,"path":"configs/platform_token_evidence_v0.1.json","sha256":"f0de777c368c7c323423fb1efd6df20e525816702f4458b35695e93bcda42485","visibility":"SOURCE_CODE"}
 {"bytes":2581,"path":"configs/task1_text_batch_prompt_v0.1.md","sha256":"0ff36d7884742635ea4eec3db72e54ad9bb1c8b895db24c32130ed7839357d6c","visibility":"SOURCE_CODE"}
 {"bytes":3242,"path":"configs/task1_variant_recipes_v0.1.json","sha256":"e4b527ee05aba603ae92c45a4bae449eb4d57c8840407bb8ac4449c1cdd33edb","visibility":"SOURCE_CODE"}
 {"bytes":516019,"path":"data/derived/unicode_confusables_ascii_v17.0.0.json","sha256":"b5873315b888da4f7ea229f0a3f86110158c0112dabd24a04e8dc1fb62727d89","visibility":"SOURCE_CODE"}
-{"bytes":26752,"path":"docs/evaluate_new_models_zh.md","sha256":"6e5ebbb6c38078c0928e19185e2693518f9554084e9b726019783699c7f4e624","visibility":"SOURCE_CODE"}
+{"bytes":30592,"path":"docs/evaluate_new_models_zh.md","sha256":"7ef79d8a05095ab8e45b4b71c4f195555ef2e6efb283d8f48693563724107e22","visibility":"SOURCE_CODE"}
 {"bytes":1049,"path":"handoff_contract.json","sha256":"b71f56f471a5bd49d4575d6747e1e87494fa62ff7a7f4b412e5704d73c6591eb","visibility":"SOURCE_CODE"}
 {"bytes":3009369,"path":"model_visible/task1_inputs.jsonl","sha256":"de767cb0fc3352c04e186cf6d83f742bd87e20736e31d7d720a5562d08aa9d64","visibility":"SOURCE_CODE"}
 {"bytes":679949,"path":"model_visible/task1_inputs_manifest.json","sha256":"8d242620d3f98d526b5bae1240ac23e79f2af7297b4a38f581ac39900cae64e3","visibility":"SOURCE_CODE"}
@@ -19,9 +20,10 @@
 {"bytes":2908,"path":"schemas/task1_variant_recipes_v0.1.schema.json","sha256":"ad3dfa88eba6688ce1388ba80da08ec5389c547462c08f24f6aa1253c38239ea","visibility":"SOURCE_CODE"}
 {"bytes":8329,"path":"scripts/build_obfuscated_reconstruction_tasks.py","sha256":"93f5b4c2cac2ab72c028f8541ead3e727cfde032b5da6ffb9b9ec9909d13d59b","visibility":"SOURCE_CODE"}
 {"bytes":7258,"path":"scripts/build_split_task_platform_overlay_manifest.py","sha256":"32a12587c6efde665af57af08c382dec9f2451b532c5dd765e8536e5eb87de24","visibility":"SOURCE_CODE"}
-{"bytes":18035,"path":"scripts/freeze_task1_protocol_results.py","sha256":"bb365c73c7780704577c4835280dbc15e39c4b49d61f8ee7523c1424d7befcbf","visibility":"SOURCE_CODE"}
+{"bytes":18111,"path":"scripts/freeze_task1_protocol_results.py","sha256":"3ecc425ec765c2da0c66b9f912db2f5b1321bf09b008c660685a6c9ca9587cba","visibility":"SOURCE_CODE"}
 {"bytes":99082,"path":"scripts/generate_obfuscated_session_dataset.py","sha256":"195490a8cd65b2f6c5583b5c25f29c0c946f21c4cc5e6626e9f898829862f52e","visibility":"SOURCE_CODE"}
-{"bytes":16693,"path":"scripts/run_task1_four_model_matrix.py","sha256":"7558bccec2b6e30ca67eb7cf394ac21bcc3bb0f806cd032506228683aca42dad","visibility":"SOURCE_CODE"}
+{"bytes":16769,"path":"scripts/run_task1_four_model_matrix.py","sha256":"0286fae960dd2c82feb9798888ef7b622ad0585fc38912482f5a23e65d3a1c71","visibility":"SOURCE_CODE"}
+{"bytes":197,"path":"scripts/run_task1_model_matrix.py","sha256":"6fe95da24b3914f1e3b556e5886a3304873239f1702447aa73e1981d7b64425a","visibility":"SOURCE_CODE"}
 {"bytes":40844,"path":"scripts/run_task1_text_batch.py","sha256":"74ffe6caeec79d5467a5d3312fc66bf11e32f88616b539a8cf5e2243ccb99b2d","visibility":"SOURCE_CODE"}
 {"bytes":67032,"path":"scripts/run_unified_mllm_smoke.py","sha256":"0f48e8a63f99944cff7b92f30a7cf3d1e95cb3e55beda372b9de7a7eb5467eef","visibility":"SOURCE_CODE"}
 {"bytes":20694,"path":"scripts/score_obfuscated_reconstruction.py","sha256":"7b8bd1707d8c9c5141009a205d0926182e16cbe02c8cc120a2e9e969ffc0adf8","visibility":"SOURCE_CODE"}

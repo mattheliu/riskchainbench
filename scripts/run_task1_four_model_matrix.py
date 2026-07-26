@@ -25,6 +25,7 @@ DEFAULT_ROUTE_PROBE = (
     ROOT / "outputs/libinfer_neo_600_eval_20260725/preflight/all_routes.json"
 )
 DEFAULT_OUT = ROOT / "outputs/libinfer_neo_task1_text_v04_eval_20260725"
+# Convenience default for the current paper experiment; never an allowlist.
 DEFAULT_MODELS = (
     "gpt-5.4",
     "claude-opus-4-8-kiro",
