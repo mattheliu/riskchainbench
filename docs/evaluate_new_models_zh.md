@@ -198,7 +198,7 @@ python -m playwright install chromium
 `libinfer-neo` 路由支持图像输入，不代表模型任务得分。
 
 ```bash
-MODELS='gpt-5.4,claude-opus-4-8-kiro,kimi-k2.6,gemini-3.6-flash'
+MODELS='gpt-5.4,claude-opus-4-8-kiro,kimi-k2.6,gemini-3.5-flash'
 
 python code/task2/scripts/probe_libinfer_multimodal_routes.py \
   --env-file .secrets/libinfer.env \
@@ -211,6 +211,13 @@ python code/task2/scripts/probe_libinfer_multimodal_routes.py \
 只有 `status=PASS_FIXED_MLLM_SELECTED` 且具体模型为
 `PASS_MULTIMODAL_ROUTE` 才能继续。路由探针中的模型 ID 必须与 Task 1 /
 Task 2 的 `--models` 完全一致。
+
+图像探针使用本地生成的无害验证码，只验证接口能力。正式批量前还必须用冻结
+Task 1 prompt 和 Task 2 prompt 做至少 20 个分层案例的任务级资格检查，并分别
+统计 HTTP 401/403、429、5xx、空响应、非法 JSON 和正常模型拒答。若研究设计
+仍要求保留未通过任务级资格检查的指定模型，可以继续跑满 600，但必须将该模型
+标记为 `ROUTE_OR_POLICY_BLOCKED`，保留所有失败行，且不得把缺失轨迹纳入可比
+准确率或证据质量均值。
 
 ## 8. 还原 Task 2 本地运行环境
 

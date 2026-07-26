@@ -29,7 +29,7 @@ DEFAULT_MODELS = (
     "gpt-5.4",
     "claude-opus-4-8-kiro",
     "kimi-k2.6",
-    "gemini-3.6-flash",
+    "gemini-3.5-flash",
 )
 EXPECTED_SOURCE_BENCHMARK_ID = "riskchainbench-balanced-600-v0.3"
 EXPECTED_TASK1_CONTRACT_SHA256 = (

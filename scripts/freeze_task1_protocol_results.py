@@ -27,7 +27,7 @@ DEFAULT_MODELS = (
     "gpt-5.4",
     "claude-opus-4-8-kiro",
     "kimi-k2.6",
-    "gemini-3.6-flash",
+    "gemini-3.5-flash",
 )
 SAMPLE_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 
