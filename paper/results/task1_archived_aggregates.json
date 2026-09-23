@@ -1,0 +1,767 @@
+{
+  "caveat": "Archive bootstrap seeds differ from the published supplement's base-seed statement. Do not claim bit-identical reproduction of all paper confidence intervals.",
+  "models": [
+    {
+      "aggregate": {
+        "abstain_rate": 0.0016666666666666668,
+        "case_count": 3600,
+        "character_error_rate": 0.01622454774073173,
+        "entry_top1_exact_rate": 0.9522222222222222,
+        "entry_topk_recall": 0.9611111111111111,
+        "full_reconstruction_success_rate": 0.6605555555555556,
+        "full_reconstruction_success_rate_top1": 0.6605555555555556,
+        "intent_accuracy": 0.9963888888888889,
+        "local_resolution_success_rate_at_k": 0.9611111111111111,
+        "message_exact_rate": 0.6622222222222223,
+        "message_exact_rate_per_message": 0.6622222222222223,
+        "mixed_token_error_rate": 0.016561495966530292,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 0,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.0005555555555555557,
+            0.0030555555555555557
+          ],
+          "character_error_rate": [
+            0.014606743345587828,
+            0.018009437077599996
+          ],
+          "entry_top1_exact_rate": [
+            0.9452777777777778,
+            0.9591666666666666
+          ],
+          "entry_topk_recall": [
+            0.9547152777777779,
+            0.9675
+          ],
+          "full_reconstruction_success_rate": [
+            0.6425,
+            0.6786111111111112
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.6425,
+            0.6786111111111112
+          ],
+          "intent_accuracy": [
+            0.9941666666666666,
+            0.9983333333333333
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.9547152777777779,
+            0.9675
+          ],
+          "message_exact_rate": [
+            0.6441666666666667,
+            0.6802777777777778
+          ],
+          "message_exact_rate_per_message": [
+            0.6441666666666667,
+            0.6802777777777778
+          ],
+          "mixed_token_error_rate": [
+            0.014654847812824482,
+            0.01846722070279326
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "GPT-5.4",
+      "source_score_sha256": "6f550c30cf16e3a2f73f7c917c5b1028caa6f6c87a30dc3da5a56321c9f409fb"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.0005555555555555556,
+        "case_count": 3600,
+        "character_error_rate": 0.011130039750141965,
+        "entry_top1_exact_rate": 0.9430555555555555,
+        "entry_topk_recall": 0.9430555555555555,
+        "full_reconstruction_success_rate": 0.7330555555555556,
+        "full_reconstruction_success_rate_top1": 0.7330555555555556,
+        "intent_accuracy": 0.9972222222222222,
+        "local_resolution_success_rate_at_k": 0.9430555555555555,
+        "message_exact_rate": 0.7352777777777778,
+        "message_exact_rate_per_message": 0.7352777777777778,
+        "mixed_token_error_rate": 0.015174629591105564,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 0,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.0,
+            0.001388888888888889
+          ],
+          "character_error_rate": [
+            0.01018380922280279,
+            0.012235115337764271
+          ],
+          "entry_top1_exact_rate": [
+            0.9361111111111111,
+            0.9497222222222222
+          ],
+          "entry_topk_recall": [
+            0.9361111111111111,
+            0.9497222222222222
+          ],
+          "full_reconstruction_success_rate": [
+            0.7175,
+            0.7486180555555555
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.7175,
+            0.7486180555555555
+          ],
+          "intent_accuracy": [
+            0.995,
+            0.9988888888888889
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.9361111111111111,
+            0.9497222222222222
+          ],
+          "message_exact_rate": [
+            0.72,
+            0.7508333333333334
+          ],
+          "message_exact_rate_per_message": [
+            0.72,
+            0.7508333333333334
+          ],
+          "mixed_token_error_rate": [
+            0.013942857548621028,
+            0.016516571190416385
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "GPT-5.6 SOL",
+      "source_score_sha256": "8995890c33863b7a1e13c54eee69e352947ced655c453773dc0248898a338d2f"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.0,
+        "case_count": 3600,
+        "character_error_rate": 0.016443579135231607,
+        "entry_top1_exact_rate": 0.9294444444444444,
+        "entry_topk_recall": 0.9316666666666666,
+        "full_reconstruction_success_rate": 0.6572222222222223,
+        "full_reconstruction_success_rate_top1": 0.6572222222222223,
+        "intent_accuracy": 0.9977777777777778,
+        "local_resolution_success_rate_at_k": 0.9316666666666666,
+        "message_exact_rate": 0.6575,
+        "message_exact_rate_per_message": 0.6575,
+        "mixed_token_error_rate": 0.023137554030002543,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 0,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.0,
+            0.0
+          ],
+          "character_error_rate": [
+            0.015127814502003132,
+            0.01786588878176155
+          ],
+          "entry_top1_exact_rate": [
+            0.9219444444444445,
+            0.9372222222222222
+          ],
+          "entry_topk_recall": [
+            0.9241666666666667,
+            0.9394444444444444
+          ],
+          "full_reconstruction_success_rate": [
+            0.6394444444444445,
+            0.6747291666666666
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.6394444444444445,
+            0.6747291666666666
+          ],
+          "intent_accuracy": [
+            0.9961111111111111,
+            0.9991666666666666
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.9241666666666667,
+            0.9394444444444444
+          ],
+          "message_exact_rate": [
+            0.6397152777777777,
+            0.675
+          ],
+          "message_exact_rate_per_message": [
+            0.6397152777777777,
+            0.675
+          ],
+          "mixed_token_error_rate": [
+            0.021294006416744855,
+            0.025183233293413293
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Claude Opus 4.8",
+      "source_score_sha256": "83843af72665419550d34e7d6359440e52df28235d5a7a107138ff48eb62fd3c"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.0,
+        "case_count": 3600,
+        "character_error_rate": 0.015916281333657824,
+        "entry_top1_exact_rate": 0.8458333333333333,
+        "entry_topk_recall": 0.8475,
+        "full_reconstruction_success_rate": 0.6563888888888889,
+        "full_reconstruction_success_rate_top1": 0.6563888888888889,
+        "intent_accuracy": 0.9966666666666667,
+        "local_resolution_success_rate_at_k": 0.8475,
+        "message_exact_rate": 0.6580555555555555,
+        "message_exact_rate_per_message": 0.6580555555555555,
+        "mixed_token_error_rate": 0.02863879065252063,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 0,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.0,
+            0.0
+          ],
+          "character_error_rate": [
+            0.014935989638121195,
+            0.016969730425995987
+          ],
+          "entry_top1_exact_rate": [
+            0.8352777777777778,
+            0.8561111111111112
+          ],
+          "entry_topk_recall": [
+            0.8372222222222222,
+            0.8577777777777778
+          ],
+          "full_reconstruction_success_rate": [
+            0.6399930555555555,
+            0.6725
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.6399930555555555,
+            0.6725
+          ],
+          "intent_accuracy": [
+            0.9944444444444445,
+            0.9986111111111111
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.8372222222222222,
+            0.8577777777777778
+          ],
+          "message_exact_rate": [
+            0.6416597222222223,
+            0.6741666666666667
+          ],
+          "message_exact_rate_per_message": [
+            0.6416597222222223,
+            0.6741666666666667
+          ],
+          "mixed_token_error_rate": [
+            0.027035735220333687,
+            0.030428308584379987
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Kimi K3",
+      "source_score_sha256": "85f7a043b268e16975c6dc3f1091cb6b9864a4fd2194fca1b3f5b3207e50475f"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.0002777777777777778,
+        "case_count": 3600,
+        "character_error_rate": 0.1601038371055407,
+        "entry_top1_exact_rate": 0.7338888888888889,
+        "entry_topk_recall": 0.7516666666666667,
+        "full_reconstruction_success_rate": 0.4572222222222222,
+        "full_reconstruction_success_rate_top1": 0.4572222222222222,
+        "intent_accuracy": 0.9994444444444445,
+        "local_resolution_success_rate_at_k": 0.7516666666666667,
+        "message_exact_rate": 0.4572222222222222,
+        "message_exact_rate_per_message": 0.4572222222222222,
+        "mixed_token_error_rate": 0.2250190694126621,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 1,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.0,
+            0.0008333333333333334
+          ],
+          "character_error_rate": [
+            0.14813112840850753,
+            0.1716733599756032
+          ],
+          "entry_top1_exact_rate": [
+            0.7222222222222222,
+            0.7452847222222222
+          ],
+          "entry_topk_recall": [
+            0.7405555555555555,
+            0.7630555555555556
+          ],
+          "full_reconstruction_success_rate": [
+            0.44277083333333334,
+            0.47194444444444444
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.44277083333333334,
+            0.47194444444444444
+          ],
+          "intent_accuracy": [
+            0.9986111111111111,
+            1.0
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.7405555555555555,
+            0.7630555555555556
+          ],
+          "message_exact_rate": [
+            0.44277083333333334,
+            0.47194444444444444
+          ],
+          "message_exact_rate_per_message": [
+            0.44277083333333334,
+            0.47194444444444444
+          ],
+          "mixed_token_error_rate": [
+            0.209126078769111,
+            0.24062495309327478
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "GPT-5.2",
+      "source_score_sha256": "ef7731c26e5ea4eae9f5a7e3af6d533feeb48df20fe99ef2b82b11886ca29340"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.19166666666666668,
+        "case_count": 3600,
+        "character_error_rate": 0.10691976961142208,
+        "entry_top1_exact_rate": 0.7216666666666667,
+        "entry_topk_recall": 0.7333333333333333,
+        "full_reconstruction_success_rate": 0.43722222222222223,
+        "full_reconstruction_success_rate_top1": 0.43722222222222223,
+        "intent_accuracy": 0.9369444444444445,
+        "local_resolution_success_rate_at_k": 0.7333333333333333,
+        "message_exact_rate": 0.4488888888888889,
+        "message_exact_rate_per_message": 0.4488888888888889,
+        "mixed_token_error_rate": 0.14421098860458129,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 20,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.17805555555555555,
+            0.20472222222222222
+          ],
+          "character_error_rate": [
+            0.09859075232886653,
+            0.11543523497010016
+          ],
+          "entry_top1_exact_rate": [
+            0.7072222222222222,
+            0.7366666666666667
+          ],
+          "entry_topk_recall": [
+            0.7191666666666666,
+            0.7477777777777778
+          ],
+          "full_reconstruction_success_rate": [
+            0.42027777777777775,
+            0.4533333333333333
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.42027777777777775,
+            0.4533333333333333
+          ],
+          "intent_accuracy": [
+            0.9266666666666666,
+            0.9466666666666667
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.7191666666666666,
+            0.7477777777777778
+          ],
+          "message_exact_rate": [
+            0.4322152777777778,
+            0.4652777777777778
+          ],
+          "message_exact_rate_per_message": [
+            0.4322152777777778,
+            0.4652777777777778
+          ],
+          "mixed_token_error_rate": [
+            0.13373141145724926,
+            0.15522872858791562
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Claude Sonnet 5",
+      "source_score_sha256": "435f50cd90dcdb4952291e0dab61386c0817c91139371ddfb9a207b48791ec52"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.025555555555555557,
+        "case_count": 3600,
+        "character_error_rate": 0.14138070901273628,
+        "entry_top1_exact_rate": 0.6286111111111111,
+        "entry_topk_recall": 0.6297222222222222,
+        "full_reconstruction_success_rate": 0.3836111111111111,
+        "full_reconstruction_success_rate_top1": 0.3836111111111111,
+        "intent_accuracy": 0.9769444444444444,
+        "local_resolution_success_rate_at_k": 0.6297222222222222,
+        "message_exact_rate": 0.3836111111111111,
+        "message_exact_rate_per_message": 0.3836111111111111,
+        "mixed_token_error_rate": 0.18682245798950606,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 21,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.020833333333333332,
+            0.030555555555555555
+          ],
+          "character_error_rate": [
+            0.12962753692591603,
+            0.15344629806925278
+          ],
+          "entry_top1_exact_rate": [
+            0.6116666666666667,
+            0.6447222222222222
+          ],
+          "entry_topk_recall": [
+            0.6127777777777778,
+            0.6455625
+          ],
+          "full_reconstruction_success_rate": [
+            0.3663888888888889,
+            0.39944444444444444
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.3663888888888889,
+            0.39944444444444444
+          ],
+          "intent_accuracy": [
+            0.9719444444444445,
+            0.9816666666666667
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.6127777777777778,
+            0.6455625
+          ],
+          "message_exact_rate": [
+            0.3663888888888889,
+            0.39944444444444444
+          ],
+          "message_exact_rate_per_message": [
+            0.3663888888888889,
+            0.39944444444444444
+          ],
+          "mixed_token_error_rate": [
+            0.17144893234082162,
+            0.20275519295516545
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Doubao Seed 2.0",
+      "source_score_sha256": "11da5d0ae7c46382ba1c99bd7bd22f52216c093407b171b03b97a360270047b5"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.002777777777777778,
+        "case_count": 3600,
+        "character_error_rate": 0.17112030502149753,
+        "entry_top1_exact_rate": 0.39861111111111114,
+        "entry_topk_recall": 0.3988888888888889,
+        "full_reconstruction_success_rate": 0.19944444444444445,
+        "full_reconstruction_success_rate_top1": 0.19944444444444445,
+        "intent_accuracy": 0.9980555555555556,
+        "local_resolution_success_rate_at_k": 0.3988888888888889,
+        "message_exact_rate": 0.19944444444444445,
+        "message_exact_rate_per_message": 0.19944444444444445,
+        "mixed_token_error_rate": 0.25534521415528283,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 42,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.001388888888888889,
+            0.0044444444444444444
+          ],
+          "character_error_rate": [
+            0.15908235606151136,
+            0.18415228158464772
+          ],
+          "entry_top1_exact_rate": [
+            0.3797152777777778,
+            0.4172222222222222
+          ],
+          "entry_topk_recall": [
+            0.37972222222222224,
+            0.4175
+          ],
+          "full_reconstruction_success_rate": [
+            0.18388888888888888,
+            0.21472222222222223
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.18388888888888888,
+            0.21472222222222223
+          ],
+          "intent_accuracy": [
+            0.9966666666666667,
+            0.9991666666666666
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.37972222222222224,
+            0.4175
+          ],
+          "message_exact_rate": [
+            0.18388888888888888,
+            0.21472222222222223
+          ],
+          "message_exact_rate_per_message": [
+            0.18388888888888888,
+            0.21472222222222223
+          ],
+          "mixed_token_error_rate": [
+            0.23852478256616813,
+            0.2727882399116904
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Kimi K2.5",
+      "source_score_sha256": "a093645ef50766cd57d06ccdcd561e4155294b50d14c547cbb59d52894887fa9"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.0011111111111111111,
+        "case_count": 3600,
+        "character_error_rate": 0.11786322706254564,
+        "entry_top1_exact_rate": 0.39055555555555554,
+        "entry_topk_recall": 0.39055555555555554,
+        "full_reconstruction_success_rate": 0.25333333333333335,
+        "full_reconstruction_success_rate_top1": 0.25333333333333335,
+        "intent_accuracy": 0.995,
+        "local_resolution_success_rate_at_k": 0.39055555555555554,
+        "message_exact_rate": 0.25333333333333335,
+        "message_exact_rate_per_message": 0.25333333333333335,
+        "mixed_token_error_rate": 0.16467882486189123,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 42,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.00027777777777777783,
+            0.0022222222222222222
+          ],
+          "character_error_rate": [
+            0.10978697130740474,
+            0.12632738425707274
+          ],
+          "entry_top1_exact_rate": [
+            0.37166666666666665,
+            0.4075069444444444
+          ],
+          "entry_topk_recall": [
+            0.37166666666666665,
+            0.4075069444444444
+          ],
+          "full_reconstruction_success_rate": [
+            0.23722222222222222,
+            0.26861111111111113
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.23722222222222222,
+            0.26861111111111113
+          ],
+          "intent_accuracy": [
+            0.9922222222222222,
+            0.9975
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.37166666666666665,
+            0.4075069444444444
+          ],
+          "message_exact_rate": [
+            0.23722222222222222,
+            0.26861111111111113
+          ],
+          "message_exact_rate_per_message": [
+            0.23722222222222222,
+            0.26861111111111113
+          ],
+          "mixed_token_error_rate": [
+            0.1553015928349274,
+            0.17519474689651518
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Qwen3.6 Plus",
+      "source_score_sha256": "1634b3285b28e83377af7160150112e862e78c18544124dd04a5f5bb03c89769"
+    },
+    {
+      "aggregate": {
+        "abstain_rate": 0.006944444444444444,
+        "case_count": 3600,
+        "character_error_rate": 0.20186582299018416,
+        "entry_top1_exact_rate": 0.35194444444444445,
+        "entry_topk_recall": 0.3522222222222222,
+        "full_reconstruction_success_rate": 0.16055555555555556,
+        "full_reconstruction_success_rate_top1": 0.16055555555555556,
+        "intent_accuracy": 0.9961111111111111,
+        "local_resolution_success_rate_at_k": 0.3522222222222222,
+        "message_exact_rate": 0.16083333333333333,
+        "message_exact_rate_per_message": 0.16083333333333333,
+        "mixed_token_error_rate": 0.29333379562212514,
+        "platform_accuracy": 1.0,
+        "predicted_live_entry_count": 96,
+        "target_message_count": 3600
+      },
+      "aggregate_bootstrap": {
+        "ci95": {
+          "abstain_rate": [
+            0.004166666666666667,
+            0.01
+          ],
+          "character_error_rate": [
+            0.18859899089760093,
+            0.21502478126195285
+          ],
+          "entry_top1_exact_rate": [
+            0.33416666666666667,
+            0.3688958333333333
+          ],
+          "entry_topk_recall": [
+            0.33471527777777776,
+            0.36944444444444446
+          ],
+          "full_reconstruction_success_rate": [
+            0.1463888888888889,
+            0.17416666666666666
+          ],
+          "full_reconstruction_success_rate_top1": [
+            0.1463888888888889,
+            0.17416666666666666
+          ],
+          "intent_accuracy": [
+            0.9938888888888889,
+            0.9980555555555556
+          ],
+          "local_resolution_success_rate_at_k": [
+            0.33471527777777776,
+            0.36944444444444446
+          ],
+          "message_exact_rate": [
+            0.14666666666666667,
+            0.17444444444444446
+          ],
+          "message_exact_rate_per_message": [
+            0.14666666666666667,
+            0.17444444444444446
+          ],
+          "mixed_token_error_rate": [
+            0.2761585291010446,
+            0.311205696793546
+          ],
+          "platform_accuracy": [
+            1.0,
+            1.0
+          ]
+        },
+        "replicates": 2000,
+        "seed": 20260726,
+        "site_count": 600
+      },
+      "model": "Kimi K2.6",
+      "source_score_sha256": "d3be1b0a52b7e97099a3eec483e920841e2ddc30adb243661e2e09a4bc04495f"
+    }
+  ],
+  "source_archive_sha256": "fa53f93efc6bbc324cf3b08d7eaa9f663842c2b90631113c93f6cb369d94527b",
+  "status": "ARCHIVED_RESULTS_NOT_A_NEW_MODEL_RUN"
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/obfuscated_reconstruction_task_v0.1.schema.json",
+  "title": "CovertEntryWalker model-visible reconstruction task v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sample_id",
+    "platform",
+    "surface",
+    "client_context",
+    "input_view",
+    "messages",
+    "prompt_id",
+    "prompt_sha256",
+    "task_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "obfuscated-reconstruction-task/v0.1"
+    },
+    "sample_id": {
+      "$ref": "#/$defs/id"
+    },
+    "platform": {
+      "enum": [
+        "bilibili",
+        "douyin",
+        "wechat",
+        "wechat_channels",
+        "qq",
+        "weibo",
+        "baidu_tieba",
+        "tiktok"
+      ]
+    },
+    "surface": {
+      "enum": [
+        "PRIVATE_MESSAGE",
+        "GROUP_CHAT",
+        "COMMENT",
+        "DYNAMIC_REPLY",
+        "LIVE_CHAT"
+      ]
+    },
+    "client_context": {
+      "$ref": "#/$defs/client_context"
+    },
+    "input_view": {
+      "const": "TOKEN_TEXT"
+    },
+    "messages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/message"
+      }
+    },
+    "prompt_id": {
+      "$ref": "#/$defs/id"
+    },
+    "prompt_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "task_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "client_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["client_type", "os", "client_version", "locale"],
+      "properties": {
+        "client_type": {
+          "enum": ["APP", "WEB", "PC", "SYNTHETIC"]
+        },
+        "os": {
+          "enum": ["ANDROID", "IOS", "WINDOWS", "MACOS", "WEB", "UNSPECIFIED"]
+        },
+        "client_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "locale": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message_id", "role", "content"],
+      "properties": {
+        "message_id": {
+          "$ref": "#/$defs/id"
+        },
+        "role": {
+          "enum": ["sender", "recipient", "system"]
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

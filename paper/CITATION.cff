@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "Please cite the RiskChainBench paper when using these reviewed resources."
+title: "RiskChainBench Task 1: reviewed paper resources"
+type: software
+version: "2026.09.23-paper-resources"
+date-released: "2026-09-23"
+url: "https://github.com/mattheliu/riskchainbench-task1"
+authors:
+  - name: "RiskChainBench contributors"
+preferred-citation:
+  type: article
+  title: "RiskChainBench: A Benchmark for Obfuscated Platform Message Restoration and Evidence-Grounded Web Investigation"
+  authors:
+    - family-names: "Liu"
+      given-names: "ZhuoXin"
+    - family-names: "Ma"
+      given-names: "Zhiming"
+    - family-names: "Zhang"
+      given-names: "Ying"
+    - family-names: "Yang"
+      given-names: "Mengzheng"
+    - family-names: "Wang"
+      given-names: "Yifan"
+    - family-names: "Huang"
+      given-names: "Zhengqi"
+    - family-names: "Zhou"
+      given-names: "Yanhan"
+    - family-names: "Lin"
+      given-names: "Zekun"
+    - family-names: "Zhang"
+      given-names: "Jun"
+    - family-names: "Zhang"
+      given-names: "Shun"
+    - family-names: "Chen"
+      given-names: "Yue"
+    - family-names: "Zhao"
+      given-names: "Qiao"
+    - family-names: "Chen"
+      given-names: "Peng"
+  year: 2026
+  journal: "arXiv"
+  volume: "abs/2609.16900"
+  url: "https://arxiv.org/abs/2609.16900"

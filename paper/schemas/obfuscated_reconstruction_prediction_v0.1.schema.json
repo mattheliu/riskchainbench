@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/obfuscated_reconstruction_prediction_v0.1.schema.json",
+  "title": "CovertEntryWalker reconstruction prediction v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sample_id",
+    "model_id",
+    "run_id",
+    "input_view",
+    "reconstructed_messages",
+    "intent",
+    "platform",
+    "entry_candidates",
+    "abstain",
+    "uncertainties"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "obfuscated-reconstruction-prediction/v0.1"
+    },
+    "sample_id": {
+      "$ref": "#/$defs/id"
+    },
+    "model_id": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "run_id": {
+      "$ref": "#/$defs/id"
+    },
+    "input_view": {
+      "enum": ["TOKEN_TEXT", "RENDERED_SCREENSHOT", "OCR_TEXT", "MULTIMODAL"]
+    },
+    "reconstructed_messages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reconstructed_message"
+      }
+    },
+    "intent": {
+      "type": "string"
+    },
+    "platform": {
+      "enum": [
+        "bilibili",
+        "douyin",
+        "wechat",
+        "wechat_channels",
+        "qq",
+        "weibo",
+        "baidu_tieba",
+        "tiktok",
+        "unknown"
+      ]
+    },
+    "entry_candidates": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/entry_candidate"
+      }
+    },
+    "abstain": {
+      "type": "boolean"
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "reconstructed_message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message_id", "text"],
+      "properties": {
+        "message_id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "entry_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "value", "confidence"],
+      "properties": {
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "value": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "benchmark": "riskchainbench-task1-six-variant-token-text-v0.3",
+  "completed_models": [
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 1,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Claude Opus 4.8",
+      "predictions_sha256": "b6b85396a9fa5ce529b263777d7bc9834a102178232914a8e1307a9f4c6b7a32",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "56db24397f4be68296092f6ba9895c09b5da55635002ab0fa4800c973285358c",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Claude Sonnet 5",
+      "predictions_sha256": "0bea1357dd829d5b3c215e36d3c7d215ca40050f50b1d5d7ecf1c74490d4d53c",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "c76029f6d0e6e30aae8eedebf23083891a171d524a716857d0992df0e88fb866",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Doubao Seed 2.0",
+      "predictions_sha256": "643cfe2eb3e3206a76243061eaa7eda40ecb8e2608a62b9417299c00704cd694",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "0d9a5f1e13c6f3a2ee85405bcb7dcb0395efc84c4a49d5548f2b9706982c5cd1",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "GPT-5.2",
+      "predictions_sha256": "f479658b7fc7a78687f55247909ddd7b1d4262473019733118490ff97838ed58",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "7d6e001fb0fa553607bc160e3664d3d05df9cad80f9de4398c7cdbe106160d11",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "GPT-5.4",
+      "predictions_sha256": "68947e0ac72dc8dbf628112cbea8038c6bd615cd1a3d54b8abf7feb25d006fac",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "84bbc9139cad715e343c461d37b4ae976a1717f84dcb48a2e6ac79baf1634341",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "GPT-5.6 SOL",
+      "predictions_sha256": "7e911c4a91835756526ae47c8f92cc2a7d1c87f7ac5c6a0589f4a146548e6f32",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "c1371d8c71ac521b04bf4ad41a0795336d33ca2c8eaa848519c3b85e79fed490",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Kimi K2.5",
+      "predictions_sha256": "154c1a18384f9b7c76305637af79ed999127b71226b6f756b9278cd9cee4c53f",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "c9377eaa059d1075bd4e182e5a7d13a99371d2b5cf6a4112a54537bc8a7899d7",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Kimi K2.6",
+      "predictions_sha256": "64ab0eb35d777273b3e651df3f5117fbb7f7f72cffd3e28d166d0b4877a0de55",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "b6f49b68b0768f69bc2bddb7211ce8992a4b6884935c0bc748686c1b3fb7bd91",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 10,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Kimi K3",
+      "predictions_sha256": "e4cd4ac243a12eb4e270d6ad9ee1a24b63f6731ed0c18ea6ac1d0101954dda5f",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "6e4885c6f898fb83f9374f8527a8ff5bafb18bd20e99e513d3b3d01c8ba680a5",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    },
+    {
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed_in_archive": 20260726,
+      "concurrency": 1,
+      "evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685",
+      "max_attempts": 3,
+      "max_tokens": 8000,
+      "model": "Qwen3.6 Plus",
+      "predictions_sha256": "bafc36e6f2ad98eece5b6c37943e32709e1a1a00df173288ac77f86c29b3d771",
+      "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+      "source_audit_sha256": "191305a11fe4c0b505f2fbb77ed41b10f012a85ef5c6b0b9033f7879bfcf1617",
+      "task_count": 3600,
+      "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+      "timeout_seconds": 300.0
+    }
+  ],
+  "not_verified": [
+    "original per-case predictions are not in the recovered archive",
+    "historical executed scorer hash is not recorded in the per-model shareable audits",
+    "paper Task 1 confidence-interval seed reconciliation",
+    "full ten-model rerun"
+  ],
+  "packaging_date": "2026-09-21",
+  "paper": "https://arxiv.org/abs/2609.16900v2",
+  "prompt_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c",
+  "source_files": [
+    {
+      "path": "model_visible/tasks_3600.jsonl",
+      "source_path": "model_visible/tasks_3600.jsonl",
+      "upstream_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644"
+    },
+    {
+      "path": "spec/model_prompt.md",
+      "source_path": "spec/model_prompt.md",
+      "upstream_sha256": "2ece83426010b6c5d6abc4ef005011f6780a60a42b467009a2cc4f753269373c"
+    },
+    {
+      "path": "schemas/obfuscated_reconstruction_task_v0.1.schema.json",
+      "source_path": "spec/obfuscated_reconstruction_task_v0.1.schema.json",
+      "upstream_sha256": "74c8dd13dcd06287b531187b945f20b7b4c4a50dc111ed86e9a3c52b9c1aac7d"
+    },
+    {
+      "path": "schemas/obfuscated_reconstruction_prediction_v0.1.schema.json",
+      "source_path": "spec/obfuscated_reconstruction_prediction_v0.1.schema.json",
+      "upstream_sha256": "d33355c4a3408b4f7c6ebbf43cd263ee826934a02b070b553b0369d4cbd8e2e1"
+    },
+    {
+      "path": "tools/run_task1_http_harness.py",
+      "source_path": "tools/run_task1_http_harness.py",
+      "upstream_sha256": "2f5ddd6842be852c29cbe844cfd46617df0bfc5b971c4ee825777caa7774f006"
+    },
+    {
+      "path": "tools/run_task1_concurrent_http.py",
+      "source_path": "tools/run_task1_concurrent_http.py",
+      "upstream_sha256": "faa5c1d05d0f30cdaac972efe58960d054d621dc7b59c0aa55565c1a8c94305a"
+    },
+    {
+      "path": "tools/score_obfuscated_reconstruction.py",
+      "source_path": "tools/score_obfuscated_reconstruction.py",
+      "upstream_sha256": "7b8bd1707d8c9c5141009a205d0926182e16cbe02c8cc120a2e9e969ffc0adf8"
+    }
+  ],
+  "status": "RECOVERED_INPUTS_AND_ARCHIVED_AGGREGATES; CI_PROVENANCE_GAP_OPEN",
+  "tasks_sha256": "a3c7248d06caa6f2d978284d87fecf6c080f963b6a30473da338ba459e65b644",
+  "upstream_commit": "794ca62f9b22be87dd0f550f79276225c11c4f25",
+  "verified": [
+    "archive manifest",
+    "3600 unique inputs and 600 source clusters",
+    "ten archived model audits use identical tasks/prompt/evaluator",
+    "8000 tokens / 300 seconds / three attempts"
+  ],
+  "withheld_evaluator_sha256": "c4fdcb3a06b7d2834963750f999b38ea238e7900ce989087c62d9020737d8685"
+}
