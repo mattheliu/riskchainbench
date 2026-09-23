@@ -1,0 +1,62 @@
+{
+  "version": "2026.09.23-evaluation-v1",
+  "scope": "public offline scoring subset, not complete private eval export",
+  "sources": {
+    "task1/tools/score_obfuscated_reconstruction.py": {
+      "source": "https://github.com/mattheliu/riskchainbench-task1/blob/dbe80b2e56aa344094ea56eaf1d977aa0d13ce1f/paper/tools/score_obfuscated_reconstruction.py",
+      "source_sha256": "7b8bd1707d8c9c5141009a205d0926182e16cbe02c8cc120a2e9e969ffc0adf8",
+      "sha256": "7b8bd1707d8c9c5141009a205d0926182e16cbe02c8cc120a2e9e969ffc0adf8",
+      "transformation": "none"
+    },
+    "task1/schemas/obfuscated_reconstruction_prediction_v0.1.schema.json": {
+      "source": "https://github.com/mattheliu/riskchainbench-task1/blob/dbe80b2e56aa344094ea56eaf1d977aa0d13ce1f/paper/schemas/obfuscated_reconstruction_prediction_v0.1.schema.json",
+      "source_sha256": "d33355c4a3408b4f7c6ebbf43cd263ee826934a02b070b553b0369d4cbd8e2e1",
+      "sha256": "d33355c4a3408b4f7c6ebbf43cd263ee826934a02b070b553b0369d4cbd8e2e1",
+      "transformation": "none"
+    },
+    "task2/bootstrap_task2_and_gated.py": {
+      "source": "https://github.com/mattheliu/riskchainbench-task2/blob/511d9f05141f7e2cfb1e7e6b201b7568d9323a62/paper/bootstrap_task2_and_gated.py",
+      "source_sha256": "aeb87f842d5f5d162c45b0f379643fa2e85504c2b979400dff77042c60797312",
+      "sha256": "aeb87f842d5f5d162c45b0f379643fa2e85504c2b979400dff77042c60797312",
+      "transformation": "none"
+    },
+    "requirements.txt": {
+      "source": "https://github.com/mattheliu/riskchainbench-task1/blob/dbe80b2e56aa344094ea56eaf1d977aa0d13ce1f/paper/requirements.txt",
+      "source_sha256": "33b871e936955346edf926400cfa75286ab2d7d3d316c59a50ee323f1c7b155f",
+      "sha256": "33b871e936955346edf926400cfa75286ab2d7d3d316c59a50ee323f1c7b155f",
+      "transformation": "none"
+    },
+    "LICENSE": {
+      "source": "https://github.com/mattheliu/riskchainbench-task1/blob/dbe80b2e56aa344094ea56eaf1d977aa0d13ce1f/LICENSE",
+      "source_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "transformation": "none"
+    },
+    "LICENSE-DATA": {
+      "source": "https://github.com/mattheliu/riskchainbench-task1/blob/dbe80b2e56aa344094ea56eaf1d977aa0d13ce1f/LICENSE-DATA",
+      "source_sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+      "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+      "transformation": "none"
+    },
+    "CITATION.cff": {
+      "source": "https://github.com/mattheliu/riskchainbench-task1/blob/dbe80b2e56aa344094ea56eaf1d977aa0d13ce1f/CITATION.cff",
+      "source_sha256": "a2bd1f60d5c11cd850170e55a064bbde964cb8d3b19d4129ad977eff92b38d12",
+      "sha256": "21e1d0adc3fe28466d27a47adb6b16b8a91f5066b63f64ec616a80a68797fabe",
+      "transformation": "software title/version only; preferred paper citation unchanged"
+    }
+  },
+  "fixtures": "invented solely for smoke tests, not paper cases",
+  "new_code": [
+    "evaluate.py",
+    "verify_package.py",
+    "tests/test_evaluation.py"
+  ],
+  "excluded": [
+    "real evaluator Gold",
+    "private resolver",
+    "raw trajectories",
+    "website assets",
+    "model credentials"
+  ],
+  "full_historical_reproduction": false
+}

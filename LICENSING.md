@@ -2,6 +2,11 @@
 
 Approved release scope: 2026-09-23. This is a mixed-license repository.
 
+The standalone `evaluation/` distribution has its own scoped LICENSE, LICENSE-DATA,
+NOTICE and README: project-owned code/schema/docs are Apache-2.0, and its invented
+`examples/*.jsonl` smoke fixtures are CC BY 4.0. No private evaluator is licensed
+or distributed by that package. The frozen `paper/` notices remain unchanged.
+
 - **Apache-2.0:** project-owned Python code, schemas, prompts, and documentation in `paper/`, and newly authored repository-level documentation. See `LICENSE`.
 - **CC BY 4.0:** project-owned synthetic Task 1 records in `paper/model_visible/tasks_3600.jsonl` (Task 1 repository only), aggregate result JSON in `paper/results/`, and project-owned provenance metadata. See `LICENSE-DATA`. Attribute RiskChainBench contributors and cite the paper; identify your modifications.
 - **Excluded from these grants:** `legacy/`, third-party content, trademarks, original website assets, external model weights, and any rights the contributors do not own. Upstream dependencies remain under their own licenses. A paper citation is not a substitute for retaining license notices.

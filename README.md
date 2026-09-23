@@ -7,6 +7,12 @@ partial paper resources; it does not yet provide a complete public reproduction
 of the benchmark. The 2026-09-23 update packages recovered artifacts, without
 rerunning models or changing published scores.
 
+**Standalone evaluation:** [evaluation/README.md](evaluation/README.md) combines
+the public Task 1 scorer and Task 2 paired-analysis core, with an offline CLI,
+invented demo fixtures and tests. It requires no private data for smoke tests;
+paper scoring still requires separately authorized, hash-matched private inputs.
+See [release boundaries](docs/RELEASE_BOUNDARIES.md) for what is public or withheld.
+
 The reviewed package contains 3,600 model-visible token-text inputs (600 source
 sessions × six variants), the matching prompt, HTTP runners, scoring code,
 schemas, synthetic tests and ten-model archived aggregate results.
@@ -18,6 +24,7 @@ See [known gaps](paper/KNOWN_GAPS.md); we preserve this discrepancy explicitly.
 ## Layout
 
 - `paper/`: reviewed release entry point, source provenance, checksums and tests.
+- `evaluation/`: independently runnable scoring/analysis subset for both tasks.
 - `legacy/`: previous public root tree, preserved byte-for-byte for compatibility
   and audit. Run legacy commands from that directory. Its input versions and
   licensing notices must not be confused with `paper/`.

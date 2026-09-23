@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026.09.23-evaluation-v1 — standalone offline subset
+
+- Add `evaluation/`: byte-identical public scoring cores, portable CLI, invented
+  smoke fixtures, explicit seeds, frozen-input hash guards and aggregate-only output.
+- Add 12 offline tests; existing 22 paper-resource tests remain unchanged.
+- Document HF Dataset Card updates and tiered disclosure boundaries.
+- Private eval history, Gold and replay data remain excluded.
+
 ## 2026.09.23-paper-resources — reviewed partial release
 
 - Promote reviewed `paper/` resources as the default entry point.

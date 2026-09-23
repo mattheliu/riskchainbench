@@ -1,0 +1,12 @@
+RiskChainBench standalone offline evaluation resources
+Copyright 2026 RiskChainBench contributors
+Paper: https://arxiv.org/abs/2609.16900
+
+Scoring cores are copied from the reviewed public Task 1 and Task 2 packages.
+See PROVENANCE.json for exact source commits and file hashes.
+We acknowledge jsonschema, unicodedata2 and pytest maintainers. Dependencies are
+not vendored and retain their own licenses; no upstream endorsement is implied.
+
+Project code/schema/docs: Apache-2.0. Invented examples/*.jsonl: CC BY 4.0.
+Gold, private mappings, website content, model weights and credentials are absent
+and are not granted redistribution permission by this package.
