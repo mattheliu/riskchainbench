@@ -19,9 +19,10 @@ Download the complete file set and run `python3 verify.py`.
 The upload and public visibility were verified in the HF interface. Independent
 anonymous byte-for-byte download verification was attempted but blocked by a
 local network connection reset; it is not claimed complete.
-HF currently renders a row preview but reports `UnexpectedError` / incoherent
-dataset size for the full viewer. Full viewer readiness is not claimed verified;
-the frozen input bytes were not rewritten to work around this service error.
+The initially observed HF `UnexpectedError` / incoherent-size message cleared
+on a later refresh on 2026-09-25. The full viewer now displays `test · 3.6k rows`
+and pagination. No frozen input bytes were changed to resolve that platform error.
+This browser check is distinct from anonymous byte-for-byte download validation.
 
 The 12-file export was locally verified (11 manifest entries plus the manifest).
 Six additional packaging tests cover the valid export and rejection of extra,
