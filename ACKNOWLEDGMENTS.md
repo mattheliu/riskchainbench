@@ -10,6 +10,20 @@ and Peng Chen. ZhuoXin Liu and Zhiming Ma contributed equally; Shun Zhang is the
 corresponding author. This author list is not a claim that each author wrote each
 software component.
 
+## Dataset annotation contributors
+
+We thank the following contributors for their work on human annotation and
+related dataset preparation for RiskChainBench (listed by GitHub username):
+
+- [@Poor-Jack](https://github.com/Poor-Jack)
+- [@lele104](https://github.com/lele104)
+- [@Zzzzzz-y-s](https://github.com/Zzzzzz-y-s)
+- [@zhengwj07-lgtm](https://github.com/zhengwj07-lgtm)
+
+感谢以上四位同学参与 RiskChainBench 数据集的人工标注及相关数据建设工作。
+
+## Upstream resources
+
 We acknowledge the work of the upstream maintainers whose resources supported
 the documented construction or validation workflow:
 

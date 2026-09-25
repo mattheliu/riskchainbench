@@ -3,6 +3,10 @@
   "scope": "reviewed new/changed integration files only; legacy history not re-audited",
   "files": [
     {
+      "path": "ACKNOWLEDGMENTS.md",
+      "sha256": "09f84da450b221e6f0899bee866154f753a40c14f7922b2241871c70bbede2fd"
+    },
+    {
       "path": ".github/workflows/public-tests.yml",
       "sha256": "de42a7ecf13edec40cfd2f5c61e3986b375f7d307b027e4a096a85f06d7000bf"
     },
@@ -24,7 +28,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "a17d46e3af3f74abffc865fb9da02228580f8b9ef7d584763ff78f50abc1a05a"
+      "sha256": "0ae868ff06a3a04f7452fcd9f44029446735052853398d6caf96df96be5072c6"
     },
     {
       "path": "docs/INTEGRATION_20260925.md",

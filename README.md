@@ -76,6 +76,13 @@ evaluations or proof of full historical recomputation.
 
 ## Licensing, citation and acknowledgment
 
+We thank [@Poor-Jack](https://github.com/Poor-Jack),
+[@lele104](https://github.com/lele104),
+[@Zzzzzz-y-s](https://github.com/Zzzzzz-y-s), and
+[@zhengwj07-lgtm](https://github.com/zhengwj07-lgtm) for their contributions to
+human annotation and related dataset preparation. See the
+[dataset contributor acknowledgments](ACKNOWLEDGMENTS.md#dataset-annotation-contributors).
+
 See [LICENSING.md](LICENSING.md) for exact scope. Project-owned reviewed code is
 Apache-2.0; project-owned synthetic records and aggregate results are CC BY 4.0.
 **These grants do not relicense legacy or third-party material.**
