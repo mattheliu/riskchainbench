@@ -34,18 +34,39 @@ These checks do not establish full historical model/browser reproduction.
 | --- | --- | --- |
 | HF `leonliuzx/riskchainbench-task1` | Private | Mixed-version historical archive; not the public input mirror |
 | HF `leonliuzx/riskchainbench-task2-controlled-web-replay` | Private | Restricted replay/runtime/evaluator archive |
-| ModelScope `leonliuzx/riskchainbench-task1` | Application-gated | Historical archive; clean mirror and card alignment pending |
-| ModelScope `leonliuzx/riskchainbench-task2-controlled-web-replay` | Application-gated | Replay archive; card and file-level audit pending |
+| ModelScope `leonliuzx/riskchainbench-task1` | Application-gated | Card updated; platform moderation reverted historical files; not a complete mirror |
+| ModelScope `leonliuzx/riskchainbench-task2-controlled-web-replay` | Application-gated | Missing card added; file-level/container audit still pending |
 
 Matching names or displayed sizes do not prove cross-platform file equivalence.
-The two existing HF archive cards now link to this maintained repository and
-credit the four annotation contributors. Archive visibility remains unchanged.
+The two existing HF archive cards and both ModelScope cards now link to this
+maintained repository and credit the four annotation contributors. Archive
+visibility remains unchanged. ModelScope Task 1 metadata now says `other` to
+clarify its mixed rights, not to revoke any prior valid license grant.
 Original archive manifests must be checked at their original revisions, not
 against a later documentation-only update.
 
 The old [Task 2 code repository](https://github.com/mattheliu/riskchainbench-task2)
 is archived, not deleted. Its historical code and Release remain available.
 The private eval repository is retained; its private history is not merged here.
+
+## ModelScope moderation and mirror limitation
+
+The Task 1 commit history records three Administrator reversions dated
+2026-07-28, described by the platform as sensitive file content or message:
+
+- `model_visible/task1_inputs.jsonl` at `e7d85843e7dd118d7be0359e90a9d44a1947ead3`.
+- `releases/task1-six-variant-token-text-v0.3/evaluator_only/source_sessions_600.jsonl`
+  at `fe3f276f3fc6d390b1d425fdb759470dac754de3`.
+- `releases/task1-six-variant-token-text-v0.3/spec/generation_base_v0.2.json`
+  at `daa7eb4c2dfbff88f853916e8266b03f3b5e3635`.
+
+[Platform history](https://modelscope.cn/datasets/leonliuzx/riskchainbench-task1/commitList)
+is the source for these actions; the exact triggering records have not been
+established. This does not prove that every Task 1 input version was affected.
+Do not describe the current ModelScope archive as an intact paper mirror.
+No reverted file was restored, renamed or re-uploaded in this documentation pass.
+The proposed clean ModelScope mirror is deferred pending clarification through
+the platform's normal content-review process, not recreated under another name.
 
 ## Further data processing
 
