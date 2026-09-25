@@ -1,0 +1,19 @@
+name: Public offline checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r evaluation/requirements.txt pytest==8.3.4
+      - run: python paper/verify_release.py
+      - run: python evaluation/verify_package.py
+      - run: python tools/verify_integration.py
+      - run: python -m pytest paper/tests evaluation/tests task2/paper/tests tests -q

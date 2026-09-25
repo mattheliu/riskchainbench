@@ -1,0 +1,158 @@
+{
+  "version": "2026-09-25",
+  "source_files": [
+    {
+      "path": "task2/paper/ACKNOWLEDGMENTS.md",
+      "sha256": "3d48492c286f945c2f3efea3e33b72dbaf6ab9fb9cca90facbc80d90292159b4",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/ACKNOWLEDGMENTS.md",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/CITATION.cff",
+      "sha256": "f056a5d4e85b892aba80fc07112c2e3f3fff42e7ca0d5230b815a17475a179e7",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/CITATION.cff",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/LICENSE",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/LICENSE-DATA",
+      "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/LICENSE-DATA",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/LICENSING.md",
+      "sha256": "508bb5bdc72dc464b9fe61bab9e27013583cf7c4acb37c15e776e8428b23b60b",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/LICENSING.md",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/NOTICE",
+      "sha256": "3eb7c468b84b58bd07317bc40d24389d6e350732f7c566976ae1afc82abfe6c9",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/NOTICE",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/PROVENANCE.json",
+      "sha256": "de7c4f7e21dcf15db0e2dc45fd101c66343390564639cbc7a8b2a73537295dc1",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/PROVENANCE.json",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/README.md",
+      "sha256": "2ceebc5993d6b1acf3fba17b5f1dd5ed43cd8394db316dcbc0259c9d940ba2be",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/README.md",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/bootstrap_task2_and_gated.py",
+      "sha256": "aeb87f842d5f5d162c45b0f379643fa2e85504c2b979400dff77042c60797312",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/bootstrap_task2_and_gated.py",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/results/web_and_gated_aggregates.json",
+      "sha256": "8b1140f4423a3ff0be2e676f8dd35708d806d5804886cf8a0373a7004e4b1c8c",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/results/web_and_gated_aggregates.json",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/tests/test_bootstrap.py",
+      "sha256": "89b10a5fc64affeb47457d9cec87d254d7a3b2b89d3674b2eaaa2fd7df0edf1e",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/tests/test_bootstrap.py",
+      "transformation": "none"
+    },
+    {
+      "path": "task2/paper/MANIFEST.sha256",
+      "sha256": "bc84fcbde29b5cfef32daaece49f6d630adf5c8efa3a7c649330c1a6e24a2f62",
+      "source_repository": "mattheliu/riskchainbench-task2",
+      "source_commit": "f87b2b70060a5fdb21e20b579894f1957e773232",
+      "source_path": "paper/MANIFEST.sha256",
+      "transformation": "none"
+    },
+    {
+      "path": "research/evidence_protocol_v02/scripts/evidence_protocol_v02.py",
+      "sha256": "4ecf740a1700483fed08f0a80d7096f680008ffe2b27e8d16b02f47a4c2c942d",
+      "source_repository": "mattheliu/riskchainbench-eval",
+      "source_commit": "794ca62f9b22be87dd0f550f79276225c11c4f25",
+      "source_path": "scripts/evidence_protocol_v02.py",
+      "transformation": "none"
+    },
+    {
+      "path": "research/evidence_protocol_v02/schemas/fraud_evidence_case_v0.2.schema.json",
+      "sha256": "309ed951884b64d7b18180d6c0c4dae7342b0e515c746298bbade5b10de4f35f",
+      "source_repository": "mattheliu/riskchainbench-eval",
+      "source_commit": "794ca62f9b22be87dd0f550f79276225c11c4f25",
+      "source_path": "schemas/fraud_evidence_case_v0.2.schema.json",
+      "transformation": "none"
+    },
+    {
+      "path": "research/evidence_protocol_v02/schemas/fraud_llm_judge_output_v0.2.schema.json",
+      "sha256": "02373eb790f33a68ab0d2d667b6aa6cdea42e9e92286a0e7592237d4c686ee9d",
+      "source_repository": "mattheliu/riskchainbench-eval",
+      "source_commit": "794ca62f9b22be87dd0f550f79276225c11c4f25",
+      "source_path": "schemas/fraud_llm_judge_output_v0.2.schema.json",
+      "transformation": "none"
+    },
+    {
+      "path": "research/evidence_protocol_v02/configs/fraud_llm_evidence_judge_v0.2.md",
+      "sha256": "8bde24913b3ff78496bcbf8cd91193a4498c719ccd7176c5989a49aef861299e",
+      "source_repository": "mattheliu/riskchainbench-eval",
+      "source_commit": "794ca62f9b22be87dd0f550f79276225c11c4f25",
+      "source_path": "configs/fraud_llm_evidence_judge_v0.2.md",
+      "transformation": "none"
+    },
+    {
+      "path": "reproduction/web_only.py",
+      "sha256": "575367b4d26a89ed959a47cf5fe421a078a921558a6b153d2b8203b05164ba22",
+      "source_repository": "local-recovery",
+      "source_commit": "2026-09-25",
+      "source_path": "reproduce_web_only.py",
+      "transformation": "explicit input arguments; fixed public aggregate reference; display-name/model alignment; remove local paths; refuse output overwrite",
+      "source_sha256": "72ce32fc08021bf5caf003184c378f02a20bb2126630d611407136c6b6503c2e"
+    }
+  ],
+  "historical_full_reproduction": false,
+  "private_history_imported": false,
+  "excluded": [
+    "Gold",
+    "resolver bindings",
+    "raw trajectories",
+    "private URLs",
+    "credentials",
+    "private git history"
+  ],
+  "new_code": [
+    "reproduction/entry_gate.py",
+    "tests/test_integration.py",
+    "tools/verify_integration.py"
+  ],
+  "gate_implementation_status": "reconstructed strict protocol helper, not recovered historical code"
+}

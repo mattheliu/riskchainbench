@@ -1,0 +1,33 @@
+{
+  "analysis_script_sha256": "aeb87f842d5f5d162c45b0f379643fa2e85504c2b979400dff77042c60797312",
+  "case_level_input_sha256": "da6bbdc314758baaa80dc5279a1adf65b4e8ab3d0b50e55a1e419a323ba2b7e0",
+  "excluded": [
+    "website Gold",
+    "private resolver",
+    "per-case results",
+    "raw screenshots and trajectories",
+    "credentials",
+    "website assets",
+    "model weights"
+  ],
+  "models": 10,
+  "not_verified": [
+    "full recomputation from the exact 6000-row input, which was not recovered",
+    "full web-environment reset and execution",
+    "exact final evidence-judge execution assets"
+  ],
+  "packaging_date": "2026-09-23",
+  "paper": "https://arxiv.org/abs/2609.16900v2",
+  "source_summary_rows": 6000,
+  "source_summary_sha256": "769267eb09cae0efdbe40661339cf9fac6bd6a7b04d03ac25bbe7116244257bb",
+  "transformations": [
+    "replace internal model keys with source display names",
+    "preserve all metric values, confidence intervals, and per-model seeds"
+  ],
+  "verified": [
+    "summary hash matches figure-package provenance",
+    "ten models with 6000 total source rows",
+    "website bootstrap uses 2000 replicates and base seed 20260727",
+    "paired gate loss identities"
+  ]
+}

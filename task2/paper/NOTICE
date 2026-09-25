@@ -1,0 +1,11 @@
+RiskChainBench reviewed paper resources
+Copyright 2026 RiskChainBench contributors
+
+Paper: https://arxiv.org/abs/2609.16900
+Repository: https://github.com/mattheliu/riskchainbench-task2
+
+See LICENSING.md for exact file scope: project-owned code/documentation uses
+Apache-2.0; project-owned synthetic records and aggregate results use CC BY 4.0.
+Legacy and third-party material are excluded from these project grants.
+Preserve this notice with redistributed project-owned software.
+See ACKNOWLEDGMENTS.md for source attributions; no upstream endorsement is implied.

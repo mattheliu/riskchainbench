@@ -7,3 +7,9 @@ __pycache__/
 /private-runs/
 /runs/
 private_run_audit.json
+/private-inputs/
+/recovery/
+RiskChainBench_PRIVATE_Recovery*
+evaluator_3600.jsonl
+offline_handoff_map_600.jsonl
+offline_resolver_overlay.json

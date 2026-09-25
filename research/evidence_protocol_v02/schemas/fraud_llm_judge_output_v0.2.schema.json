@@ -1,0 +1,420 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/fraud_llm_judge_output_v0.2.schema.json",
+  "title": "CovertEntryWalker proposition-aware LLM evidence judge output v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "judge_name",
+    "judge_version",
+    "protocol_version",
+    "case_id",
+    "input_valid",
+    "evidence_support",
+    "conclusion_admissibility",
+    "claim_audits",
+    "proposition_audits",
+    "alternative_audits",
+    "metrics",
+    "methodology_flags",
+    "findings",
+    "required_action",
+    "summary",
+    "judge_confidence"
+  ],
+  "properties": {
+    "judge_name": {
+      "const": "covert_entry_llm_evidence_judge"
+    },
+    "judge_version": {
+      "type": "string",
+      "pattern": "^0\\.2\\.[0-9]+$"
+    },
+    "protocol_version": {
+      "const": "0.2"
+    },
+    "case_id": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "input_valid": {
+      "type": "boolean"
+    },
+    "evidence_support": {
+      "enum": ["SUPPORTED", "PARTIAL", "UNSUPPORTED", "INVALID_INPUT"]
+    },
+    "conclusion_admissibility": {
+      "enum": [
+        "ADMISSIBLE",
+        "ABSTENTION_REQUIRED",
+        "INVALID_EVIDENCE",
+        "NOT_AUDITABLE"
+      ]
+    },
+    "claim_audits": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim_audit"
+      }
+    },
+    "proposition_audits": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/proposition_audit"
+      }
+    },
+    "alternative_audits": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/alternative_audit"
+      }
+    },
+    "metrics": {
+      "$ref": "#/$defs/metrics"
+    },
+    "methodology_flags": {
+      "$ref": "#/$defs/methodology_flags"
+    },
+    "findings": {
+      "$ref": "#/$defs/findings"
+    },
+    "required_action": {
+      "enum": [
+        "ACCEPT_EVIDENCE_SUPPORT",
+        "REVISE_CLAIMS",
+        "ABSTAIN",
+        "REJECT_INPUT"
+      ]
+    },
+    "summary": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "judge_confidence": {
+      "enum": ["LOW", "MODERATE", "HIGH", "NOT_STATED"]
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metric": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "claim_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "claim",
+        "claim_type",
+        "claim_level",
+        "status",
+        "supporting_evidence_ids",
+        "supporting_inference_ids",
+        "counterevidence_ids",
+        "independent_dependency_group_ids",
+        "reason"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "pattern": "^C[0-9A-Za-z._-]+$"
+        },
+        "claim": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "claim_type": {
+          "enum": ["DIRECT_FACT", "INFERENCE", "RISK_CONCLUSION", "LEGAL_CONCLUSION"]
+        },
+        "claim_level": {
+          "enum": ["source", "activity", "risk", "legal"]
+        },
+        "status": {
+          "enum": [
+            "SUPPORTED",
+            "PARTIAL",
+            "UNSUPPORTED",
+            "CONTRADICTED",
+            "NOT_AUDITABLE"
+          ]
+        },
+        "supporting_evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^E[0-9A-Za-z._-]+$"
+          }
+        },
+        "supporting_inference_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^I[0-9A-Za-z._-]+$"
+          }
+        },
+        "counterevidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^E[0-9A-Za-z._-]+$"
+          }
+        },
+        "independent_dependency_group_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^DG[0-9A-Za-z._-]+$"
+          }
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "proposition_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposition_id",
+        "prediction_coverage",
+        "supporting_assessment_ids",
+        "counter_assessment_ids",
+        "independent_support_group_ids",
+        "unmet_prediction_ids",
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "proposition_id": {
+          "type": "string",
+          "pattern": "^H[0-9A-Za-z._-]+$"
+        },
+        "prediction_coverage": {
+          "$ref": "#/$defs/metric"
+        },
+        "supporting_assessment_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ASMT[0-9A-Za-z._-]+$"
+          }
+        },
+        "counter_assessment_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ASMT[0-9A-Za-z._-]+$"
+          }
+        },
+        "independent_support_group_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^DG[0-9A-Za-z._-]+$"
+          }
+        },
+        "unmet_prediction_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^PRED[0-9A-Za-z._-]+$"
+          }
+        },
+        "status": {
+          "enum": ["SUPPORTED", "MIXED", "UNSUPPORTED", "NOT_TESTABLE"]
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "alternative_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alternative_id",
+        "materiality",
+        "submitted_status",
+        "audited_status",
+        "evidence_ids",
+        "reason"
+      ],
+      "properties": {
+        "alternative_id": {
+          "type": "string",
+          "pattern": "^ALT[0-9A-Za-z._-]+$"
+        },
+        "materiality": {
+          "enum": ["MATERIAL", "NON_MATERIAL"]
+        },
+        "submitted_status": {
+          "enum": ["NOT_TESTED", "SUPPORTED", "REFUTED", "UNRESOLVED"]
+        },
+        "audited_status": {
+          "enum": ["SUPPORTED", "REFUTED", "UNRESOLVED", "NOT_AUDITABLE"]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^E[0-9A-Za-z._-]+$"
+          }
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "citation_precision",
+        "citation_recall",
+        "atomic_claim_support_coverage",
+        "proposition_coverage",
+        "counterevidence_coverage",
+        "material_alternative_coverage"
+      ],
+      "properties": {
+        "citation_precision": {
+          "$ref": "#/$defs/metric"
+        },
+        "citation_recall": {
+          "$ref": "#/$defs/metric"
+        },
+        "atomic_claim_support_coverage": {
+          "$ref": "#/$defs/metric"
+        },
+        "proposition_coverage": {
+          "$ref": "#/$defs/metric"
+        },
+        "counterevidence_coverage": {
+          "$ref": "#/$defs/metric"
+        },
+        "material_alternative_coverage": {
+          "$ref": "#/$defs/metric"
+        }
+      }
+    },
+    "methodology_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "forbidden_shortcut",
+        "gold_label_leakage",
+        "unsupported_legal_conclusion",
+        "proposition_level_overreach",
+        "dependency_overcounting",
+        "negative_evidence_scope_error",
+        "omitted_counterevidence",
+        "unresolved_material_alternative"
+      ],
+      "properties": {
+        "forbidden_shortcut": {"type": "boolean"},
+        "gold_label_leakage": {"type": "boolean"},
+        "unsupported_legal_conclusion": {"type": "boolean"},
+        "proposition_level_overreach": {"type": "boolean"},
+        "dependency_overcounting": {"type": "boolean"},
+        "negative_evidence_scope_error": {"type": "boolean"},
+        "omitted_counterevidence": {"type": "boolean"},
+        "unresolved_material_alternative": {"type": "boolean"}
+      }
+    },
+    "audit_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "reason", "evidence_ids"],
+      "properties": {
+        "subject": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^E[0-9A-Za-z._-]+$"
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unsupported_claims",
+        "contradictions",
+        "omitted_counterevidence",
+        "unresolved_material_alternative_ids",
+        "dependency_overcount_group_ids",
+        "invalid_negative_evidence_ids"
+      ],
+      "properties": {
+        "unsupported_claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/audit_item"
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/audit_item"
+          }
+        },
+        "omitted_counterevidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/audit_item"
+          }
+        },
+        "unresolved_material_alternative_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ALT[0-9A-Za-z._-]+$"
+          }
+        },
+        "dependency_overcount_group_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^DG[0-9A-Za-z._-]+$"
+          }
+        },
+        "invalid_negative_evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^E[0-9A-Za-z._-]+$"
+          }
+        }
+      }
+    }
+  }
+}

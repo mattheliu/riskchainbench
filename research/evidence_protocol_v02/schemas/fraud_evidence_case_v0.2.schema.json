@@ -1,0 +1,1100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/fraud_evidence_case_v0.2.schema.json",
+  "title": "CovertEntryWalker proposition-driven evidence case v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "site_id",
+    "scope",
+    "decision_policy",
+    "evidence_gate",
+    "provenance",
+    "search_scopes",
+    "dependency_groups",
+    "observations",
+    "inferences",
+    "proposition_set",
+    "predictions",
+    "alternative_explanations",
+    "assessments",
+    "stopping",
+    "conclusion"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "case_id": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "site_id": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "message_id": {
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "decision_policy": {
+      "$ref": "#/$defs/decision_policy"
+    },
+    "evidence_gate": {
+      "$ref": "#/$defs/evidence_gate"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "search_scopes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/search_scope"
+      }
+    },
+    "dependency_groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/dependency_group"
+      }
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/observation"
+      }
+    },
+    "inferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/inference"
+      }
+    },
+    "proposition_set": {
+      "$ref": "#/$defs/proposition_set"
+    },
+    "predictions": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/prediction"
+      }
+    },
+    "alternative_explanations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/alternative_explanation"
+      }
+    },
+    "assessments": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/assessment"
+      }
+    },
+    "stopping": {
+      "$ref": "#/$defs/stopping"
+    },
+    "conclusion": {
+      "$ref": "#/$defs/conclusion"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "fact": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]+$"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^E[0-9A-Za-z._-]+$"
+    },
+    "inference_id": {
+      "type": "string",
+      "pattern": "^I[0-9A-Za-z._-]+$"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adjudication_scope",
+        "decision_level",
+        "legal_status",
+        "private_audit_separated",
+        "forbidden_model_shortcuts"
+      ],
+      "properties": {
+        "adjudication_scope": {
+          "const": "RESEARCH_RISK_TRIAGE"
+        },
+        "decision_level": {
+          "enum": ["source", "activity", "risk"]
+        },
+        "legal_status": {
+          "const": "UNDETERMINED"
+        },
+        "private_audit_separated": {
+          "const": true
+        },
+        "forbidden_model_shortcuts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "raw_url",
+              "domain",
+              "ip_address",
+              "redirect_chain",
+              "reputation",
+              "blacklist",
+              "registration_record"
+            ]
+          }
+        }
+      }
+    },
+    "decision_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min_independent_support_groups",
+        "require_full_proposition_coverage",
+        "require_material_alternatives_resolved",
+        "negative_evidence_requires_complete_scope",
+        "allow_legal_conclusion",
+        "weighting_policy"
+      ],
+      "properties": {
+        "min_independent_support_groups": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "require_full_proposition_coverage": {
+          "const": true
+        },
+        "require_material_alternatives_resolved": {
+          "const": true
+        },
+        "negative_evidence_requires_complete_scope": {
+          "const": true
+        },
+        "allow_legal_conclusion": {
+          "const": false
+        },
+        "weighting_policy": {
+          "const": "ORDINAL_NO_UNCALIBRATED_PROBABILITY"
+        }
+      }
+    },
+    "evidence_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collection_authorized",
+        "authorization_basis",
+        "capture_complete",
+        "integrity_verified",
+        "provenance_complete",
+        "fidelity_verified",
+        "interaction_trace_complete",
+        "sanitization_recorded",
+        "scope_limitations"
+      ],
+      "properties": {
+        "collection_authorized": {
+          "type": "boolean"
+        },
+        "authorization_basis": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "capture_complete": {
+          "type": "boolean"
+        },
+        "integrity_verified": {
+          "type": "boolean"
+        },
+        "provenance_complete": {
+          "type": "boolean"
+        },
+        "fidelity_verified": {
+          "type": "boolean"
+        },
+        "interaction_trace_complete": {
+          "type": "boolean"
+        },
+        "sanitization_recorded": {
+          "type": "boolean"
+        },
+        "scope_limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alignment",
+        "conformance_claim",
+        "agents",
+        "entities",
+        "activities",
+        "derivations"
+      ],
+      "properties": {
+        "alignment": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["W3C_PROV", "CASE_UCO"]
+          }
+        },
+        "conformance_claim": {
+          "const": "ALIGNED_NOT_CONFORMANT"
+        },
+        "agents": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/agent"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/entity"
+          }
+        },
+        "activities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/activity"
+          }
+        },
+        "derivations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/derivation"
+          }
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^AG[0-9A-Za-z._-]+$"
+        },
+        "type": {
+          "enum": ["person", "software", "organization", "service"]
+        },
+        "name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "path",
+        "sha256",
+        "source_stage",
+        "generated_at",
+        "primary_source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ART[0-9A-Za-z._-]+$"
+        },
+        "kind": {
+          "enum": [
+            "message",
+            "ocr_text",
+            "html_response",
+            "dom_snapshot",
+            "accessibility_tree",
+            "screenshot",
+            "network_trace",
+            "interaction_trace",
+            "video",
+            "transaction_record",
+            "sanitization_log",
+            "other"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "mime_type": {
+          "type": "string"
+        },
+        "source_stage": {
+          "enum": ["source_capture", "sanitized_working_copy", "local_replay"]
+        },
+        "generated_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "primary_source": {
+          "type": "boolean"
+        },
+        "private_audit_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "agent_ids",
+        "used_entity_ids",
+        "generated_entity_ids",
+        "started_at",
+        "ended_at",
+        "tool"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ACT[0-9A-Za-z._-]+$"
+        },
+        "kind": {
+          "enum": [
+            "acquisition",
+            "extraction",
+            "transformation",
+            "sanitization",
+            "replay",
+            "analysis"
+          ]
+        },
+        "agent_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^AG[0-9A-Za-z._-]+$"
+          }
+        },
+        "used_entity_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ART[0-9A-Za-z._-]+$"
+          }
+        },
+        "generated_entity_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ART[0-9A-Za-z._-]+$"
+          }
+        },
+        "started_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "ended_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "tool": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version"],
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "version": {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            "parameters_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "generated_entity_id",
+        "used_entity_ids",
+        "activity_id",
+        "relation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^DER[0-9A-Za-z._-]+$"
+        },
+        "generated_entity_id": {
+          "type": "string",
+          "pattern": "^ART[0-9A-Za-z._-]+$"
+        },
+        "used_entity_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ART[0-9A-Za-z._-]+$"
+          }
+        },
+        "activity_id": {
+          "type": "string",
+          "pattern": "^ACT[0-9A-Za-z._-]+$"
+        },
+        "relation": {
+          "enum": [
+            "wasDerivedFrom",
+            "wasRevisionOf",
+            "wasQuotedFrom",
+            "hadPrimarySource"
+          ]
+        }
+      }
+    },
+    "search_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "coverage_status",
+        "planned_actions",
+        "completed_actions",
+        "completion_basis",
+        "limitations"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^SS[0-9A-Za-z._-]+$"
+        },
+        "description": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "coverage_status": {
+          "enum": ["COMPLETE", "PARTIAL", "NOT_ATTEMPTED", "INACCESSIBLE"]
+        },
+        "planned_actions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completed_actions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completion_basis": {
+          "type": "string"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "dependency_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "root_entity_ids", "member_observation_ids", "rationale"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^DG[0-9A-Za-z._-]+$"
+        },
+        "root_entity_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ART[0-9A-Za-z._-]+$"
+          }
+        },
+        "member_observation_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "statement",
+        "fact",
+        "value",
+        "polarity",
+        "modality",
+        "entity_id",
+        "activity_id",
+        "dependency_group_id",
+        "search_scope_ids",
+        "observed_at",
+        "model_visible"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/evidence_id"
+        },
+        "kind": {
+          "const": "DIRECT_OBSERVATION"
+        },
+        "statement": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "fact": {
+          "$ref": "#/$defs/fact"
+        },
+        "value": {},
+        "polarity": {
+          "enum": ["PRESENT", "ABSENCE"]
+        },
+        "modality": {
+          "enum": [
+            "message",
+            "ocr",
+            "dom",
+            "accessibility",
+            "screenshot",
+            "network",
+            "interaction",
+            "video",
+            "transaction_record"
+          ]
+        },
+        "entity_id": {
+          "type": "string",
+          "pattern": "^ART[0-9A-Za-z._-]+$"
+        },
+        "activity_id": {
+          "type": "string",
+          "pattern": "^ACT[0-9A-Za-z._-]+$"
+        },
+        "dependency_group_id": {
+          "type": "string",
+          "pattern": "^DG[0-9A-Za-z._-]+$"
+        },
+        "search_scope_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^SS[0-9A-Za-z._-]+$"
+          }
+        },
+        "observed_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "model_visible": {
+          "type": "boolean"
+        },
+        "page_id": {
+          "type": "string"
+        },
+        "action_id": {
+          "type": "string"
+        },
+        "selector": {
+          "type": "string"
+        },
+        "bbox": {
+          "type": "array",
+          "prefixItems": [
+            {"type": "number"},
+            {"type": "number"},
+            {"type": "number"},
+            {"type": "number"}
+          ],
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "polarity": {"const": "ABSENCE"}
+            },
+            "required": ["polarity"]
+          },
+          "then": {
+            "properties": {
+              "search_scope_ids": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "inference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "claim",
+        "level",
+        "based_on_ids",
+        "method",
+        "agent_id",
+        "created_at",
+        "assumptions",
+        "confidence_band",
+        "model_visible"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/inference_id"
+        },
+        "claim": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "level": {
+          "enum": ["source", "activity", "risk"]
+        },
+        "based_on_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(E|I)[0-9A-Za-z._-]+$"
+          }
+        },
+        "method": {
+          "enum": ["HUMAN", "RULE", "LLM", "DETERMINISTIC_TRANSFORM"]
+        },
+        "agent_id": {
+          "type": "string",
+          "pattern": "^AG[0-9A-Za-z._-]+$"
+        },
+        "created_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "confidence_band": {
+          "enum": ["LOW", "MODERATE", "HIGH", "NOT_STATED"]
+        },
+        "model_visible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "proposition_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["background_information", "propositions"],
+      "properties": {
+        "background_information": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "propositions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/proposition"
+          }
+        }
+      }
+    },
+    "proposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "risk_alignment",
+        "level",
+        "statement",
+        "mutually_exclusive_with"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^H[0-9A-Za-z._-]+$"
+        },
+        "role": {
+          "enum": ["TARGET", "ALTERNATIVE", "RESIDUAL"]
+        },
+        "risk_alignment": {
+          "enum": ["HIGH_RISK", "BENIGN", "OTHER"]
+        },
+        "level": {
+          "enum": ["source", "activity", "risk"]
+        },
+        "statement": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "mutually_exclusive_with": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^H[0-9A-Za-z._-]+$"
+          }
+        }
+      }
+    },
+    "prediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "proposition_id",
+        "fact",
+        "expectation",
+        "diagnosticity",
+        "search_scope_ids",
+        "rationale"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^PRED[0-9A-Za-z._-]+$"
+        },
+        "proposition_id": {
+          "type": "string",
+          "pattern": "^H[0-9A-Za-z._-]+$"
+        },
+        "fact": {
+          "$ref": "#/$defs/fact"
+        },
+        "expectation": {
+          "enum": ["PRESENT", "ABSENT", "VARIABLE"]
+        },
+        "diagnosticity": {
+          "enum": ["HIGH", "MODERATE", "LOW", "NON_DIAGNOSTIC"]
+        },
+        "search_scope_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^SS[0-9A-Za-z._-]+$"
+          }
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "expectation": {"const": "ABSENT"}
+            },
+            "required": ["expectation"]
+          },
+          "then": {
+            "properties": {
+              "search_scope_ids": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "alternative_explanation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "materiality",
+        "status",
+        "related_proposition_ids",
+        "evidence_ids",
+        "search_scope_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ALT[0-9A-Za-z._-]+$"
+        },
+        "statement": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "materiality": {
+          "enum": ["MATERIAL", "NON_MATERIAL"]
+        },
+        "status": {
+          "enum": ["NOT_TESTED", "SUPPORTED", "REFUTED", "UNRESOLVED"]
+        },
+        "related_proposition_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^H[0-9A-Za-z._-]+$"
+          }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        },
+        "search_scope_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^SS[0-9A-Za-z._-]+$"
+          }
+        }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_id",
+        "proposition_id",
+        "direction",
+        "strength",
+        "rationale",
+        "alternative_explanation_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ASMT[0-9A-Za-z._-]+$"
+        },
+        "subject_id": {
+          "type": "string",
+          "pattern": "^(E|I)[0-9A-Za-z._-]+$"
+        },
+        "proposition_id": {
+          "type": "string",
+          "pattern": "^H[0-9A-Za-z._-]+$"
+        },
+        "prediction_id": {
+          "type": "string",
+          "pattern": "^PRED[0-9A-Za-z._-]+$"
+        },
+        "direction": {
+          "enum": ["SUPPORTS", "REFUTES", "NEUTRAL"]
+        },
+        "strength": {
+          "enum": ["HIGH", "MODERATE", "LOW"]
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "alternative_explanation_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ALT[0-9A-Za-z._-]+$"
+          }
+        }
+      }
+    },
+    "stopping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "reason",
+        "unmet_prediction_ids",
+        "unresolved_alternative_ids",
+        "limits_reached"
+      ],
+      "properties": {
+        "decision": {
+          "enum": [
+            "CONTINUE",
+            "STOP_SUFFICIENT",
+            "STOP_SCOPE_LIMIT",
+            "STOP_SAFETY",
+            "STOP_EXHAUSTED"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "unmet_prediction_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^PRED[0-9A-Za-z._-]+$"
+          }
+        },
+        "unresolved_alternative_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ALT[0-9A-Za-z._-]+$"
+          }
+        },
+        "limits_reached": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "conclusion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "selected_proposition_id",
+        "supporting_assessment_ids",
+        "counter_assessment_ids",
+        "unresolved_alternative_ids",
+        "rationale",
+        "limitations",
+        "confidence_band",
+        "legal_status",
+        "is_gold_label",
+        "requires_human_review"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "SUPPORTED_HIGH_RISK",
+            "BENIGN_SUPPORTED",
+            "INSUFFICIENT_EVIDENCE",
+            "CONFLICTING_EVIDENCE",
+            "INVALID_EVIDENCE"
+          ]
+        },
+        "selected_proposition_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^H[0-9A-Za-z._-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "supporting_assessment_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ASMT[0-9A-Za-z._-]+$"
+          }
+        },
+        "counter_assessment_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ASMT[0-9A-Za-z._-]+$"
+          }
+        },
+        "unresolved_alternative_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^ALT[0-9A-Za-z._-]+$"
+          }
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "confidence_band": {
+          "enum": ["LOW", "MODERATE", "HIGH", "NOT_STATED"]
+        },
+        "legal_status": {
+          "const": "UNDETERMINED"
+        },
+        "is_gold_label": {
+          "const": false
+        },
+        "requires_human_review": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

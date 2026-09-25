@@ -1,0 +1,138 @@
+{
+  "version": "2026-09-25",
+  "scope": "reviewed new/changed integration files only; legacy history not re-audited",
+  "files": [
+    {
+      "path": ".github/workflows/public-tests.yml",
+      "sha256": "de42a7ecf13edec40cfd2f5c61e3986b375f7d307b027e4a096a85f06d7000bf"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "35d2ea766f682bd058a2ce8f2e13fd74e3123cacea94233fa2066fca455e1e7a"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "e7b02017cdda9144f9a59733c512eecc3c46334445394a3d26c4943cd4d20af6"
+    },
+    {
+      "path": "CITATION.cff",
+      "sha256": "a3e1faa7af875a440956be1b158b865200a96d33d8934074fa997cfdcc6a5cfa"
+    },
+    {
+      "path": "LICENSING.md",
+      "sha256": "06c02430518b232c009d2ee3ce140d3d698782f827ca204d6d42c011cc04e41d"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a17d46e3af3f74abffc865fb9da02228580f8b9ef7d584763ff78f50abc1a05a"
+    },
+    {
+      "path": "docs/INTEGRATION_20260925.md",
+      "sha256": "c93fd3ae1ece5b74cc225b2b7846b200af1aa2428d8a7456fb2535718435d969"
+    },
+    {
+      "path": "docs/INTEGRATION_PROVENANCE.json",
+      "sha256": "e0ee5b29e54d3f2a160ffcfafc1741cd23b576cff229c49af44a43ff5cf9dd8a"
+    },
+    {
+      "path": "reproduction/README.md",
+      "sha256": "77012dcdb7e3132e1ec4d3c9e6d324aff392b5a461e34cc41dd66012603dd08f"
+    },
+    {
+      "path": "reproduction/entry_gate.py",
+      "sha256": "5de8d262812bfe8c7f730b58981eb2151c7bcc9472d7e4dd4d57b23664898c53"
+    },
+    {
+      "path": "reproduction/web_only.py",
+      "sha256": "575367b4d26a89ed959a47cf5fe421a078a921558a6b153d2b8203b05164ba22"
+    },
+    {
+      "path": "research/evidence_protocol_v02/README.md",
+      "sha256": "c683b772ab2752d364e83e6f1b819e1d672457bb0350f3a4eb930d01479d59bd"
+    },
+    {
+      "path": "research/evidence_protocol_v02/configs/fraud_llm_evidence_judge_v0.2.md",
+      "sha256": "8bde24913b3ff78496bcbf8cd91193a4498c719ccd7176c5989a49aef861299e"
+    },
+    {
+      "path": "research/evidence_protocol_v02/schemas/fraud_evidence_case_v0.2.schema.json",
+      "sha256": "309ed951884b64d7b18180d6c0c4dae7342b0e515c746298bbade5b10de4f35f"
+    },
+    {
+      "path": "research/evidence_protocol_v02/schemas/fraud_llm_judge_output_v0.2.schema.json",
+      "sha256": "02373eb790f33a68ab0d2d667b6aa6cdea42e9e92286a0e7592237d4c686ee9d"
+    },
+    {
+      "path": "research/evidence_protocol_v02/scripts/evidence_protocol_v02.py",
+      "sha256": "4ecf740a1700483fed08f0a80d7096f680008ffe2b27e8d16b02f47a4c2c942d"
+    },
+    {
+      "path": "results/recovery_web_only_20260925.json",
+      "sha256": "33658852965e2efd94a934fd9ee2b389de10b545c4d320508d5ea2d44dc03727"
+    },
+    {
+      "path": "task1/README.md",
+      "sha256": "e468f1ce54ce954d4302b0bab05a0749460672aa4d643f5cd9da07ebca57e731"
+    },
+    {
+      "path": "task2/README.md",
+      "sha256": "b10d8955708c5d57cd5014b36dd5dc0059716bf49b494fe5e88c4d8de75b2e73"
+    },
+    {
+      "path": "task2/paper/ACKNOWLEDGMENTS.md",
+      "sha256": "3d48492c286f945c2f3efea3e33b72dbaf6ab9fb9cca90facbc80d90292159b4"
+    },
+    {
+      "path": "task2/paper/CITATION.cff",
+      "sha256": "f056a5d4e85b892aba80fc07112c2e3f3fff42e7ca0d5230b815a17475a179e7"
+    },
+    {
+      "path": "task2/paper/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "task2/paper/LICENSE-DATA",
+      "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+    },
+    {
+      "path": "task2/paper/LICENSING.md",
+      "sha256": "508bb5bdc72dc464b9fe61bab9e27013583cf7c4acb37c15e776e8428b23b60b"
+    },
+    {
+      "path": "task2/paper/MANIFEST.sha256",
+      "sha256": "bc84fcbde29b5cfef32daaece49f6d630adf5c8efa3a7c649330c1a6e24a2f62"
+    },
+    {
+      "path": "task2/paper/NOTICE",
+      "sha256": "3eb7c468b84b58bd07317bc40d24389d6e350732f7c566976ae1afc82abfe6c9"
+    },
+    {
+      "path": "task2/paper/PROVENANCE.json",
+      "sha256": "de7c4f7e21dcf15db0e2dc45fd101c66343390564639cbc7a8b2a73537295dc1"
+    },
+    {
+      "path": "task2/paper/README.md",
+      "sha256": "2ceebc5993d6b1acf3fba17b5f1dd5ed43cd8394db316dcbc0259c9d940ba2be"
+    },
+    {
+      "path": "task2/paper/bootstrap_task2_and_gated.py",
+      "sha256": "aeb87f842d5f5d162c45b0f379643fa2e85504c2b979400dff77042c60797312"
+    },
+    {
+      "path": "task2/paper/results/web_and_gated_aggregates.json",
+      "sha256": "8b1140f4423a3ff0be2e676f8dd35708d806d5804886cf8a0373a7004e4b1c8c"
+    },
+    {
+      "path": "task2/paper/tests/test_bootstrap.py",
+      "sha256": "89b10a5fc64affeb47457d9cec87d254d7a3b2b89d3674b2eaaa2fd7df0edf1e"
+    },
+    {
+      "path": "tests/test_integration.py",
+      "sha256": "cffafc2e133b70eb312777c9aa4d4b55c964b913146f7c9c7328e882bfee35fa"
+    },
+    {
+      "path": "tools/verify_integration.py",
+      "sha256": "cd0dd36f21e68c4e6245f0673514412aa2d880bae05e7a2f2de950151e98c917"
+    }
+  ]
+}

@@ -1,0 +1,837 @@
+{
+  "scope": "independent web-only recomputation from frozen scored rows, not full paired reproduction",
+  "sources": {
+    "archive_sha256": "11dfb14036a2835ba65d1420ad1f056a9182e8ca03c89eed7ae73371e8108ab5",
+    "scored_member": "task2_final_results/task2_case_level_scored.jsonl",
+    "scored_sha256": "d07e7f79427088796fbe6c0d337ebc9f3ac3d482f5c034b6b2e0421447ded5ae",
+    "reference_sha256": "8b1140f4423a3ff0be2e676f8dd35708d806d5804886cf8a0373a7004e4b1c8c",
+    "script_sha256": "aeb87f842d5f5d162c45b0f379643fa2e85504c2b979400dff77042c60797312",
+    "ordinal_mapping_sha256": "ac1fd62e0948d4006035a7ea88521245dc252533591ed3febb7fc75ddb6d7e7c"
+  },
+  "archive_manifest_files_verified": 13,
+  "exact_paired_input_sha256": "da6bbdc314758baaa80dc5279a1adf65b4e8ab3d0b50e55a1e419a323ba2b7e0",
+  "exact_paired_input_recovered": false,
+  "original_cli_rejects_unmatched_table": true,
+  "original_archive_rows": 6600,
+  "selected_models": 10,
+  "selected_rows": 6000,
+  "excluded_model_reason": "Gemini 3.6 Flash is absent from the frozen ten-model paper summary",
+  "bootstrap": {
+    "replicates": 2000,
+    "base_seed": 20260727,
+    "unit": "website",
+    "ordering": "ascending ordinal from independently preserved private handoff map"
+  },
+  "models": [
+    {
+      "display_model": "Claude Opus 4.8",
+      "websites": 600,
+      "seed": 20260727,
+      "point": {
+        "decision_accuracy": 0.49833333333333335,
+        "decision_macro_f1": 0.5144902742463718,
+        "violation_type_macro_f1": 0.4056865611633596,
+        "hierarchical_exact_match": 0.475
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.4583333333333333,
+          0.54
+        ],
+        "decision_macro_f1": [
+          0.4419049178199916,
+          0.5816040135016415
+        ],
+        "violation_type_macro_f1": [
+          0.30320065863386136,
+          0.4938539526110077
+        ],
+        "hierarchical_exact_match": [
+          0.435,
+          0.5166666666666667
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 1.1102230246251565e-16,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "Claude Sonnet 5",
+      "websites": 600,
+      "seed": 20260728,
+      "point": {
+        "decision_accuracy": 0.2633333333333333,
+        "decision_macro_f1": 0.3645765276540382,
+        "violation_type_macro_f1": 0.2595392156862745,
+        "hierarchical_exact_match": 0.26166666666666666
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.22833333333333333,
+          0.3
+        ],
+        "decision_macro_f1": [
+          0.2930892516742614,
+          0.43388977212506624
+        ],
+        "violation_type_macro_f1": [
+          0.14228586504340104,
+          0.35948511972134023
+        ],
+        "hierarchical_exact_match": [
+          0.22666666666666666,
+          0.2966666666666667
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            5.551115123125783e-17
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "Doubao Seed 2.0",
+      "websites": 600,
+      "seed": 20260729,
+      "point": {
+        "decision_accuracy": 0.295,
+        "decision_macro_f1": 0.38012228506907836,
+        "violation_type_macro_f1": 0.3261223658760053,
+        "hierarchical_exact_match": 0.295
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.26166666666666666,
+          0.33166666666666667
+        ],
+        "decision_macro_f1": [
+          0.32233916654412026,
+          0.43908438130091776
+        ],
+        "violation_type_macro_f1": [
+          0.2692669520638444,
+          0.37132417215483376
+        ],
+        "hierarchical_exact_match": [
+          0.26166666666666666,
+          0.33166666666666667
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            5.551115123125783e-17,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            -5.551115123125783e-17,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "GPT-5.2",
+      "websites": 600,
+      "seed": 20260730,
+      "point": {
+        "decision_accuracy": 0.5733333333333334,
+        "decision_macro_f1": 0.5118013961946665,
+        "violation_type_macro_f1": 0.279604037633076,
+        "hierarchical_exact_match": 0.5633333333333334
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.5333333333333333,
+          0.6116666666666667
+        ],
+        "decision_macro_f1": [
+          0.46960134765197387,
+          0.5546390253870868
+        ],
+        "violation_type_macro_f1": [
+          0.26234721530888777,
+          0.2958361044680676
+        ],
+        "hierarchical_exact_match": [
+          0.5233333333333333,
+          0.6016666666666667
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "GPT-5.4",
+      "websites": 600,
+      "seed": 20260731,
+      "point": {
+        "decision_accuracy": 0.5366666666666666,
+        "decision_macro_f1": 0.5171347820810749,
+        "violation_type_macro_f1": 0.2636341338328093,
+        "hierarchical_exact_match": 0.5316666666666666
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.49833333333333335,
+          0.5766666666666667
+        ],
+        "decision_macro_f1": [
+          0.46041466633590905,
+          0.5730070600018508
+        ],
+        "violation_type_macro_f1": [
+          0.24593060612550866,
+          0.2816431564730934
+        ],
+        "hierarchical_exact_match": [
+          0.49333333333333335,
+          0.5716666666666667
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "GPT-5.6 SOL",
+      "websites": 600,
+      "seed": 20260732,
+      "point": {
+        "decision_accuracy": 0.6283333333333333,
+        "decision_macro_f1": 0.5927422365152828,
+        "violation_type_macro_f1": 0.42772934523622635,
+        "hierarchical_exact_match": 0.61
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.5916666666666667,
+          0.6666666666666666
+        ],
+        "decision_macro_f1": [
+          0.5327312638104771,
+          0.6456089719247614
+        ],
+        "violation_type_macro_f1": [
+          0.31671136404371547,
+          0.5299287037242955
+        ],
+        "hierarchical_exact_match": [
+          0.5733333333333334,
+          0.6466666666666666
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": -1.1102230246251565e-16,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "Kimi K2.5",
+      "websites": 600,
+      "seed": 20260733,
+      "point": {
+        "decision_accuracy": 0.5516666666666666,
+        "decision_macro_f1": 0.4884801189149015,
+        "violation_type_macro_f1": 0.48104358796343,
+        "hierarchical_exact_match": 0.5433333333333333
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.5133333333333333,
+          0.5916666666666667
+        ],
+        "decision_macro_f1": [
+          0.4316248184270595,
+          0.5521794294039192
+        ],
+        "violation_type_macro_f1": [
+          0.31886283546449706,
+          0.5499851631123315
+        ],
+        "hierarchical_exact_match": [
+          0.505,
+          0.5833333333333334
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            5.551115123125783e-17,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "Kimi K2.6",
+      "websites": 600,
+      "seed": 20260734,
+      "point": {
+        "decision_accuracy": 0.415,
+        "decision_macro_f1": 0.5096212015449765,
+        "violation_type_macro_f1": 0.3368860551865689,
+        "hierarchical_exact_match": 0.4066666666666667
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.375,
+          0.4533333333333333
+        ],
+        "decision_macro_f1": [
+          0.438649405163596,
+          0.5725859463225255
+        ],
+        "violation_type_macro_f1": [
+          0.1916231236084177,
+          0.38565656565656564
+        ],
+        "hierarchical_exact_match": [
+          0.36833333333333335,
+          0.445
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            -1.1102230246251565e-16
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            -2.7755575615628914e-17,
+            5.551115123125783e-17
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "Kimi K3",
+      "websites": 600,
+      "seed": 20260735,
+      "point": {
+        "decision_accuracy": 0.475,
+        "decision_macro_f1": 0.5243878756042649,
+        "violation_type_macro_f1": 0.4081104943944925,
+        "hierarchical_exact_match": 0.465
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.43666666666666665,
+          0.515
+        ],
+        "decision_macro_f1": [
+          0.4456394432298047,
+          0.5905171589714177
+        ],
+        "violation_type_macro_f1": [
+          0.3153718754013554,
+          0.4956145446664986
+        ],
+        "hierarchical_exact_match": [
+          0.4266666666666667,
+          0.505
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            -5.551115123125783e-17,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "display_model": "Qwen3.6 Plus",
+      "websites": 600,
+      "seed": 20260736,
+      "point": {
+        "decision_accuracy": 0.5166666666666667,
+        "decision_macro_f1": 0.5023604432293972,
+        "violation_type_macro_f1": 0.441485723727942,
+        "hierarchical_exact_match": 0.51
+      },
+      "ci95": {
+        "decision_accuracy": [
+          0.475,
+          0.5566666666666666
+        ],
+        "decision_macro_f1": [
+          0.4249673184738119,
+          0.5675985663082438
+        ],
+        "violation_type_macro_f1": [
+          0.33536533215365333,
+          0.5378778991370011
+        ],
+        "hierarchical_exact_match": [
+          0.4683333333333333,
+          0.55
+        ]
+      },
+      "comparison": {
+        "decision_accuracy": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        },
+        "decision_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            -1.1102230246251565e-16,
+            0.0
+          ]
+        },
+        "violation_type_macro_f1": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            1.1102230246251565e-16
+          ]
+        },
+        "hierarchical_exact_match": {
+          "point_match": true,
+          "ci_endpoint_matches": [
+            true,
+            true
+          ],
+          "point_delta": 0.0,
+          "ci_deltas": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  ],
+  "not_reproduced": [
+    "entry_gate_pass",
+    "gated_decision_accuracy",
+    "gated_decision_macro_f1",
+    "gated_violation_type_macro_f1",
+    "gated_hierarchical_exact_match",
+    "gate_loss"
+  ],
+  "point_matches": 40,
+  "point_comparisons": 40,
+  "ci_endpoint_matches": 80,
+  "ci_endpoint_comparisons": 80,
+  "max_absolute_difference": 1.1102230246251565e-16,
+  "all_equal_at_12_decimal_places": true,
+  "comparison_absolute_tolerance": 1e-12,
+  "status": "WEB_ONLY_NUMERIC_MATCH_WITHIN_TOLERANCE",
+  "validation_date": "2026-09-25",
+  "validation_scope": "local recomputation using authorized private inputs; not publicly self-contained reproduction",
+  "network_or_model_calls": 0,
+  "local_code_tests_passed": 55
+}
