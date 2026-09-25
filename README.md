@@ -12,6 +12,7 @@ reviewed Task 1, Task 2 and evaluation resources. Existing `paper/` and
 - [Recovery analysis](reproduction/README.md): web-only recomputation plus a clearly labeled reconstructed strict-entry helper.
 - [Historical evidence research](research/evidence_protocol_v02/README.md): reviewed validator/schema/prompt subset, **not the final paper Judge**.
 - [Release boundaries and remaining gaps](docs/INTEGRATION_20260925.md).
+- [Public Task 1 input dataset](https://huggingface.co/datasets/leonliuzx/riskchainbench-task1-paper-inputs): a clean, input-only HF mirror; [data distribution and archive policy](docs/DATA_DISTRIBUTION.md).
 
 **Partial reproduction only.** Local web-only verification matched 40 point
 estimates and 80 CI endpoints within 1e-12 using private inputs. The exact paired
@@ -88,5 +89,7 @@ Apache-2.0; project-owned synthetic records and aggregate results are CC BY 4.0.
 **These grants do not relicense legacy or third-party material.**
 See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) and [CITATION.cff](CITATION.cff).
 
-The separate evaluation repository and HF archives remain private. Access is not
+The separate evaluation repository and original HF archives remain private; the
+new input-only HF mirror is public. The old Task 2 repository is archived, not deleted.
+Access to restricted archives is not
 automatic; ask via repository issues without posting private data or credentials.

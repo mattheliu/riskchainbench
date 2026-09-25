@@ -28,7 +28,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "0ae868ff06a3a04f7452fcd9f44029446735052853398d6caf96df96be5072c6"
+      "sha256": "82141e8f927be4af76729c0f9cd494ad167826382c4f929d96af5b021b6fd63a"
     },
     {
       "path": "docs/INTEGRATION_20260925.md",
@@ -137,6 +137,10 @@
     {
       "path": "tools/verify_integration.py",
       "sha256": "cd0dd36f21e68c4e6245f0673514412aa2d880bae05e7a2f2de950151e98c917"
+    },
+    {
+      "path": "docs/DATA_DISTRIBUTION.md",
+      "sha256": "876d9f030159c40a153a127e27c8d6cbefc7cd4f95c24ce02d5963c1727f9ae7"
     }
   ]
 }
